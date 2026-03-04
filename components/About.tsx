@@ -114,7 +114,7 @@ export default function About() {
               position: "relative",
             }}>
               <img
-                src="/images/omkumar/Omkumar01.jpeg"
+                src="/images/omkumar/Omkumar10.jpeg"
                 alt="Om Kumar Solanki"
                 style={{
                   width: "100%",
