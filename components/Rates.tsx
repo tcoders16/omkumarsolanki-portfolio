@@ -381,7 +381,7 @@ export default function Rates() {
             </div>
           </div>
           <div style={{ display:"flex", gap:10, flexWrap:"wrap", flexShrink:0 }}>
-            <a href="mailto:emailtosolankiom@gmail.com?subject=AI%20Consulting%20Inquiry"
+            <a href="/book"
               style={{ fontFamily:"var(--font-mono)", fontSize:"0.58rem",
                 letterSpacing:"0.06em", padding:"12px 24px", borderRadius:4,
                 textDecoration:"none", background:T.white, color:"#000",
