@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f0f0f"/>
-      <stop offset="100%" stop-color="#1a1a1a"/>
+      <stop offset="0%" stop-color="#f5f5f5"/>
+      <stop offset="100%" stop-color="#e8e8e8"/>
     </linearGradient>
-    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#3dba7e"/>
       <stop offset="100%" stop-color="#2a9460"/>
     </linearGradient>
@@ -13,12 +13,15 @@
   <!-- Background -->
   <rect width="32" height="32" rx="7" fill="url(#bg)"/>
 
-  <!-- Green accent bar top-left -->
-  <rect x="4" y="4" width="10" height="2.5" rx="1.25" fill="url(#glow)"/>
+  <!-- Subtle border -->
+  <rect width="32" height="32" rx="7" fill="none" stroke="#d0d0d0" stroke-width="0.75"/>
 
-  <!-- O -->
-  <text x="3.5" y="24" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="-1">O</text>
+  <!-- Green accent bar -->
+  <rect x="4" y="5" width="24" height="2.5" rx="1.25" fill="url(#green)" opacity="0.85"/>
 
-  <!-- S — offset, lighter -->
-  <text x="14" y="24" font-family="Georgia, serif" font-size="18" font-weight="700" fill="url(#glow)" letter-spacing="-1">S</text>
+  <!-- O dark -->
+  <text x="3" y="25" font-family="Georgia, serif" font-size="19" font-weight="700" fill="#1a1a1a" letter-spacing="-1">O</text>
+
+  <!-- S green -->
+  <text x="15" y="25" font-family="Georgia, serif" font-size="19" font-weight="700" fill="url(#green)" letter-spacing="-1">S</text>
 </svg>
