@@ -3,14 +3,14 @@ export default function ResumePage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-          font-family: 'Inter', sans-serif;
+          font-family: 'EB Garamond', Georgia, serif;
           background: #fff;
-          color: #111;
+          color: #000;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
         }
@@ -19,395 +19,274 @@ export default function ResumePage() {
           width: 210mm;
           min-height: 297mm;
           margin: 0 auto;
-          padding: 14mm 16mm 14mm 16mm;
+          padding: 18mm 20mm;
           background: #fff;
         }
 
         /* ── Header ── */
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          padding-bottom: 10px;
-          border-bottom: 2px solid #111;
-          margin-bottom: 12px;
-        }
-        .header-left h1 {
-          font-size: 26px;
+        .name {
+          text-align: center;
+          font-size: 26pt;
           font-weight: 700;
-          letter-spacing: -0.04em;
-          line-height: 1;
-          margin-bottom: 4px;
+          letter-spacing: 0.04em;
+          margin-bottom: 6px;
         }
-        .header-left .title {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          font-weight: 500;
-          color: #555;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
+        .contact {
+          text-align: center;
+          font-size: 10pt;
+          color: #000;
+          line-height: 1.6;
         }
-        .header-right {
-          text-align: right;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 8px;
-          color: #444;
-          line-height: 1.8;
-        }
-        .header-right a {
-          color: #1a6b52;
-          text-decoration: none;
+        .contact a { color: #000; text-decoration: none; }
+        .contact .sep { margin: 0 6px; }
+        .header-rule {
+          border: none;
+          border-top: 2px solid #000;
+          margin: 10px 0 14px;
         }
 
-        /* ── Sections ── */
+        /* ── Section ── */
         .section { margin-bottom: 14px; }
-        .section-label {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 7.5px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: #888;
-          border-bottom: 1px solid #e0e0e0;
-          padding-bottom: 4px;
-          margin-bottom: 9px;
+        .section-title {
+          font-size: 11pt;
+          font-variant: small-caps;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          border-bottom: 1px solid #000;
+          padding-bottom: 2px;
+          margin-bottom: 8px;
+          text-transform: lowercase;
         }
 
         /* ── Summary ── */
         .summary {
-          font-size: 9.5px;
-          color: #222;
-          line-height: 1.7;
-          max-width: 100%;
+          font-size: 10.5pt;
+          line-height: 1.55;
         }
 
         /* ── Experience ── */
-        .exp-item { margin-bottom: 11px; }
-        .exp-top {
+        .exp-item { margin-bottom: 10px; }
+        .exp-row {
           display: flex;
           justify-content: space-between;
           align-items: baseline;
-          margin-bottom: 2px;
         }
         .exp-company {
-          font-size: 11px;
+          font-size: 11pt;
           font-weight: 700;
-          color: #111;
-          letter-spacing: -0.02em;
         }
-        .exp-company-accent { color: #1a6b52; }
         .exp-period {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 7.5px;
-          color: #888;
+          font-size: 10pt;
+          font-style: italic;
         }
         .exp-role {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 8px;
-          font-weight: 500;
-          color: #1a6b52;
-          margin-bottom: 4px;
-          letter-spacing: 0.02em;
-        }
-        .exp-desc {
-          font-size: 9px;
-          color: #333;
-          line-height: 1.65;
-        }
-        .exp-bullets {
-          margin-top: 4px;
-          padding-left: 12px;
-        }
-        .exp-bullets li {
-          font-size: 9px;
-          color: #333;
-          line-height: 1.65;
-          margin-bottom: 2px;
-          list-style: none;
-          position: relative;
-        }
-        .exp-bullets li::before {
-          content: "·";
-          position: absolute;
-          left: -10px;
-          color: #1a6b52;
-          font-weight: 700;
-        }
-
-        /* ── Projects ── */
-        .projects-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
-        }
-        .project-item {
-          border: 1px solid #e8e8e8;
-          border-left: 3px solid #1a6b52;
-          padding: 7px 9px;
-          border-radius: 1px;
-        }
-        .project-item.purple { border-left-color: #7c5cbf; }
-        .project-item.amber  { border-left-color: #b8872a; }
-        .project-name {
-          font-size: 9.5px;
-          font-weight: 700;
-          color: #111;
-          margin-bottom: 1px;
-        }
-        .project-sub {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 7px;
-          color: #888;
+          font-size: 10.5pt;
+          font-style: italic;
           margin-bottom: 4px;
         }
-        .project-desc {
-          font-size: 8.5px;
-          color: #333;
-          line-height: 1.6;
-          margin-bottom: 3px;
-        }
-        .project-impact {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 7px;
-          color: #1a6b52;
-        }
-        .project-item.purple .project-impact { color: #7c5cbf; }
-        .project-item.amber .project-impact  { color: #b8872a; }
-
-        /* ── Skills ── */
-        .skills-block { margin-bottom: 6px; }
-        .skills-block-label {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 7.5px;
-          font-weight: 600;
-          color: #555;
-          margin-bottom: 4px;
-          letter-spacing: 0.06em;
-        }
-        .skills-pills {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-        }
-        .pill {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 7.5px;
-          color: #222;
-          background: #f4f4f4;
-          border: 1px solid #e0e0e0;
-          padding: 2px 7px;
-          border-radius: 2px;
-        }
-
-        /* ── Metrics bar ── */
-        .metrics {
-          display: flex;
-          gap: 0;
-          border: 1px solid #e8e8e8;
-          border-radius: 2px;
-          overflow: hidden;
-          margin-bottom: 14px;
-        }
-        .metric-item {
-          flex: 1;
-          padding: 6px 10px;
-          text-align: center;
-          border-right: 1px solid #e8e8e8;
-        }
-        .metric-item:last-child { border-right: none; }
-        .metric-val {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 13px;
-          font-weight: 700;
-          color: #1a6b52;
-          line-height: 1;
-          display: block;
-        }
-        .metric-lbl {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 6.5px;
-          color: #888;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          display: block;
+        ul.bullets {
+          padding-left: 18px;
           margin-top: 2px;
         }
+        ul.bullets li {
+          font-size: 10pt;
+          line-height: 1.55;
+          margin-bottom: 2px;
+          list-style-type: disc;
+        }
+
+        /* ── Education ── */
+        .edu-item { margin-bottom: 8px; }
+        .edu-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+        }
+        .edu-school { font-size: 11pt; font-weight: 700; }
+        .edu-year   { font-size: 10pt; font-style: italic; }
+        .edu-degree { font-size: 10.5pt; font-style: italic; }
+        .edu-note   { font-size: 10pt; }
+
+        /* ── Projects ── */
+        .proj-item  { margin-bottom: 8px; }
+        .proj-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+        }
+        .proj-name  { font-size: 10.5pt; font-weight: 700; }
+        .proj-tech  { font-size: 10pt; font-style: italic; }
+        .proj-desc  { font-size: 10pt; line-height: 1.55; }
+
+        /* ── Skills ── */
+        .skills-row { font-size: 10.5pt; line-height: 1.7; }
+        .skills-row strong { font-weight: 700; }
 
         /* ── Print ── */
         @media print {
           body { background: #fff; }
-          .page { margin: 0; padding: 12mm 14mm; }
+          .page { margin: 0; padding: 15mm 18mm; }
           .no-print { display: none; }
         }
 
-        /* ── Screen helper ── */
+        /* ── Screen ── */
         @media screen {
-          body { background: #e8e8e8; padding: 20px 0 40px; }
-          .print-btn {
+          body { background: #d6d6d6; padding: 30px 0 60px; }
+          .save-btn {
             position: fixed; top: 16px; right: 16px;
-            background: #111; color: #fff;
+            background: #000; color: #fff;
             border: none; padding: 10px 20px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px; cursor: pointer;
-            border-radius: 2px; z-index: 100;
-            letter-spacing: 0.06em;
+            font-family: Georgia, serif;
+            font-size: 12px; cursor: pointer;
+            letter-spacing: 0.04em; z-index: 100;
           }
-          .print-btn:hover { background: #1a6b52; }
+          .save-btn:hover { background: #333; }
         }
       `}</style>
 
-      <button className="print-btn no-print" onClick={() => typeof window !== "undefined" && window.print()}>
-        PRINT / SAVE PDF ↓
+      <button
+        className="save-btn no-print"
+        onClick={() => {
+          if (typeof window === "undefined") return;
+          const prev = document.title;
+          document.title = "Omkumar-Solanki-Resume";
+          window.print();
+          document.title = prev;
+        }}
+      >
+        Save PDF ↓
       </button>
 
       <div className="page">
 
-        {/* ── HEADER ── */}
-        <div className="header">
-          <div className="header-left">
-            <h1>Om Kumar Solanki</h1>
-            <div className="title">AI / ML Engineer  ·  Agentic Systems  ·  MLOps</div>
-          </div>
-          <div className="header-right">
-            <div><a href="mailto:emailtosolankiom@gmail.com">emailtosolankiom@gmail.com</a></div>
-            <div><a href="https://github.com/omkumarsolanki">github.com/omkumarsolanki</a></div>
-            <div><a href="https://www.resso.ai">resso.ai</a></div>
-            <div>Canada / Remote</div>
-          </div>
+        {/* NAME */}
+        <div className="name">Om Kumar Solanki</div>
+        <div className="contact">
+          <a href="mailto:emailtosolankiom@gmail.com">emailtosolankiom@gmail.com</a>
+          <span className="sep">|</span>
+          <a href="https://www.linkedin.com/in/omkumarsolanki">linkedin.com/in/omkumarsolanki</a>
+          <span className="sep">|</span>
+          <a href="https://github.com/omkumarsolanki">github.com/omkumarsolanki</a>
+          <span className="sep">|</span>
+          <a href="https://www.omkumarsolanki.com">omkumarsolanki.com</a>
+          <span className="sep">|</span>
+          Ontario, Canada
         </div>
+        <hr className="header-rule" />
 
-        {/* ── METRICS ── */}
-        <div className="metrics">
-          {[
-            { v: "3+",    l: "Years Prod AI" },
-            { v: "<2s",   l: "Inference Latency" },
-            { v: "0.97",  l: "AUC Score" },
-            { v: "100%",  l: "Private RAG" },
-            { v: "R²=0.89", l: "Chemistry ML" },
-          ].map(m => (
-            <div key={m.l} className="metric-item">
-              <span className="metric-val">{m.v}</span>
-              <span className="metric-lbl">{m.l}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── SUMMARY ── */}
+        {/* SUMMARY */}
         <div className="section">
-          <div className="section-label">Summary</div>
+          <div className="section-title">Summary</div>
           <p className="summary">
-            Founding Engineer and AI/ML Architect with 3+ years building production AI systems from scratch.
-            Designed real-time ML inference pipelines (sub-2s latency), sigmoid-gated agentic trigger architectures,
-            on-premise RAG stacks (zero data egress), and MCP-based multi-agent orchestration systems.
-            Comfortable owning the full stack — from model training and ONNX quantisation to WebRTC audio pipelines,
-            FastAPI inference servers, and AWS infrastructure. Currently building live AI interview intelligence at Resso.ai.
+            Founding Engineer and AI/ML Architect with 3+ years of experience building production AI systems.
+            Specializes in real-time ML inference pipelines, agentic architectures, on-premise RAG stacks, and
+            full-stack AI applications. Designed and shipped systems that run in production with real users and
+            real consequences — from WebRTC audio ingestion pipelines to sigmoid-gated multi-agent orchestration.
+            Comfortable owning the full stack from model training and ONNX quantization to cloud infrastructure.
           </p>
         </div>
 
-        {/* ── EXPERIENCE ── */}
+        {/* EXPERIENCE */}
         <div className="section">
-          <div className="section-label">Experience</div>
+          <div className="section-title">Experience</div>
 
           <div className="exp-item">
-            <div className="exp-top">
-              <span className="exp-company"><span className="exp-company-accent">Resso.ai</span></span>
-              <span className="exp-period">Nov 2025 — Present</span>
+            <div className="exp-row">
+              <span className="exp-company">Resso.ai</span>
+              <span className="exp-period">November 2025 — Present</span>
             </div>
             <div className="exp-role">Founding Engineer — AI, ML &amp; Real-Time Systems</div>
-            <ul className="exp-bullets">
-              <li>Designed and built the complete production ML platform from zero — WebRTC audio ingestion at 8 kHz, custom speaker diarization pipeline separating candidate and interviewer voices in real time.</li>
-              <li>Built NLP feature extraction across prosody, semantics and pace; deployed live hire-probability scorer running at &lt;2s inference latency during active interviews.</li>
-              <li>Engineered the talking AI avatar system: audio-to-viseme lip sync, WebSocket event bus, on-device ONNX model quantisation for smooth real-time video rendering.</li>
-              <li>Reduced inference latency from 8s → &lt;2s. Job placement rate improved +45%.</li>
+            <ul className="bullets">
+              <li>Designed and built the complete production ML platform from zero, including WebRTC audio ingestion at 8 kHz and a custom speaker diarization pipeline separating candidate and interviewer voices in real time.</li>
+              <li>Deployed live hire-probability scoring model with sub-2-second inference latency during active interviews; improved job placement rate by 45%.</li>
+              <li>Engineered a talking AI avatar system using audio-to-viseme lip-sync mapping, WebSocket event bus, and on-device ONNX model quantization for real-time video rendering.</li>
+              <li>Reduced end-to-end inference latency from 8s to under 2s through pipeline optimization and INT8 quantization.</li>
             </ul>
           </div>
 
           <div className="exp-item">
-            <div className="exp-top">
+            <div className="exp-row">
               <span className="exp-company">HariKrushna Software</span>
-              <span className="exp-period">Jun 2024 — Present</span>
+              <span className="exp-period">June 2024 — Present</span>
             </div>
             <div className="exp-role">AI Architect &amp; Agentic Software Engineer</div>
-            <ul className="exp-bullets">
-              <li>Delivered on-premise RAG stacks (GGUF + HNSW vector store, 100% private, offline-capable) for enterprise clients unable to use cloud AI.</li>
-              <li>Built production MCP server integrating AI agents with Slack, CRMs, databases, and internal APIs via a single universal protocol.</li>
-              <li>Designed sigmoid-gated multi-signal MLOps trigger systems: drift detection (KL divergence), F1 degradation, time-based, and LLM-confidence triggers driving automated model retraining pipelines.</li>
+            <ul className="bullets">
+              <li>Delivered on-premise RAG stacks using GGUF-quantized LLMs and HNSW vector stores — 100% private, offline-capable, with sub-1s query latency on 16 GB RAM.</li>
+              <li>Built production MCP servers integrating AI agents with Slack, CRMs, databases, and internal APIs through a single universal protocol with persistent context memory.</li>
+              <li>Designed sigmoid-gated multi-signal MLOps trigger systems aggregating drift detection, F1 degradation, time-based signals, and LLM confidence scores to drive automated retraining pipelines.</li>
             </ul>
           </div>
 
           <div className="exp-item">
-            <div className="exp-top">
+            <div className="exp-row">
               <span className="exp-company">Corol.org &amp; NunaFab</span>
               <span className="exp-period">2024</span>
             </div>
             <div className="exp-role">ML Engineer — Sustainable Chemistry</div>
-            <ul className="exp-bullets">
-              <li>Built SHAP-explainable XGBoost ensemble on a 200-row dataset using transfer learning from related chemical domains; achieved R² = 0.89.</li>
-              <li>Delivered interpretable feature attribution (φᵢ per ingredient) — reducing R&amp;D iteration cycles 3× and costs 40%.</li>
+            <ul className="bullets">
+              <li>Built SHAP-explainable XGBoost ensemble on 200-row dataset using transfer learning from related chemical domains; achieved R² = 0.89 and reduced R&amp;D iteration cycles by 3× with 40% cost reduction.</li>
+              <li>Delivered interpretable feature attribution (φᵢ per ingredient) enabling chemists to understand which molecular features drive predictions.</li>
             </ul>
           </div>
         </div>
 
-        {/* ── PROJECTS ── */}
+        {/* EDUCATION */}
         <div className="section">
-          <div className="section-label">Key Projects</div>
-          <div className="projects-grid">
-            <div className="project-item">
-              <div className="project-name">Vadtal — Vector DB Platform</div>
-              <div className="project-sub">On-Premise RAG · Private AI · Zero Data Egress</div>
-              <div className="project-desc">Complete local RAG stack: GGUF quantized LLM on 16 GB RAM, custom HNSW vector store, semantic chunking, cosine similarity search, FastAPI server. 100% offline.</div>
-              <div className="project-impact">Sub-1s queries · 100% private · 16 GB RAM</div>
+          <div className="section-title">Education</div>
+
+          <div className="edu-item">
+            <div className="edu-row">
+              <span className="edu-school">Sheridan College</span>
+              <span className="edu-year">2021 — 2025</span>
             </div>
-            <div className="project-item purple">
-              <div className="project-name">MCP Integration Server</div>
-              <div className="project-sub">Universal Agentic Tool Layer</div>
-              <div className="project-desc">Production MCP server enabling AI agents to speak to any enterprise tool — Slack, CRM, DB, APIs — through one standard protocol with parallel tool calls and context memory.</div>
-              <div className="project-impact">1 server · N integrations · persistent context</div>
+            <div className="edu-degree">Bachelor of Applied Science (Honours) — Artificial Intelligence</div>
+            <div className="edu-note">AI Minds Board Member, Sheridan EDGE</div>
+          </div>
+
+          <div className="edu-item">
+            <div className="edu-row">
+              <span className="edu-school">AWS Academy</span>
+              <span className="edu-year">December 2025</span>
             </div>
-            <div className="project-item purple">
-              <div className="project-name">Lawline.tech</div>
-              <div className="project-sub">AI-Powered Legal Document Intelligence</div>
-              <div className="project-desc">Fine-tuned LLM pipeline for clause classification, party/obligation/risk extraction from legal PDFs. Confidence-scored output flags low-confidence clauses for review.</div>
-              <div className="project-impact">&lt;3s processing · 94% accuracy · 60% fewer errors</div>
-            </div>
-            <div className="project-item amber">
-              <div className="project-name">Sigmoid Agentic Trigger System</div>
-              <div className="project-sub">MLOps · Automated Model Retraining</div>
-              <div className="project-desc">Multi-signal monitoring (drift, F1, time, LLM confidence) aggregated through sigmoid gate. LLM orchestrator decides when to retrain, what to retrain, and routes to retrain agent.</div>
-              <div className="project-impact">σ(z) gated · 4-signal · &lt;4h retrain cycle</div>
-            </div>
+            <div className="edu-degree">Cloud Developing Graduate Certificate</div>
           </div>
         </div>
 
-        {/* ── SKILLS ── */}
+        {/* PROJECTS */}
         <div className="section">
-          <div className="section-label">Skills</div>
-          <div className="skills-block">
-            <div className="skills-block-label">Languages &amp; Frameworks</div>
-            <div className="skills-pills">
-              {["Python", "TypeScript", "Node.js", "React", "Next.js", "FastAPI"].map(s => (
-                <span key={s} className="pill">{s}</span>
-              ))}
+          <div className="section-title">Selected Projects</div>
+
+          <div className="proj-item">
+            <div className="proj-row">
+              <span className="proj-name">Lawline.tech — AI Legal Document Intelligence</span>
+              <span className="proj-tech">Live SaaS Product</span>
             </div>
+            <div className="proj-desc">Fine-tuned LLM pipeline for clause classification, party identification, obligation extraction, and risk flagging from legal PDFs. Confidence-scored structured JSON output in under 3 seconds. Reduced manual review errors by 60%.</div>
           </div>
-          <br />
-          <div className="skills-block">
-            <div className="skills-block-label">AI / ML</div>
-            <div className="skills-pills">
-              {["PyTorch", "ONNX", "Scikit-learn", "XGBoost", "Fine-tuning", "LoRA/QLoRA", "RAG", "HNSW", "GGUF", "Speaker Diarization", "NLP", "SHAP", "MLflow"].map(s => (
-                <span key={s} className="pill">{s}</span>
-              ))}
+
+          <div className="proj-item">
+            <div className="proj-row">
+              <span className="proj-name">Vadtal — On-Premise RAG Platform</span>
+              <span className="proj-tech">GGUF · HNSW · FastAPI</span>
             </div>
+            <div className="proj-desc">Complete local RAG stack with GGUF-quantized LLM, custom HNSW vector store, semantic chunking, and cosine similarity search. Fully offline, 100% private, sub-1s query latency on 16 GB RAM.</div>
           </div>
-          <br />
-          <div className="skills-block">
-            <div className="skills-block-label">Infrastructure &amp; Tools</div>
-            <div className="skills-pills">
-              {["AWS", "Docker", "Kubernetes", "WebRTC", "MCP Protocol", "PostgreSQL", "Redis", "Vector DBs", "CI/CD", "MLOps"].map(s => (
-                <span key={s} className="pill">{s}</span>
-              ))}
+
+          <div className="proj-item">
+            <div className="proj-row">
+              <span className="proj-name">MCP Integration Server</span>
+              <span className="proj-tech">MCP Protocol · Agentic Systems</span>
             </div>
+            <div className="proj-desc">Production MCP server enabling AI agents to interface with any enterprise tool — Slack, CRM, database, APIs — through a single universal protocol with parallel tool calls and persistent context memory.</div>
           </div>
+        </div>
+
+        {/* SKILLS */}
+        <div className="section">
+          <div className="section-title">Skills</div>
+          <div className="skills-row"><strong>Languages &amp; Frameworks:</strong> Python, TypeScript, Node.js, React, Next.js, FastAPI</div>
+          <div className="skills-row"><strong>AI / ML:</strong> PyTorch, ONNX, Scikit-learn, XGBoost, Fine-tuning, LoRA/QLoRA, RAG, HNSW, GGUF, Speaker Diarization, NLP, SHAP, MLflow</div>
+          <div className="skills-row"><strong>Infrastructure:</strong> AWS, Docker, Kubernetes, WebRTC, MCP Protocol, PostgreSQL, Redis, Vector Databases, CI/CD, MLOps</div>
         </div>
 
       </div>

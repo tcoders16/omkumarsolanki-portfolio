@@ -113,7 +113,7 @@ export default function Nav() {
           </a>
 
           <a
-            href="/resume.pdf"
+            href="/resume"
             target="_blank"
             rel="noopener noreferrer"
             style={{
