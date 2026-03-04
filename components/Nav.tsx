@@ -62,7 +62,7 @@ export default function Nav() {
         </a>
 
         {/* Desktop nav */}
-        <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 36 }}>
+        <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 24 }}>
           {links.map(l => (
             <a key={l.label} href={l.href} className="nav-link">
               {l.label}

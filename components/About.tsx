@@ -110,28 +110,20 @@ export default function About() {
               height: 220,
               border: "1px solid var(--border-mid)",
               borderRadius: 2,
-              background: "var(--surface-2)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
               overflow: "hidden",
               position: "relative",
             }}>
-              {/* Placeholder — replace <div> with <img src="/photo.jpg" ... /> */}
-              <div style={{
-                position: "absolute", inset: 0,
-                background: "linear-gradient(135deg, rgba(57,217,180,0.04), rgba(139,92,246,0.04))",
-              }} />
-              <span style={{ fontSize: "2rem", opacity: 0.2 }}>◈</span>
-              <span style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-                color: "var(--dim)", letterSpacing: "0.08em", textAlign: "center",
-                padding: "0 16px",
-              }}>
-                Add /public/photo.jpg
-              </span>
+              <img
+                src="/images/omkumar/Omkumar01.jpeg"
+                alt="Om Kumar Solanki"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center top",
+                  display: "block",
+                }}
+              />
             </div>
 
             {/* Social links below photo */}
