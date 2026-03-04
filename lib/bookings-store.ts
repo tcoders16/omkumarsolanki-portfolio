@@ -96,15 +96,21 @@ export async function notifyEmail(b: Booking): Promise<void> {
     console.log(`[booking] SMTP not configured — skipping email for ${b.name}`);
     return;
   }
+
+  const transporter = getTransporter();
+  const from = `"Om Kumar Solanki" <${process.env.SMTP_USER}>`;
+
+  // 1. Notify Om
   try {
-    await getTransporter().sendMail({
-      from:    `"Portfolio Bookings" <${process.env.SMTP_USER}>`,
+    await transporter.sendMail({
+      from,
       to:      process.env.NOTIFY_EMAIL ?? process.env.SMTP_USER,
-      subject: `New booking: ${b.name} — ${b.date} at ${b.slot} ET`,
+      subject: `📅 New booking: ${b.name} — ${b.date} at ${b.slot} ET`,
+      replyTo: b.email,
       html: `
         <div style="font-family:monospace;max-width:560px;padding:28px;background:#0a0a0a;color:#ededed;border-radius:6px;">
           <h2 style="color:#3dba7e;font-size:0.9rem;margin:0 0 20px;letter-spacing:0.1em;text-transform:uppercase;">
-            New 30-min Strategy Call
+            New 30-min Strategy Call Booked
           </h2>
           <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
             <tr><td style="color:#555;padding:5px 0;width:60px;font-size:0.7rem;">NAME</td><td style="color:#ededed;padding:5px 0;">${b.name}</td></tr>
@@ -113,13 +119,40 @@ export async function notifyEmail(b: Booking): Promise<void> {
             <tr><td style="color:#555;padding:5px 0;font-size:0.7rem;">TIME</td><td style="color:#ededed;padding:5px 0;">${b.slot} ET · 30 min</td></tr>
             ${b.note ? `<tr><td style="color:#555;padding:5px 0;font-size:0.7rem;vertical-align:top;">NOTE</td><td style="color:#c8c4bc;padding:5px 0;">${b.note}</td></tr>` : ""}
           </table>
-          <p style="color:#444;font-size:0.7rem;margin:0;">Reply to this email to confirm or reschedule.</p>
+          <p style="color:#444;font-size:0.7rem;margin:0;">Hit reply to reach ${b.name} directly.</p>
         </div>
       `,
-      replyTo: b.email,
     });
-    console.log(`[booking] email sent for ${b.name} (${b.date} ${b.slot})`);
+    console.log(`[booking] notified Om for ${b.name} (${b.date} ${b.slot})`);
   } catch (e) {
-    console.error("[booking] email failed:", e);
+    console.error("[booking] Om notify failed:", e);
+  }
+
+  // 2. Confirm to booker
+  try {
+    await transporter.sendMail({
+      from,
+      to:      b.email,
+      subject: `Your call with Om is confirmed — ${b.date} at ${b.slot} ET`,
+      replyTo: process.env.NOTIFY_EMAIL ?? process.env.SMTP_USER,
+      html: `
+        <div style="font-family:monospace;max-width:560px;padding:28px;background:#0a0a0a;color:#ededed;border-radius:6px;">
+          <h2 style="color:#3dba7e;font-size:0.9rem;margin:0 0 8px;letter-spacing:0.1em;text-transform:uppercase;">
+            You're booked ✓
+          </h2>
+          <p style="color:#888;font-size:0.75rem;margin:0 0 24px;">Hi ${b.name}, your 30-min strategy call with Om Kumar Solanki is confirmed.</p>
+          <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+            <tr><td style="color:#555;padding:5px 0;width:60px;font-size:0.7rem;">DATE</td><td style="color:#ededed;padding:5px 0;">${b.date}</td></tr>
+            <tr><td style="color:#555;padding:5px 0;font-size:0.7rem;">TIME</td><td style="color:#ededed;padding:5px 0;">${b.slot} ET · 30 min</td></tr>
+            <tr><td style="color:#555;padding:5px 0;font-size:0.7rem;">WITH</td><td style="color:#ededed;padding:5px 0;">Om Kumar Solanki — AI/ML Engineer</td></tr>
+          </table>
+          <p style="color:#555;font-size:0.7rem;margin:0 0 8px;">Om will reach out with a meeting link shortly. Reply to this email if you need to reschedule.</p>
+          <p style="color:#333;font-size:0.65rem;margin:0;">omkumarsolanki.com</p>
+        </div>
+      `,
+    });
+    console.log(`[booking] confirmation sent to ${b.email}`);
+  } catch (e) {
+    console.error("[booking] booker confirm failed:", e);
   }
 }
