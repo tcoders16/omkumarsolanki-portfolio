@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (!checkRate(ip)) {
     return NextResponse.json(
-      { error: "Rate limit reached. Reach Om directly at om@resso.ai" },
+      { error: "Rate limit reached. Reach Om directly at emailtosolankiom@gmail.com" },
       { status: 429 }
     );
   }

@@ -42,7 +42,7 @@ export default function Contact() {
       setSent(true);
       form.reset();
     } catch {
-      setError("Something went wrong. Email me directly at om@resso.ai");
+      setError("Something went wrong. Email me directly at emailtosolankiom@gmail.com");
     }
     setSending(false);
   };
@@ -90,7 +90,7 @@ export default function Contact() {
           flexWrap: "wrap",
         }}>
           {[
-            { label: "Email",    value: "om@resso.ai",             href: "mailto:om@resso.ai" },
+            { label: "Email",    value: "emailtosolankiom@gmail.com",             href: "mailto:emailtosolankiom@gmail.com" },
             { label: "LinkedIn", value: "/in/omkumar-solanki",      href: "https://www.linkedin.com/in/omkumar-solanki" },
             { label: "Location", value: "Ontario, Canada",          href: null },
           ].map(({ label, value, href }) => (

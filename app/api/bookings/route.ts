@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
   );
   if (emailClash) {
     return NextResponse.json(
-      { error: "This email already has a booking. Reach Om at om@resso.ai to reschedule." },
+      { error: "This email already has a booking. Reach Om at emailtosolankiom@gmail.com to reschedule." },
       { status: 409 }
     );
   }

@@ -130,7 +130,7 @@ export default function About() {
             {/* Social links below photo */}
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
               <a
-                href="mailto:om@resso.ai"
+                href="mailto:emailtosolankiom@gmail.com"
                 style={{
                   fontFamily: "var(--font-mono)", fontSize: "0.6rem",
                   color: "var(--muted)", textDecoration: "none",
@@ -140,7 +140,7 @@ export default function About() {
                 onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
                 onMouseLeave={e => (e.currentTarget.style.color = "var(--muted)")}
               >
-                ✉ om@resso.ai
+                ✉ emailtosolankiom@gmail.com
               </a>
               <a
                 href="https://www.linkedin.com/in/omkumar-solanki"

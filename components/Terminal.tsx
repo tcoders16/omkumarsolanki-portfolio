@@ -58,7 +58,7 @@ const CMDS: Record<string, CmdFn> = {
     { type:"out",     text:"  whoami                  Identity & clearance record" },
     { type:"out",     text:"  linkedin                Open LinkedIn profile ↗" },
     { type:"out",     text:"  x                       Open X.com profile ↗" },
-    { type:"out",     text:"  email                   Compose email to om@resso.ai" },
+    { type:"out",     text:"  email                   Compose email to emailtosolankiom@gmail.com" },
     { type:"blank",   text:"" },
     { type:"info",    text:"  — DOCUMENTS ——————————————————————————————————————" },
     { type:"out",     text:"  resume                  Download & open resume PDF" },
@@ -69,7 +69,7 @@ const CMDS: Record<string, CmdFn> = {
     { type:"out",     text:"  github                  Fetch live repos from GitHub API" },
     { type:"out",     text:"  nmap resso.ai           Scan production service ports" },
     { type:"out",     text:"  ping resso.ai           Real latency measurement" },
-    { type:"out",     text:"  ssh om@resso.ai         Connect to production server" },
+    { type:"out",     text:"  ssh om@resso.ai                        Connect to production server" },
     { type:"out",     text:"  traceroute resso.ai     Trace network path" },
     { type:"blank",   text:"" },
     { type:"info",    text:"  — AI ————————————————————————————————————————————" },
@@ -98,7 +98,7 @@ const CMDS: Record<string, CmdFn> = {
     { type:"out",     text:"              Sheridan College  |  AWS Academy Graduate" },
     { type:"blank",   text:"" },
     { type:"out",     text:"  LOCATION    Ontario, Canada" },
-    { type:"out",     text:"  EMAIL       om@resso.ai" },
+    { type:"out",     text:"  EMAIL       emailtosolankiom@gmail.com" },
     { type:"out",     text:"  GITHUB      github.com/omkumarsolanki" },
     { type:"out",     text:"  LINKEDIN    linkedin.com/in/omkumar-solanki" },
     { type:"blank",   text:"" },
@@ -253,7 +253,7 @@ const CMDS: Record<string, CmdFn> = {
   },
 
   ssh: (args) => {
-    const target = args[0] || "om@resso.ai";
+    const target = args[0] || "emailtosolankiom@gmail.com";
     return [
       { type:"dim",     text:`Connecting to ${target}...` },
       { type:"dim",     text:`ED25519 key fingerprint is SHA256:aBcDeFgH1234xYzW...` },
@@ -371,16 +371,16 @@ const CMDS: Record<string, CmdFn> = {
 
   email: async () => {
     await new Promise(r => setTimeout(r, 600));
-    if (typeof window !== "undefined") window.location.href = "mailto:om@resso.ai?subject=Let's%20build%20something&body=Hi%20Om%2C";
+    if (typeof window !== "undefined") window.location.href = "mailto:emailtosolankiom@gmail.com?subject=Let's%20build%20something&body=Hi%20Om%2C";
     return [
       { type:"dim",     text:"Composing new message..." },
       { type:"blank",   text:"" },
-      { type:"out",     text:"  To       om@resso.ai" },
+      { type:"out",     text:"  To       emailtosolankiom@gmail.com" },
       { type:"out",     text:"  Subject  Let's build something" },
       { type:"out",     text:"  Encrypt  TLS 1.3  ·  DKIM signed" },
       { type:"blank",   text:"" },
       { type:"success", text:"  ✓  Mail client opened." },
-      { type:"dim",     text:"  (Or reach me directly at om@resso.ai)" },
+      { type:"dim",     text:"  (Or reach me directly at emailtosolankiom@gmail.com)" },
     ];
   },
 
@@ -422,7 +422,7 @@ const CMDS: Record<string, CmdFn> = {
     if (aiCallCount >= AI_RATE_LIMIT) {
       return [
         { type:"warn",  text:`⚠  AI rate limit reached (${AI_RATE_LIMIT} queries per session).` },
-        { type:"dim",   text:"Reach Om directly: om@resso.ai" },
+        { type:"dim",   text:"Reach Om directly: emailtosolankiom@gmail.com" },
       ];
     }
 
@@ -476,7 +476,7 @@ const CMDS: Record<string, CmdFn> = {
       { type:"success", text:"║                                               ║" },
       { type:"success", text:"║   ✓  ACCESS GRANTED: Hire Om Kumar Solanki   ║" },
       { type:"success", text:"║                                               ║" },
-      { type:"success", text:"║   EMAIL     om@resso.ai                       ║" },
+      { type:"success", text:"║   EMAIL     emailtosolankiom@gmail.com                       ║" },
       { type:"success", text:"║   LINKEDIN  /in/omkumar-solanki               ║" },
       { type:"success", text:"║                                               ║" },
       { type:"success", text:"╚═══════════════════════════════════════════════╝" },

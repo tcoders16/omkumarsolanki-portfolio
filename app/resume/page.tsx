@@ -269,7 +269,7 @@ export default function ResumePage() {
             <div className="title">AI / ML Engineer  ·  Agentic Systems  ·  MLOps</div>
           </div>
           <div className="header-right">
-            <div><a href="mailto:om@resso.ai">om@resso.ai</a></div>
+            <div><a href="mailto:emailtosolankiom@gmail.com">emailtosolankiom@gmail.com</a></div>
             <div><a href="https://github.com/omkumarsolanki">github.com/omkumarsolanki</a></div>
             <div><a href="https://www.resso.ai">resso.ai</a></div>
             <div>Canada / Remote</div>
