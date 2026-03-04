@@ -167,43 +167,59 @@ export default function Nav() {
             {l.label}
           </a>
         ))}
-        <div style={{ display: "flex", gap: 20, marginTop: 16 }}>
+
+        {/* Mobile CTAs */}
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+          marginTop: 4,
+          width: "100%",
+          padding: "0 24px",
+          flexWrap: "wrap",
+        }}>
           <a
             href="/book"
+            onClick={() => setMenuOpen(false)}
             style={{
+              flex: 1,
+              minWidth: 120,
+              textAlign: "center",
               fontFamily: "var(--font-mono)",
               fontSize: "0.65rem",
+              fontWeight: 700,
               color: "#3dba7e",
               textDecoration: "none",
               letterSpacing: "0.08em",
+              padding: "11px 16px",
+              border: "1px solid rgba(61,186,126,0.4)",
+              borderRadius: 6,
+              background: "rgba(61,186,126,0.07)",
             }}
           >
             BOOK A CALL ↗
           </a>
           <a
-            href={GITHUB_URL}
+            href="/resume"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => setMenuOpen(false)}
             style={{
+              flex: 1,
+              minWidth: 120,
+              textAlign: "center",
               fontFamily: "var(--font-mono)",
               fontSize: "0.65rem",
-              color: "var(--muted)",
-              textDecoration: "none",
-              letterSpacing: "0.08em",
-            }}
-          >
-            GITHUB ↗
-          </a>
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.65rem",
+              fontWeight: 700,
               color: "var(--accent)",
               textDecoration: "none",
               letterSpacing: "0.08em",
+              padding: "11px 16px",
+              border: "1px solid var(--accent-ring)",
+              borderRadius: 6,
+              background: "var(--accent-dim)",
             }}
           >
             RESUME ↓

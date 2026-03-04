@@ -461,25 +461,30 @@ main { position: relative; z-index: 1; }
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.96);
+  background: rgba(0,0,0,0.97);
   z-index: 99;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: clamp(6px, 1.8vh, 18px);
+  padding: 72px 24px 36px;
   backdrop-filter: blur(20px);
+  overflow-y: auto;
 }
 .mobile-menu.open { display: flex; }
-.mobile-menu a {
+.mobile-menu > a {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 2.2rem;
+  font-size: clamp(1.3rem, 6.5vw, 1.75rem);
   letter-spacing: -0.03em;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.2s;
+  width: 100%;
+  text-align: center;
+  padding: 4px 0;
 }
-.mobile-menu a:hover { color: var(--white); }
+.mobile-menu > a:hover { color: var(--white); }
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -512,7 +517,45 @@ main { position: relative; z-index: 1; }
   .hamburger { display: flex; }
   .project-card { padding: 24px; }
   .hero-name { font-size: clamp(3.2rem, 15vw, 6rem); }
+
+  /* Section vertical padding */
+  .section { padding: clamp(60px, 10vh, 96px) 0; }
+
+  /* Mobile menu action link overrides (prevent 2.2rem from applying) */
+  .mobile-menu a[href="/book"],
+  .mobile-menu a[href="/resume"],
+  .mobile-menu a[href="https://github.com/omkumarsolanki"] {
+    font-size: 0.72rem !important;
+  }
+
+  /* Container padding on small screens */
+  .container { padding: 0 clamp(16px, 5vw, 28px); }
+
+  /* Rates table — allow horizontal scroll */
+  .rates-trigger-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
+
 @media (max-width: 480px) {
   .btn { padding: 12px 22px; font-size: 0.8rem; }
+
+  /* Section padding tighter on phones */
+  .section { padding: 56px 0; }
+
+  /* Typography scale-down for phones */
+  .display-xl { font-size: clamp(2rem, 10vw, 3.5rem); }
+  .display-lg  { font-size: clamp(1.6rem, 8vw, 2.8rem); }
+  .display-md  { font-size: clamp(1.3rem, 6vw, 2rem); }
+  .body-lg     { font-size: 0.95rem; }
+  .body-sm     { font-size: 0.82rem; }
+
+  /* Project card tweaks */
+  .project-card { padding: 20px 18px; }
+
+  /* Section rule index hidden on tiny screens */
+  .section-rule__index { display: none; }
+
+  /* Prevent horizontal overflow site-wide */
+  body { overflow-x: hidden; }
+  * { max-width: 100%; }
+  img, canvas, svg { max-width: 100%; height: auto; }
 }

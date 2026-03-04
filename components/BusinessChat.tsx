@@ -123,7 +123,7 @@ export default function BusinessChat() {
 
       {/* Chat panel */}
       {open && (
-        <div style={{
+        <div className="chat-panel" style={{
           position: "fixed", bottom: 96, right: 28, zIndex: 9998,
           width: 370, maxHeight: 560,
           background: "#0e0e0e", border: "1px solid rgba(255,255,255,0.1)",
@@ -247,6 +247,56 @@ export default function BusinessChat() {
             )}
           </div>
 
+          {/* Quick suggestion chips — shown before user sends anything */}
+          {count === 0 && (
+            <div style={{
+              padding: "6px 12px 2px",
+              display: "flex", gap: 6, flexWrap: "wrap",
+              borderTop: "1px solid rgba(255,255,255,0.05)",
+            }}>
+              {[
+                { label: "/book", action: "link", href: "/book" },
+                { label: "/resume", action: "link", href: "/resume" },
+                { label: "/more", action: "msg", text: "Tell me more about Om's services and what he can build." },
+              ].map(chip => (
+                chip.action === "link" ? (
+                  <a
+                    key={chip.label}
+                    href={chip.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontFamily: "var(--font-mono)", fontSize: "0.55rem",
+                      color: "#4a9eff", textDecoration: "none",
+                      padding: "4px 9px", borderRadius: 20,
+                      border: "1px solid rgba(74,158,255,0.3)",
+                      background: "rgba(74,158,255,0.07)",
+                      letterSpacing: "0.04em", cursor: "pointer",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {chip.label}
+                  </a>
+                ) : (
+                  <button
+                    key={chip.label}
+                    onClick={() => { setInput(chip.text!); setTimeout(() => inputRef.current?.focus(), 30); }}
+                    style={{
+                      fontFamily: "var(--font-mono)", fontSize: "0.55rem",
+                      color: "#3dba7e", background: "rgba(61,186,126,0.07)",
+                      padding: "4px 9px", borderRadius: 20,
+                      border: "1px solid rgba(61,186,126,0.3)",
+                      letterSpacing: "0.04em", cursor: "pointer",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {chip.label}
+                  </button>
+                )
+              ))}
+            </div>
+          )}
+
           {/* Input */}
           {count < CLIENT_LIMIT && (
             <div style={{
@@ -313,6 +363,18 @@ export default function BusinessChat() {
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
         div::-webkit-scrollbar { display: none; }
+
+        @media (max-width: 480px) {
+          .chat-panel {
+            bottom: 80px !important;
+            right: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 14px 14px 0 0 !important;
+            max-height: 72vh !important;
+          }
+        }
       `}</style>
     </>
   );

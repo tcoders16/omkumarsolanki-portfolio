@@ -248,10 +248,10 @@ export default function Rates() {
           </span>
         </div>
 
-        <div className="reveal reveal-d3" style={{
+        <div className="reveal reveal-d3 rates-trigger-table-wrap" style={{
           border:`1px solid ${T.border}`, borderRadius:8, overflow:"hidden", marginBottom:52,
         }}>
-          <div style={{ display:"grid", gridTemplateColumns:"2fr 2fr 1fr 2fr 1.5fr",
+          <div style={{ display:"grid", gridTemplateColumns:"2fr 2fr 1fr 2fr 1.5fr", minWidth:560,
             padding:"8px 16px", background:"rgba(255,255,255,0.02)",
             borderBottom:`1px solid ${T.border}`,
             fontFamily:"var(--font-mono)", fontSize:"0.46rem",
@@ -261,7 +261,7 @@ export default function Rates() {
           </div>
           {TRIGGERS.map((row, i) => (
             <div key={row.signal} style={{
-              display:"grid", gridTemplateColumns:"2fr 2fr 1fr 2fr 1.5fr",
+              display:"grid", gridTemplateColumns:"2fr 2fr 1fr 2fr 1.5fr", minWidth:560,
               padding:"11px 16px",
               borderBottom: i < TRIGGERS.length - 1 ? `1px solid ${T.border}` : "none",
               background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.01)",
@@ -410,6 +410,10 @@ export default function Rates() {
         }
         @media (max-width:680px) {
           .b2b-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width:480px) {
+          .rates-trigger-table-wrap { border-radius: 6px; }
+          .tiers-grid > div { padding: 20px 16px !important; }
         }
       `}</style>
     </section>
