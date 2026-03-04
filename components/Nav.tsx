@@ -12,12 +12,11 @@ const links = [
   { label: "Contact",  href: "/#contact" },
 ];
 
-// TODO: Replace with your actual GitHub URL
 const GITHUB_URL = "https://github.com/omkumarsolanki";
 
 export default function Nav() {
-  const [scrolled, setScrolled]   = useState(false);
-  const [menuOpen, setMenuOpen]   = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -25,7 +24,6 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -38,10 +36,11 @@ export default function Nav() {
         top: 0, left: 0, right: 0,
         zIndex: 100,
         height: 60,
-        padding: "0 clamp(20px, 5vw, 64px)",
+        padding: "0 clamp(16px, 3vw, 48px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: 12,
         background: scrolled ? "rgba(0,0,0,0.88)" : "transparent",
         backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
@@ -57,86 +56,79 @@ export default function Nav() {
           color: "var(--white)",
           textDecoration: "none",
           letterSpacing: "-0.04em",
+          flexShrink: 0,
         }}>
           OS<span style={{ color: "var(--accent)" }}>.</span>
         </a>
 
-        {/* Desktop nav */}
-        <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 24 }}>
+        {/* Desktop nav links — centered */}
+        <div className="hide-mobile" style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "clamp(12px, 1.5vw, 24px)",
+          flex: 1,
+          justifyContent: "center",
+          overflow: "hidden",
+        }}>
           {links.map(l => (
-            <a key={l.label} href={l.href} className="nav-link">
+            <a key={l.label} href={l.href} className="nav-link" style={{ whiteSpace: "nowrap" }}>
               {l.label}
             </a>
           ))}
         </div>
 
-        {/* Desktop right side — Book + GitHub + Resume */}
-        <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {/* Book a Call */}
+        {/* Desktop right — Book a Call + Resume */}
+        <div className="hide-mobile" style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          flexShrink: 0,
+        }}>
           <a
             href="/book"
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "0.6rem",
+              fontSize: "0.58rem",
               fontWeight: 600,
               letterSpacing: "0.08em",
               color: "#3dba7e",
               textDecoration: "none",
               textTransform: "uppercase",
-              padding: "6px 14px",
-              border: "1px solid rgba(61,186,126,0.28)",
-              borderRadius: 2,
+              padding: "6px 12px",
+              border: "1px solid rgba(61,186,126,0.35)",
+              borderRadius: 3,
               transition: "all 0.2s",
+              whiteSpace: "nowrap",
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = "rgba(61,186,126,0.1)";
-              e.currentTarget.style.borderColor = "rgba(61,186,126,0.55)";
+              e.currentTarget.style.borderColor = "rgba(61,186,126,0.65)";
             }}
             onMouseLeave={e => {
               e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.borderColor = "rgba(61,186,126,0.28)";
+              e.currentTarget.style.borderColor = "rgba(61,186,126,0.35)";
             }}
           >
             Book a Call ↗
           </a>
-          {/* GitHub */}
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.6rem",
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-              color: "var(--muted)",
-              textDecoration: "none",
-              textTransform: "uppercase",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = "var(--white)")}
-            onMouseLeave={e => (e.currentTarget.style.color = "var(--muted)")}
-          >
-            GitHub ↗
-          </a>
 
-          {/* Resume — placeholder (add /resume.pdf to /public) */}
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "0.6rem",
+              fontSize: "0.58rem",
               fontWeight: 500,
               letterSpacing: "0.08em",
               color: "var(--accent)",
               textDecoration: "none",
               textTransform: "uppercase",
-              padding: "6px 14px",
+              padding: "6px 12px",
               border: "1px solid var(--accent-ring)",
-              borderRadius: 2,
+              borderRadius: 3,
               transition: "all 0.2s",
+              whiteSpace: "nowrap",
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = "var(--accent-dim)";
