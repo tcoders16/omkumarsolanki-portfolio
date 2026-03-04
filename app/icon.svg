@@ -1,5 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0a0a0a"/>
-  <text x="5" y="22" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="-0.5">OS</text>
-  <circle cx="27" cy="8" r="3" fill="#3dba7e"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f0f0f"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3dba7e"/>
+      <stop offset="100%" stop-color="#2a9460"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+
+  <!-- Green accent bar top-left -->
+  <rect x="4" y="4" width="10" height="2.5" rx="1.25" fill="url(#glow)"/>
+
+  <!-- O -->
+  <text x="3.5" y="24" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="-1">O</text>
+
+  <!-- S — offset, lighter -->
+  <text x="14" y="24" font-family="Georgia, serif" font-size="18" font-weight="700" fill="url(#glow)" letter-spacing="-1">S</text>
 </svg>
