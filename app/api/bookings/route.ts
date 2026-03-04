@@ -6,9 +6,8 @@ import { randomUUID } from "crypto";
 import { getBookings, addBooking, notifyEmail } from "@/lib/bookings-store";
 
 // ── IP Rate Limiter ───────────────────────────────────────────────────────────
-// Max 5 POST attempts per IP per hour; persists across hot-reloads via globalThis
 const RATE_LIMIT   = 5;
-const WINDOW_MS    = 60 * 60 * 1000; // 1 hour
+const WINDOW_MS    = 60 * 60 * 1000;
 
 const g = globalThis as typeof globalThis & {
   __bookingRateMap?: Map<string, { count: number; resetAt: number }>;
@@ -18,7 +17,6 @@ if (!g.__bookingRateMap) g.__bookingRateMap = new Map();
 function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number } {
   const now    = Date.now();
   const entry  = g.__bookingRateMap!.get(ip);
-
   if (!entry || now > entry.resetAt) {
     g.__bookingRateMap!.set(ip, { count: 1, resetAt: now + WINDOW_MS });
     return { allowed: true, retryAfterSec: 0 };
@@ -31,11 +29,11 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number }
 }
 
 export async function GET() {
-  return NextResponse.json(getBookings());
+  const bookings = await getBookings();
+  return NextResponse.json(bookings);
 }
 
 export async function POST(req: NextRequest) {
-  // Rate-limit by real IP (X-Forwarded-For from proxies, fallback to socket addr)
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
     req.headers.get("x-real-ip") ??
@@ -45,16 +43,11 @@ export async function POST(req: NextRequest) {
   if (!allowed) {
     return NextResponse.json(
       { error: `Too many attempts. Try again in ${Math.ceil(retryAfterSec / 60)} min.` },
-      {
-        status: 429,
-        headers: { "Retry-After": String(retryAfterSec) },
-      }
+      { status: 429, headers: { "Retry-After": String(retryAfterSec) } }
     );
   }
-  let body: {
-    date?: string; slot?: string;
-    name?: string; email?: string; note?: string;
-  };
+
+  let body: { date?: string; slot?: string; name?: string; email?: string; note?: string; };
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
 
@@ -67,18 +60,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
   }
 
-  // Slot must be in the future (ET = UTC-5)
   const [h, m] = slot.split(":").map(Number);
   const [y, mo, d] = date.split("-").map(Number);
-  const slotTime = new Date(Date.UTC(y, mo - 1, d, h + 5, m)); // ET → UTC
+  const slotTime = new Date(Date.UTC(y, mo - 1, d, h + 5, m));
   if (slotTime <= new Date()) {
     return NextResponse.json({ error: "That slot is in the past." }, { status: 400 });
   }
 
-  // 1 booking per email address (across all dates)
-  const emailClash = getBookings().find(
-    b => b.email.toLowerCase() === email.trim().toLowerCase()
-  );
+  const bookings = await getBookings();
+
+  const emailClash = bookings.find(b => b.email.toLowerCase() === email.trim().toLowerCase());
   if (emailClash) {
     return NextResponse.json(
       { error: "This email already has a booking. Reach Om at emailtosolankiom@gmail.com to reschedule." },
@@ -86,29 +77,27 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 1 booking per day
-  const dayClash = getBookings().find(b => b.date === date);
+  const dayClash = bookings.find(b => b.date === date);
   if (dayClash) {
     return NextResponse.json({ error: "That day is already taken — pick another." }, { status: 409 });
   }
 
-  // Check exact slot double-booking
-  const slotClash = getBookings().find(b => b.date === date && b.slot === slot);
+  const slotClash = bookings.find(b => b.date === date && b.slot === slot);
   if (slotClash) {
     return NextResponse.json({ error: "That slot was just taken — pick another." }, { status: 409 });
   }
 
   const booking = {
     id:       randomUUID(),
-    date,     slot,
+    date, slot,
     name:     name.trim().slice(0, 60),
     email:    email.trim().slice(0, 120),
     note:     note.trim().slice(0, 300),
     bookedAt: new Date().toISOString(),
   };
 
-  addBooking(booking);           // persists + broadcasts via SSE
-  notifyEmail(booking);          // fire-and-forget email
+  await addBooking(booking);
+  notifyEmail(booking);
 
   return NextResponse.json({ success: true, booking });
 }

@@ -15,13 +15,14 @@ export async function GET(req: NextRequest) {
   let ctrl: ReadableStreamDefaultController<Uint8Array>;
 
   const stream = new ReadableStream<Uint8Array>({
-    start(c) {
+    async start(c) {
       ctrl = c;
       sseSubs.add(c);
 
       // Send current state immediately
+      const bookings = await getBookings();
       c.enqueue(enc.encode(
-        `data: ${JSON.stringify({ type: "init", bookings: getBookings() })}\n\n`
+        `data: ${JSON.stringify({ type: "init", bookings })}\n\n`
       ));
 
       // Broadcast updated watcher count to everyone

@@ -1,10 +1,9 @@
 /**
- * Shared singleton store for live calendar bookings.
- * Uses globalThis so state survives Next.js hot-reloads in dev.
- * For Vercel serverless you'd swap file + Map with a KV store (e.g. Upstash Redis).
+ * Bookings store backed by Upstash Redis.
+ * Falls back to in-memory (dev) when env vars are not set.
  */
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { Redis } from "@upstash/redis";
+import nodemailer from "nodemailer";
 
 export type Booking = {
   id: string;
@@ -16,38 +15,55 @@ export type Booking = {
   bookedAt: string; // ISO timestamp
 };
 
-const DATA_FILE = join(process.cwd(), "data", "bookings.json");
+const REDIS_KEY = "portfolio:bookings";
 
-// ── Survive hot-reloads ──────────────────────────────────────────────────────
-const g = globalThis as typeof globalThis & {
-  __bookings?:    Booking[];
-  __sseSubs?:     Set<ReadableStreamDefaultController<Uint8Array>>;
-};
-
-if (!g.__bookings) {
-  try {
-    g.__bookings = existsSync(DATA_FILE)
-      ? JSON.parse(readFileSync(DATA_FILE, "utf-8"))
-      : [];
-  } catch { g.__bookings = []; }
+// ── Redis client (lazy singleton) ─────────────────────────────────────────────
+function getRedis(): Redis | null {
+  if (
+    !process.env.UPSTASH_REDIS_REST_URL ||
+    !process.env.UPSTASH_REDIS_REST_TOKEN
+  ) return null;
+  return new Redis({
+    url:   process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  });
 }
-if (!g.__sseSubs) g.__sseSubs = new Set();
+
+// ── In-memory fallback (dev) ───────────────────────────────────────────────────
+const g = globalThis as typeof globalThis & {
+  __bookings?:  Booking[];
+  __sseSubs?:   Set<ReadableStreamDefaultController<Uint8Array>>;
+};
+if (!g.__bookings)  g.__bookings  = [];
+if (!g.__sseSubs)   g.__sseSubs   = new Set();
 
 export const sseSubs = g.__sseSubs!;
 
-// ── Accessors ────────────────────────────────────────────────────────────────
-export function getBookings(): Booking[] {
+// ── Accessors ─────────────────────────────────────────────────────────────────
+export async function getBookings(): Promise<Booking[]> {
+  const redis = getRedis();
+  if (redis) {
+    const raw = await redis.get<Booking[]>(REDIS_KEY);
+    return raw ?? [];
+  }
   return g.__bookings!;
 }
 
-export function addBooking(b: Booking): void {
-  g.__bookings!.push(b);
-  try { writeFileSync(DATA_FILE, JSON.stringify(g.__bookings, null, 2)); } catch {}
-  broadcast({ type: "booking", bookings: g.__bookings });
+export async function addBooking(b: Booking): Promise<void> {
+  const redis = getRedis();
+  if (redis) {
+    const current = await getBookings();
+    current.push(b);
+    await redis.set(REDIS_KEY, current);
+    broadcast({ type: "booking", bookings: current });
+  } else {
+    g.__bookings!.push(b);
+    broadcast({ type: "booking", bookings: g.__bookings });
+  }
   broadcastWatchers();
 }
 
-// ── SSE helpers ──────────────────────────────────────────────────────────────
+// ── SSE helpers ───────────────────────────────────────────────────────────────
 const enc = new TextEncoder();
 
 export function broadcast(data: object): void {
@@ -62,9 +78,7 @@ export function broadcastWatchers(): void {
   broadcast({ type: "watchers", count: sseSubs.size });
 }
 
-// ── Email via Gmail SMTP (nodemailer) ─────────────────────────────────────────
-import nodemailer from "nodemailer";
-
+// ── Email via Gmail SMTP ──────────────────────────────────────────────────────
 function getTransporter() {
   return nodemailer.createTransport({
     host:   process.env.SMTP_HOST   ?? "smtp.gmail.com",
