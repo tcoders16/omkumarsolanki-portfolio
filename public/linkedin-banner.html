@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a1a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Courier New', monospace; }
+
+  .banner {
+    width: 1584px;
+    height: 396px;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Grid texture */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Left accent bar */
+  .accent-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #3dba7e, #4a9eff, #8b5cf6);
+  }
+
+  /* Sigmoid curve SVG */
+  .sigmoid-bg {
+    position: absolute;
+    right: 200px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.06;
+  }
+
+  /* Floating math */
+  .math-float {
+    position: absolute;
+    font-family: 'Courier New', monospace;
+    color: rgba(255,255,255,0.07);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  /* Main content */
+  .content {
+    position: relative;
+    z-index: 10;
+    padding: 0 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .left { max-width: 860px; }
+
+  .tag-line {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #3dba7e;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .name {
+    font-family: 'Courier New', monospace;
+    font-size: 72px;
+    font-weight: 700;
+    color: #f0f0f0;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 18px;
+  }
+
+  .name span { color: #3dba7e; }
+
+  .title {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: #666;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #888;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 14px;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Right stats */
+  .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-end;
+  }
+
+  .stat {
+    text-align: right;
+  }
+
+  .stat-val {
+    font-family: 'Courier New', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: #f0f0f0;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .stat-val.green { color: #3dba7e; }
+  .stat-val.blue  { color: #4a9eff; }
+  .stat-val.purple { color: #8b5cf6; }
+
+  .stat-lbl {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    color: #555;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Corner formula */
+  .formula {
+    position: absolute;
+    bottom: 24px;
+    right: 72px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 0.04em;
+  }
+
+  /* Horizontal rule */
+  .rule {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(to right, #3dba7e, transparent);
+    opacity: 0.3;
+  }
+
+  /* Screenshot instructions */
+  .instructions {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #888;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="instructions">
+  Screenshot the banner below — 1584 × 396px. Zoom browser to 100% for exact dimensions.
+</div>
+
+<div class="banner">
+  <div class="grid"></div>
+  <div class="accent-bar"></div>
+
+  <!-- Floating math labels -->
+  <div class="math-float" style="top:34px;left:440px">P(hire|x) = σ(Wₜhₜ + b)</div>
+  <div class="math-float" style="top:80px;left:760px">R(q) = top-k(cosine(E(q), Eᵢ))</div>
+  <div class="math-float" style="bottom:60px;left:380px">Agent → [LLM + context] → MCP → {tool}</div>
+  <div class="math-float" style="bottom:30px;left:700px">ŷ = Σwₖfₖ(X) + ε</div>
+  <div class="math-float" style="top:50px;right:340px">P(action) = σ(z) ≥ 0.50</div>
+
+  <!-- Sigmoid SVG -->
+  <svg class="sigmoid-bg" width="320" height="280" viewBox="-5 -0.1 10 1.2">
+    <path d="M -4.5 0.01 Q -2 0.05 0 0.5 Q 2 0.95 4.5 0.99"
+      fill="none" stroke="white" stroke-width="0.15" stroke-linecap="round"/>
+    <line x1="-4.5" y1="0.5" x2="4.5" y2="0.5" stroke="white" stroke-width="0.04" stroke-dasharray="0.3 0.2" opacity="0.5"/>
+  </svg>
+
+  <div class="content">
+    <div class="left">
+      <div class="tag-line">Founding Engineer @ Resso.ai  ·  Open to Hire</div>
+      <div class="name">Om Kumar<br>Solanki<span>.</span></div>
+      <div class="title">AI / ML Engineer  ·  Agentic Systems  ·  MLOps  ·  RAG Architecture</div>
+      <div class="pills">
+        <span class="pill">PyTorch</span>
+        <span class="pill">ONNX</span>
+        <span class="pill">Fine-tuning</span>
+        <span class="pill">RAG</span>
+        <span class="pill">MCP</span>
+        <span class="pill">AWS</span>
+        <span class="pill">WebRTC</span>
+        <span class="pill">MLOps</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val green">&lt;2s</div>
+        <div class="stat-lbl">Inference Latency</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val blue">0.97</div>
+        <div class="stat-lbl">AUC Score</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val purple">100%</div>
+        <div class="stat-lbl">Private RAG</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="formula">P(action) = σ(w₁·drift + w₂·perf + w₃·time + w₄·conf + b)</div>
+  <div class="rule"></div>
+</div>
+
+</body>
+</html>

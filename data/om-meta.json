@@ -1,0 +1,150 @@
+{
+  "identity": {
+    "name": "Om Kumar Solanki",
+    "alias": "OS.",
+    "role": "AI/ML Engineer & Founding Engineer",
+    "location": "Ontario, Canada",
+    "email": "om@resso.ai",
+    "github": "github.com/omkumarsolanki",
+    "linkedin": "linkedin.com/in/omkumar-solanki",
+    "open_to": ["Founding roles", "AI consulting", "Senior ML engineer positions"]
+  },
+  "companies": [
+    {
+      "name": "Resso.ai",
+      "role": "Founding Engineer",
+      "period": "Nov 2025 – present",
+      "what": "Real-time AI interview intelligence platform",
+      "impact": "Built entire production ML platform — WebRTC audio capture, speaker diarization, hire-probability scoring pipeline. End-to-end latency under 2 seconds.",
+      "metrics": "AUC 0.941, INT8 quantized ONNX model, <2s end-to-end"
+    },
+    {
+      "name": "HariKrushna Software",
+      "role": "AI Architect",
+      "period": "Jun 2024 – present",
+      "what": "Enterprise AI systems",
+      "impact": "Designed and deployed enterprise-grade AI integrations including MCP servers bridging LLM agents to Slack, CRMs, and databases."
+    },
+    {
+      "name": "Corol.org / NunaFab",
+      "role": "ML Engineer",
+      "period": "2024",
+      "what": "Chemistry AI and materials science ML",
+      "impact": "XGBoost model predicting chemistry outcomes. R²=0.89 on 200-row dataset with SHAP explainability. Cut R&D cycle time by 40%."
+    }
+  ],
+  "projects": [
+    {
+      "name": "Resso.ai — Real-Time Hire Scoring",
+      "tech": "WebRTC, Speaker Diarization, ONNX, PyTorch",
+      "what": "AI that scores job candidates live during interviews",
+      "plain": "No more gut-feel hiring — an AI listens and scores candidates as the interview happens, flagging signals that lead to good hires.",
+      "metric": "<2s scoring, AUC 0.941, INT8 ONNX"
+    },
+    {
+      "name": "Vadtal — On-Premise Air-Gapped RAG",
+      "tech": "GGUF, HNSW, FastAPI, llama.cpp",
+      "what": "Private AI knowledge base that runs 100% offline",
+      "plain": "Companies with sensitive data can now have an AI brain that never phones home — everything runs locally with zero external calls.",
+      "metric": "4.2ms latency, 0 external API calls, 16GB RAM"
+    },
+    {
+      "name": "Lawline.tech — Legal AI",
+      "tech": "Fine-tuned LLM, clause classification",
+      "what": "AI that reads and flags risky legal contracts",
+      "plain": "Built at Starbucks. Upload a contract and it reads the whole thing in seconds, flags the risky clauses before you sign.",
+      "metric": "94% accuracy, 3s per document vs 3 hours manually"
+    },
+    {
+      "name": "Corol / NunaFab — Chemistry ML",
+      "tech": "XGBoost, SHAP, Python",
+      "what": "ML model predicting chemistry experiment outcomes",
+      "plain": "Instead of running hundreds of expensive lab experiments, the model predicts which combinations work — cutting R&D costs by 40%.",
+      "metric": "R²=0.89, 40% cost reduction, 200-row dataset"
+    },
+    {
+      "name": "AI Avatar with Lip Sync",
+      "tech": "Audio-to-viseme, WebSocket bus",
+      "what": "Talking AI avatar with real-time lip sync",
+      "plain": "A digital avatar that speaks and moves its lips in sync with audio — powered by a custom audio-to-viseme pipeline over WebSocket."
+    },
+    {
+      "name": "MCP Enterprise Bridge",
+      "tech": "MCP, TypeScript, LLM agents",
+      "what": "Multi-agent orchestration connecting AI to business tools",
+      "plain": "One layer that lets AI agents talk to Slack, CRMs, and databases — plug it in once and all your tools become AI-accessible."
+    }
+  ],
+  "skills": {
+    "languages": ["Python", "TypeScript"],
+    "ml_frameworks": ["PyTorch", "ONNX", "XGBoost", "MLflow", "SHAP"],
+    "infrastructure": ["Docker", "AWS", "Kubernetes", "FastAPI"],
+    "ai_specialties": ["LLM fine-tuning", "RAG", "GGUF", "HNSW", "MCP", "Agentic AI", "WebRTC", "Speaker Diarization"],
+    "frontend": ["Next.js", "React"]
+  },
+  "education": [
+    {
+      "school": "Sheridan College",
+      "degree": "BASc Artificial Intelligence (Honours)"
+    },
+    {
+      "school": "AWS Academy",
+      "degree": "Cloud Developing Graduate",
+      "year": "Dec 2025"
+    }
+  ],
+  "metrics": {
+    "inference_latency": "<2s",
+    "auc_hire_scoring": "0.941",
+    "rag_external_calls": "0%",
+    "rd_cycle_speedup": "3x",
+    "chemistry_r2": "0.89",
+    "legal_accuracy": "94%"
+  },
+  "personality": "Built his first AI while working shifts at Starbucks. Writes production ML systems, not demos. Ships fast. Advocates for simple solutions to complex problems.",
+
+  "booking": {
+    "cal": "https://cal.com/om-solanki/consultation",
+    "email": "om@resso.ai",
+    "call_type": "Free 30-min AI Strategy Call"
+  },
+
+  "use_cases": [
+    {
+      "problem": "Hiring is slow, inconsistent, or gut-feel",
+      "solution": "Real-time AI interview scoring",
+      "reference": "Resso.ai — built a live hire-probability pipeline: AUC 0.941, scores candidates in <2s as the interview happens",
+      "result": "No more bad hires from bias or fatigue — every candidate scored objectively, instantly"
+    },
+    {
+      "problem": "Legal review, contract reading, or compliance is slow and expensive",
+      "solution": "AI contract analysis",
+      "reference": "Lawline.tech — fine-tuned LLM that reads entire contracts, flags risky clauses: 94% accuracy, 3 seconds vs 3 hours manually",
+      "result": "Your legal team stops reading every page and starts reviewing only the flagged risks"
+    },
+    {
+      "problem": "Sensitive data, can't use cloud AI, privacy or regulatory concern",
+      "solution": "On-premise air-gapped AI (zero external calls)",
+      "reference": "Vadtal — private RAG system running 100% locally: 4.2ms latency, 0% external API calls, runs on 16GB RAM",
+      "result": "Full AI capability inside your own infrastructure — GDPR/HIPAA friendly, data never leaves your servers"
+    },
+    {
+      "problem": "R&D cycles are slow, expensive lab experiments, research bottlenecks",
+      "solution": "Predictive ML to replace trial-and-error research",
+      "reference": "Corol/NunaFab — XGBoost model predicting chemistry outcomes before running experiments: R²=0.89, 40% cost reduction",
+      "result": "Run 10x fewer experiments, pick winners computationally before spending lab budget"
+    },
+    {
+      "problem": "Teams waste time on repetitive tasks, manual data entry, copy-paste workflows",
+      "solution": "Agentic AI connected to your existing tools",
+      "reference": "MCP Enterprise Bridge — multi-agent orchestration layer connecting LLM agents to Slack, CRMs, and databases",
+      "result": "AI that reads your Slack, updates your CRM, and acts on business signals — automatically"
+    },
+    {
+      "problem": "Want AI but don't know where to start, need a strategy",
+      "solution": "AI audit — map where automation saves the most money first",
+      "reference": "HariKrushna Software — designed enterprise AI roadmaps for companies new to AI, deployed end-to-end",
+      "result": "Clear prioritised plan: which processes to automate, estimated ROI, and a build timeline"
+    }
+  ]
+}
