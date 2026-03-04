@@ -108,10 +108,11 @@ export default function About() {
             <div style={{
               width: 180,
               height: 220,
-              border: "1px solid var(--border-mid)",
-              borderRadius: 2,
+              border: "2px solid var(--border-mid)",
+              borderRadius: 20,
               overflow: "hidden",
               position: "relative",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
             }}>
               <img
                 src="/images/omkumar/Omkumar10.jpeg"
