@@ -1253,7 +1253,7 @@ function BayesianViz() {
 
         // Label at peak
         ctx.fillStyle = color; ctx.font = "bold 7.5px monospace"; ctx.textAlign = "center";
-        ctx.fillText(label, toX(mu), toY(gaussian(mu, sig, )) - 6);
+        ctx.fillText(label, toX(mu), toY(gaussian(mu, mu, sig)) - 6);
       };
 
       drawCurve(priorMu, priorSig, "rgba(100,160,255,0.8)", "Prior");
