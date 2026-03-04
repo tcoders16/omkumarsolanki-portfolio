@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
   };
 
   await addBooking(booking);
-  notifyEmail(booking);
+  await notifyEmail(booking);
 
   return NextResponse.json({ success: true, booking });
 }
