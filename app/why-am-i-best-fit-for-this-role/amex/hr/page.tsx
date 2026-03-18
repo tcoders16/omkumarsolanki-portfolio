@@ -381,8 +381,8 @@ export default function AmexHRFit() {
                 company: 'Resso.ai',
                 color: '#0a9280', bg: 'linear-gradient(135deg, #f0fdfb, #fff)',
                 border: '#0a928030',
-                problem: 'Enterprise call centre clients were losing revenue because AI agents forgot what the customer said three sentences ago. Conversations kept restarting from zero.',
-                action: 'Sat with clients for 2–3 days before writing a line of code. Mapped exactly where context broke. Built the stateful platform from scratch. Owned every layer — model, API, infra, dashboard.',
+                problem: 'Edtech clients were losing learners because AI call agents forgot context mid-conversation and kept restarting from zero. Students dropped off. Clients lost engagement.',
+                action: 'Sat with edtech clients for 2–3 days before writing a line of code. Mapped exactly where context broke. Built the stateful platform from scratch. Owned every layer — model, API, infra, dashboard.',
                 quote: 'They renewed the contract and expanded from 1 AI persona to 5 within 3 months of go-live.',
                 outcomes: [
                   { before: '72%', after: '98%', label: 'Conversations stayed on track' },
@@ -822,7 +822,7 @@ export default function AmexHRFit() {
               <div className="spec-grid">
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Requirement Discovery</div>
-                  <div className="spec-text">Sat with enterprise clients (fintech, healthcare) for 2–3 days before writing a line of code. Mapped their current call workflows — where agents dropped context, what triggered escalation, which silences meant confusion vs. thinking. <strong>Built the spec from observed pain, not assumptions.</strong></div>
+                  <div className="spec-text">Sat with enterprise clients (edtech) for 2–3 days before writing a line of code. Mapped their current call workflows — where agents dropped context, what triggered escalation, which silences meant confusion vs. thinking. <strong>Built the spec from observed pain, not assumptions.</strong></div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#7c3aed' }}>Translation to Engineering Spec</div>

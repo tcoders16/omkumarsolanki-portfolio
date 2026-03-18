@@ -9,7 +9,7 @@ const jdMap = [
   { req: "AWS, Kubernetes, Kafka", detail: "AWS Academy certified: EC2, S3, Lambda, SageMaker. Kafka event pipeline across 3 hospital systems — partitioned topics, consumer groups, DLQ, exactly-once semantics. K8s: HPA, rolling updates, liveness/readiness probes.", metric: "Production across all three" },
   { req: "Schema validation + structured outputs", detail: "Pydantic BaseModel on every LLM output. Retry with constrained re-prompt. After max retries: safe default + DLQ. One of six layers that cut hallucination rate from 14% to 3.8%.", metric: "14% → 3.8% hallucination" },
   { req: "Evaluation and monitoring", detail: "Per-persona dashboards at Resso: accuracy, latency, context retention, completion rate — daily. Automated 500-doc eval pipeline at HariKrushna with regression detection on every push.", metric: "72% → 98% retention" },
-  { req: "Fintech + regulated environments", detail: "7 enterprise clients: fintech, healthcare, legal — every model update required eval report and compliance sign-off before deploy. Lawline.tech: air-gapped, attorney-client privilege, zero telemetry.", metric: "7 enterprise clients" },
+  { req: "Fintech + regulated environments", detail: "7 enterprise clients: edtech, legal — every model update required eval report and compliance sign-off before deploy. Lawline.tech: air-gapped, attorney-client privilege, zero telemetry.", metric: "7 enterprise clients" },
 ];
 
 const incidentLog = [
