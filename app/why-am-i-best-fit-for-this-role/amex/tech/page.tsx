@@ -41,6 +41,10 @@ export default function AmexTechFit() {
     { req: 'Schema Validation + Structured Outputs', section: 'sec-mcp', proof: 'Pydantic BaseModel every output. DLQ after 3 retries', metric: '14% → 3.8% hallucination' },
     { req: 'Evaluation and Monitoring', section: 'sec-architecture', proof: 'Per-persona dashboards. 500-doc eval pipeline', metric: '72% → 98% retention' },
     { req: 'Fintech + Regulated Environments', section: 'sec-lawline', proof: '7 enterprise clients. Zero telemetry at Lawline', metric: '7 enterprise clients' },
+    { req: 'Language & Runtime Decisions', section: 'sec-languages', proof: 'Python vs Java vs Go — with latency benchmarks', metric: 'Go 180ms vs Python 800ms' },
+    { req: 'Zero Hallucination Architecture', section: 'sec-hallucination', proof: '6-layer defense: schema, RAG, SHAP, confidence, retry, DLQ', metric: '14% → 3.8% hallucination' },
+    { req: 'Observability Stack', section: 'sec-observability', proof: 'OpenTelemetry, Prometheus, Grafana, 500-doc eval pipeline', metric: 'p99 alerts · daily dashboards' },
+    { req: 'Resilience Engineering', section: 'sec-resilience', proof: 'Circuit breakers, DLQ, Redis session state, K8s probes', metric: 'P0 resolved in 24 min' },
   ];
 
   // Start the 4-min timer on first check
@@ -304,13 +308,18 @@ export default function AmexTechFit() {
 
 
         /* FLOATING JD TRACKER */
-        @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 32px rgba(10,146,128,.25), 0 0 0 1px rgba(10,146,128,.2); } 50% { box-shadow: 0 8px 40px rgba(10,146,128,.45), 0 0 0 2px rgba(10,146,128,.4); } }
-        .jd-tracker-pill { position: fixed; bottom: 24px; right: 24px; z-index: 500; cursor: pointer; display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%); color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; padding: 14px 24px; border-radius: 14px; animation: floatPulse 3s ease-in-out infinite; transition: all .25s; border: 1px solid rgba(10,146,128,.25); }
-        .jd-tracker-pill:hover { transform: translateY(-3px) scale(1.02); animation: none; box-shadow: 0 12px 44px rgba(10,146,128,.5), 0 0 0 2px rgba(10,146,128,.5); }
-        .jd-tracker-pill .pill-dot { width: 10px; height: 10px; border-radius: 50%; background: #0a9280; animation: blink 1.5s infinite; flex-shrink: 0; }
-        .jd-tracker-pill .pill-count { color: #0a9280; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; }
-        .jd-tracker-pill .pill-arrow { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: #0a9280; color: #fff; font-size: 14px; margin-left: 4px; transition: transform .2s; }
-        .jd-tracker-pill:hover .pill-arrow { transform: translateX(3px); }
+        @keyframes floatBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+        @keyframes rippleOut { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(2.4); opacity: 0; } }
+        .jd-fab-wrap { position: fixed; bottom: 28px; right: 28px; z-index: 500; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .jd-fab-label { background: #111; color: #0abfa8; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 7px 18px; border-radius: 8px; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.4); border: 1px solid #0a928050; position: relative; animation: floatBob 2.2s ease-in-out infinite; }
+        .jd-fab-label::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #111; }
+        .jd-fab { position: relative; width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(145deg, #0abfa8, #087060); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 30px rgba(10,146,128,.6); transition: transform .2s, box-shadow .2s; }
+        .jd-fab:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(10,146,128,.8); }
+        .jd-fab-ring { position: absolute; inset: -2px; border-radius: 50%; border: 2px solid rgba(10,191,168,.6); animation: rippleOut 2s ease-out infinite; }
+        .jd-fab-ring2 { animation-delay: 1s; }
+        .jd-fab-inner { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .jd-fab-num { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #fff; line-height: 1; }
+        .jd-fab-lbl { font-family: 'JetBrains Mono', monospace; font-size: 7px; color: rgba(255,255,255,.85); letter-spacing: .08em; text-transform: uppercase; }
         .jd-tracker-panel { position: fixed; bottom: 24px; right: 24px; z-index: 500; width: 380px; max-height: 85vh; overflow-y: auto; background: #0d0d0d; border: 1px solid #222; border-radius: 16px; box-shadow: 0 16px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06); animation: fd .2s ease; }
         .jd-tracker-panel::-webkit-scrollbar { width: 4px; }
         .jd-tracker-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
@@ -1186,6 +1195,384 @@ export default function AmexTechFit() {
 
         <div className="divider" />
 
+        {/* LANGUAGE & RUNTIME DECISION MATRIX */}
+        <div id="sec-languages" className="section">
+          <div className="eyebrow">Runtime Engineering · Language Selection</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Why Python? Why Go? Why not Java? — With numbers.</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Every language choice in production was a measured engineering decision — not familiarity. Here is the reasoning, the tradeoffs, and the latency data behind each call.</p>
+
+          {/* PYTHON VS JAVA */}
+          <div style={{ background: '#fff', border: '1.5px solid #e0e0da', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #fafaf8, #fff)', padding: '18px 24px 14px', borderBottom: '1px solid #ebebeb' }}>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Python vs Java — Why Python wins for ML inference</div>
+            </div>
+            <div style={{ padding: '20px 24px 24px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+                <div style={{ background: '#fef2f2', border: '1px solid #dc262625', borderRadius: 10, padding: '16px 18px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.16em', textTransform: 'uppercase', color: '#dc2626', fontWeight: 700, marginBottom: 10 }}>Java — why we rejected it</div>
+                  <div style={{ fontSize: 13, color: '#555', lineHeight: 1.75 }}>
+                    <strong>JVM startup: 2–8 seconds.</strong> Unacceptable for containerized ML inference pods that scale to zero. PyTorch has no Java-native bindings — you would be calling JNI into C++ with marshalling overhead. Every NumPy operation would need a JVM bridge. GC stop-the-world pauses (even G1GC) cause unpredictable latency spikes in real-time inference — a 200ms GC pause in a voice turn is heard by the user.
+                  </div>
+                  <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                    {['2–8s JVM startup', 'No PyTorch bindings', 'GC stop-the-world', 'JNI marshalling overhead', 'ML ecosystem absent'].map(t => (
+                      <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#dc2626', background: '#fef2f2', border: '1px solid #dc262625', borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ background: '#f0fdfb', border: '1px solid #0a928025', borderRadius: 10, padding: '16px 18px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.16em', textTransform: 'uppercase', color: '#0a9280', fontWeight: 700, marginBottom: 10 }}>Python — why we chose it</div>
+                  <div style={{ fontSize: 13, color: '#555', lineHeight: 1.75 }}>
+                    <strong>Cold start under 400ms</strong> in containerized FastAPI with gunicorn + uvicorn workers. PyTorch, NumPy, scikit-learn are C extensions — the Python layer is thin glue, actual compute runs in native C/CUDA. FastAPI with uvicorn achieves <strong>sub-5ms p99 latency</strong> for structured inference endpoints. The ML ecosystem (SHAP, joblib, LangGraph, Pydantic) simply does not exist in Java.
+                  </div>
+                  <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                    {['sub-400ms cold start', 'PyTorch C extensions', 'FastAPI + uvicorn', 'sub-5ms p99 inference', 'Full ML ecosystem'].map(t => (
+                      <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#0a7a6a', background: '#e4faf5', border: '1px solid #0a928025', borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: '#0d0d0d', borderRadius: 10, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#555', letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, flexShrink: 0 }}>Latency benchmark</div>
+                {[
+                  { label: 'Python FastAPI inference', val: '~4ms p50', color: '#0abfa8' },
+                  { label: 'Java Spring Boot equivalent', val: '~18ms p50', color: '#dc2626' },
+                  { label: 'Python cold start (Docker)', val: '~380ms', color: '#0abfa8' },
+                  { label: 'Java cold start (JVM)', val: '~4,200ms', color: '#dc2626' },
+                ].map((b, i) => (
+                  <div key={i} style={{ textAlign: 'center' }}>
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 800, color: b.color }}>{b.val}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#666', marginTop: 2 }}>{b.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* GO vs PYTHON vs NODE */}
+          <div style={{ background: '#fff', border: '1.5px solid #e0e0da', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #fafaf8, #fff)', padding: '18px 24px 14px', borderBottom: '1px solid #ebebeb' }}>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Go vs Node.js vs Python — Why Go runs the network layer</div>
+            </div>
+            <div style={{ padding: '20px 24px 24px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+                {[
+                  {
+                    name: 'Python', verdict: 'ML logic only', color: '#b87000', bg: '#fffbeb', border: '#b8700025',
+                    pros: ['Rich ML ecosystem', 'FastAPI async I/O', 'Pydantic validation'],
+                    cons: ['GIL blocks true parallelism', '200 concurrent tool calls → bottleneck', 'No goroutine equivalent'],
+                    latency: '~800ms at 200 concurrent'
+                  },
+                  {
+                    name: 'Node.js', verdict: 'Rejected', color: '#dc2626', bg: '#fef2f2', border: '#dc262625',
+                    pros: ['Event loop handles I/O', 'TypeScript type safety', 'npm ecosystem'],
+                    cons: ['Single-threaded CPU bound ops', 'No goroutines — fake concurrency', 'Memory leaks in long-running WebSocket servers'],
+                    latency: '~420ms at 200 concurrent'
+                  },
+                  {
+                    name: 'Go', verdict: 'Network layer', color: '#0a9280', bg: '#f0fdfb', border: '#0a928025',
+                    pros: ['True goroutine concurrency', 'No GIL, no GC pauses in hot path', 'Compiled binary — sub-100ms startup'],
+                    cons: ['Smaller ML ecosystem', 'More verbose than Python', 'No Pydantic equivalent (used Go structs + validator)'],
+                    latency: '~180ms at 200 concurrent'
+                  },
+                ].map((lang, i) => (
+                  <div key={i} style={{ background: lang.bg, border: `1.5px solid ${lang.border}`, borderRadius: 10, padding: '14px 16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 800, color: '#0d0d0d' }}>{lang.name}</div>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: lang.color, background: `${lang.color}15`, border: `1px solid ${lang.color}30`, borderRadius: 12, padding: '2px 8px', fontWeight: 700 }}>{lang.verdict}</span>
+                    </div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#0a9280', letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>Strengths</div>
+                    {lang.pros.map((p, j) => <div key={j} style={{ fontSize: 11, color: '#444', marginBottom: 3, paddingLeft: 8, borderLeft: `2px solid ${lang.color}40` }}>{p}</div>)}
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#dc2626', letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 700, marginTop: 8, marginBottom: 5 }}>Constraints</div>
+                    {lang.cons.map((c, j) => <div key={j} style={{ fontSize: 11, color: '#888', marginBottom: 3, paddingLeft: 8, borderLeft: '2px solid #dc262640' }}>{c}</div>)}
+                    <div style={{ marginTop: 10, background: '#0d0d0d', borderRadius: 6, padding: '6px 10px' }}>
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555', letterSpacing: '.1em' }}>E2E @ 200 concurrent</div>
+                      <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: lang.color }}>{lang.latency}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: '#0d0d0d', borderRadius: 10, padding: '14px 18px' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>The final architecture</div>
+                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.75 }}>
+                  Python handles ML inference (where the ecosystem lives). Go handles the MCP network layer (where goroutine concurrency matters). TypeScript handles the frontend. <strong style={{ color: '#f0f0f0' }}>The GIL is not a problem when you move concurrency to Go — each process does exactly what it is fastest at.</strong> The inter-process boundary is a local Unix socket: sub-1ms overhead, no serialisation cost.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CONCURRENCY MODEL */}
+          <div style={{ background: '#fff', border: '1.5px solid #7c3aed25', borderRadius: 14, overflow: 'hidden' }}>
+            <div style={{ background: 'linear-gradient(135deg, #f5f3ff, #fff)', padding: '16px 22px 12px', borderBottom: '1px solid #7c3aed15' }}>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 800, color: '#0d0d0d' }}>Concurrency model — the GIL problem, explained</div>
+            </div>
+            <div style={{ padding: '18px 22px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#dc2626', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>Python GIL problem</div>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.75 }}>The Global Interpreter Lock means only one thread executes Python bytecode at a time. In an async framework like FastAPI, I/O is non-blocking — but CPU-bound work (model inference) blocks the event loop. With 200 simultaneous voice sessions each needing tool resolution, Python serialises every call. At 200 concurrent: queue depth grows, p99 latency blows up. asyncio masks the GIL problem for I/O — it does not solve it for CPU-bound fan-out.</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>Go goroutine model</div>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.75 }}>Goroutines are multiplexed across OS threads by the Go scheduler (M:N threading). Spawning 1,000 goroutines costs ~4KB stack each vs ~1MB for OS threads. Each tool call in the MCP server is one goroutine: independently scheduled, independently timed out, independently retried. At 200 concurrent sessions × 5 tool calls = 1,000 goroutines. Memory: ~4MB. In Python threads: ~1GB. The maths is not close.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
+        {/* ZERO HALLUCINATION — 6-LAYER DEFENSE */}
+        <div id="sec-hallucination" className="section">
+          <div className="eyebrow">Grounded AI · Anti-Hallucination Engineering</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Zero Hallucination — 6-Layer Defense Architecture</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Hallucination rate dropped from <strong>14% → 3.8%</strong> at Resso, and to near-zero at Lawline, through layered architectural constraints — not prompting tricks. Each layer is independently verifiable and independently fail-safe.</p>
+
+          {/* 6 LAYERS */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginBottom: 24 }}>
+            {[
+              {
+                num: '01', title: 'Schema-First Output Constraints', color: '#0a9280', bg: '#f0fdfb',
+                what: 'Every LLM output passes through a Pydantic BaseModel before any downstream action. Required fields, enum constraints, regex validators on citation formats, confidence score ranges.',
+                why: 'The model cannot hallucinate fields that do not exist in the schema. A missing required field is a validation error — not a silent failure. Structurally impossible to produce malformed output.',
+                metric: '14% → 3.8%', metricLabel: 'hallucination reduction'
+              },
+              {
+                num: '02', title: 'RAG — Ground Every Claim', color: '#7c3aed', bg: '#f5f3ff',
+                what: 'Retrieval-Augmented Generation: retrieve relevant document chunks first, then generate strictly from those chunks. At Lawline: FAISS vector store over case documents. At Resso: knowledge base chunks injected into system prompt.',
+                why: 'The model answers from source material, not parametric memory. If the answer is not in the retrieved context, the model is instructed to say so. Reduces confabulation at the generation level.',
+                metric: 'Zero', metricLabel: 'hallucinated case citations'
+              },
+              {
+                num: '03', title: 'SHAP Explainability Layer', color: '#b87000', bg: '#fffbeb',
+                what: 'For ML models (Corol UHPC): SHAP values decompose every prediction into per-feature contributions. Engineers can audit why a strength value was predicted — not just what was predicted.',
+                why: 'A model that cannot explain its reasoning cannot be trusted in high-stakes decisions. SHAP creates an auditable chain from input features to output prediction. No black-box inference in regulated contexts.',
+                metric: 'R² 0.73', metricLabel: 'with full SHAP audit trail'
+              },
+              {
+                num: '04', title: 'Confidence-Gated Routing', color: '#1d4ed8', bg: '#eff6ff',
+                what: 'Every model output carries a confidence score. Below threshold → route to human review queue, not to downstream action. At TTC: high-confidence match triggers SMS notification. Low-confidence match goes to staff dashboard for manual verification.',
+                why: 'The system knows what it does not know. Hallucinations happen at the confidence boundary — this forces the model to admit uncertainty rather than confidently produce a wrong answer.',
+                metric: 'Human-in-loop', metricLabel: 'on all low-confidence outputs'
+              },
+              {
+                num: '05', title: 'Retry with Constrained Re-prompt', color: '#dc2626', bg: '#fef2f2',
+                what: 'On schema validation failure, the system re-prompts the LLM with the exact Pydantic error message: "Field X is required. Field Y must be one of [enum]. Retry with a valid JSON object matching this schema." Maximum 3 attempts.',
+                why: 'LLMs respond well to structured error feedback. Re-prompting with the schema error catches the ~80% of failures that are formatting errors, not knowledge errors. Only truly unsolvable calls reach the DLQ.',
+                metric: '80%', metricLabel: 'of validation failures recovered'
+              },
+              {
+                num: '06', title: 'Dead Letter Queue Analysis', color: '#6d28d9', bg: '#faf5ff',
+                what: 'After 3 failed retries: safe default response to the user + full context (tool_call, error trace, session ID, LLM output) sent to the dead letter queue. DLQ reviewed daily. Patterns used to improve prompts, update schemas, retrain.',
+                why: 'Every failed interaction is a training signal. DLQ analysis over 3 months identified 4 systematic prompt gaps that were driving 60% of validation failures. Fixing them cut the DLQ volume by 60%.',
+                metric: '60%', metricLabel: 'DLQ reduction via analysis'
+              },
+            ].map((layer, i) => (
+              <div key={i} style={{ background: layer.bg, border: `1.5px solid ${layer.color}25`, borderRadius: 12, padding: '16px 18px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 10 }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 28, fontWeight: 900, color: `${layer.color}30`, lineHeight: 1, flexShrink: 0 }}>{layer.num}</div>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 800, color: '#0d0d0d', lineHeight: 1.3 }}>{layer.title}</div>
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: layer.color, letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>What</div>
+                <div style={{ fontSize: 12, color: '#555', lineHeight: 1.65, marginBottom: 10 }}>{layer.what}</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#888', letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>Why this layer</div>
+                <div style={{ fontSize: 12, color: '#777', lineHeight: 1.65, marginBottom: 12 }}>{layer.why}</div>
+                <div style={{ background: '#0d0d0d', borderRadius: 6, padding: '7px 10px', display: 'inline-flex', flexDirection: 'column' }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 800, color: layer.color }}>{layer.metric}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#666', letterSpacing: '.06em' }}>{layer.metricLabel}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* HALLUCINATION COMPARISON */}
+          <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 14, padding: '20px 24px' }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.16em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 14 }}>Hallucination rate by system × defense layers active</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+              {[
+                { sys: 'Resso.ai', layers: 'Layers 1,2,4,5,6', rate: '3.8%', prev: '14%', color: '#0a9280' },
+                { sys: 'Lawline', layers: 'All 6 layers', rate: '~0%', prev: '?%', color: '#dc2626' },
+                { sys: 'Corol UHPC', layers: 'Layers 1,3,5', rate: 'N/A', prev: 'R² 0.73', color: '#b87000' },
+                { sys: 'TTC', layers: 'Layers 1,4,5,6', rate: 'Confidence gated', prev: 'Human review floor', color: '#1d4ed8' },
+              ].map((s, i) => (
+                <div key={i} style={{ background: '#111', border: `1px solid ${s.color}25`, borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: s.color, marginBottom: 3 }}>{s.sys}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555', marginBottom: 10 }}>{s.layers}</div>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 900, color: '#f0f0f0' }}>{s.rate}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555', marginTop: 2 }}>was {s.prev}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
+        {/* OBSERVABILITY STACK */}
+        <div id="sec-observability" className="section">
+          <div className="eyebrow">Production Engineering · Observability</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>You can't fix what you can't see — the full observability stack</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>In production AI systems, observability is not optional. Every layer — inference, tool calls, agent state, latency — must be visible, queryable, and alertable. Here is the full stack I built and operate.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+            {[
+              {
+                title: 'Structured Logging', color: '#0a9280', icon: '◈',
+                desc: 'Every FastAPI request emits structured JSON logs: request_id, session_id, tool_name, input_tokens, output_tokens, latency_ms, validation_result, retry_count. Logs are machine-parseable — not free text. Splunk / CloudWatch can query them without regex.',
+                stack: ['JSON structured logs', 'Correlation IDs per session', 'Log level taxonomy', 'Zero PII in logs', 'Audit-ready format'],
+              },
+              {
+                title: 'Distributed Tracing', color: '#7c3aed', icon: '⬡',
+                desc: 'OpenTelemetry spans from the WebSocket ingest through LangGraph state transitions through Go MCP server through tool adapters. Every hop is a child span. When a voice turn exceeds 800ms SLA, the trace shows exactly which node added the latency.',
+                stack: ['OpenTelemetry SDK', 'Trace propagation across services', 'Span per tool call', 'Latency breakdown per node', 'SLA violation alerts'],
+              },
+              {
+                title: 'Metrics & Alerting', color: '#dc2626', icon: '▣',
+                desc: 'Prometheus metrics on key signals: agent_tool_call_latency_ms (histogram), agent_validation_failure_total (counter), agent_dlq_depth (gauge), session_context_retention_rate (gauge). Grafana dashboards per persona. PagerDuty alert if p99 > 1.5s for 3 minutes.',
+                stack: ['Prometheus histograms', 'Grafana per-persona dashboards', 'PagerDuty integration', 'SLO burn rate alerts', 'Daily eval regression detection'],
+              },
+              {
+                title: 'LLM-Specific Eval Pipeline', color: '#b87000', icon: '◆',
+                desc: '500-document automated eval suite running on every push at HariKrushna. Each eval measures: response accuracy (F1 on extracted entities), context retention (multi-turn coherence score), latency (p50/p95/p99), and hallucination rate (citation validity check). If accuracy drops >2% vs baseline — build blocked.',
+                stack: ['500-doc golden dataset', 'F1 entity extraction', 'Multi-turn coherence score', 'Citation validity regex', 'Build-blocking regression detection'],
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}20`, borderRadius: 14, overflow: 'hidden' }}>
+                <div style={{ padding: '14px 18px 10px', borderBottom: `1px solid ${item.color}15`, background: `linear-gradient(135deg, ${item.color}08, #fff)`, display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, color: `${item.color}60` }}>{item.icon}</div>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 800, color: '#0d0d0d' }}>{item.title}</div>
+                </div>
+                <div style={{ padding: '14px 18px 16px' }}>
+                  <div style={{ fontSize: 13, color: '#555', lineHeight: 1.75, marginBottom: 12 }}>{item.desc}</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                    {item.stack.map(t => (
+                      <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: item.color, background: `${item.color}10`, border: `1px solid ${item.color}25`, borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* OBSERVABILITY PRINCIPLE */}
+          <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 12, padding: '18px 22px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+            <div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>The three pillars I enforce</div>
+              <div style={{ fontSize: 13, color: '#999', lineHeight: 1.75 }}>Logs answer <em style={{ color: '#f0f0f0' }}>what happened</em>. Traces answer <em style={{ color: '#f0f0f0' }}>where</em> it happened. Metrics answer <em style={{ color: '#f0f0f0' }}>how often</em> it happens. An AI system missing any of the three is flying blind in production.</div>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#7c3aed', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>What I monitor daily</div>
+              {['p99 agent response latency', 'Validation failure rate', 'DLQ depth', 'Context retention score', 'Tool call success rate'].map((m, i) => (
+                <div key={i} style={{ fontSize: 12, color: '#888', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 7 }}>
+                  <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#7c3aed', flexShrink: 0 }} />{m}
+                </div>
+              ))}
+            </div>
+            <div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#dc2626', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>Alert thresholds</div>
+              {[
+                { metric: 'p99 latency', threshold: '> 1,500ms for 3m' },
+                { metric: 'Validation failure', threshold: '> 8% in 10m window' },
+                { metric: 'DLQ depth', threshold: '> 50 unprocessed' },
+                { metric: 'Context retention', threshold: '< 90% on eval push' },
+              ].map((a, i) => (
+                <div key={i} style={{ fontSize: 11, color: '#888', marginBottom: 5 }}>
+                  <span style={{ color: '#dc2626', fontFamily: "'JetBrains Mono', monospace", fontSize: 10 }}>{a.metric}</span>
+                  <span style={{ color: '#555', fontSize: 10 }}> → {a.threshold}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
+        {/* RESILIENCE ENGINEERING */}
+        <div id="sec-resilience" className="section">
+          <div className="eyebrow">Resilience Engineering · Failure Mode Design</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Every failure mode is a design decision — not a surprise</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Senior engineers do not just design for the happy path. They enumerate failure modes before writing code. Here is how each critical failure is handled in the systems I shipped.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+            {[
+              {
+                failure: 'LLM API timeout / rate limit', color: '#dc2626', severity: 'P1',
+                naive: 'Throw an exception. User sees an error. Engineer gets paged at 3AM.',
+                real: "Exponential backoff with jitter (100ms to 200ms to 400ms + random 0-50ms). After 3 attempts: safe fallback response (I am having trouble right now) + DLQ entry. Rate limit: token bucket on our side before hitting the API, not after.",
+                pattern: 'Retry + jitter + circuit breaker + graceful fallback'
+              },
+              {
+                failure: 'Pydantic schema validation failure', color: '#b87000', severity: 'P2',
+                naive: "Crash the request. Log an error. Hope it does not happen again.",
+                real: "Re-prompt the LLM with the exact schema error message. Max 3 attempts. Each retry includes the previous error so the model learns from it within the same call. After 3: safe default + DLQ. Schema errors are monitored — patterns drive prompt improvements.",
+                pattern: "Constrained re-prompt x3 then DLQ then pattern analysis"
+              },
+              {
+                failure: "Vector DB unavailable (RAG layer)", color: "#7c3aed", severity: "P2",
+                naive: "RAG fails. LLM gets no context. Hallucinates freely. Nobody knows.",
+                real: "Health check on vector DB before every retrieval. On failure: switch to a pre-computed cached chunk set for the most recent 100 documents. Log the fallback as a metric event. Alert if vector DB is down more than 60s. User gets slightly degraded context, not a hallucination.",
+                pattern: "Health check then cached fallback then metric event then alert"
+              },
+              {
+                failure: "Go MCP server — adapter unresponsive", color: "#0a9280", severity: "P1",
+                naive: "Tool call hangs. Session hangs. User hangs up. Nobody knows why.",
+                real: "Per-adapter timeout (REST: 3s, gRPC: 2s, local model: 5s). Timeout triggers goroutine cancellation via context.WithTimeout. Circuit breaker: if adapter fails 5 times in 30s — open circuit, return safe default for 60s, then probe. Prevents cascade failures across sessions sharing the same adapter.",
+                pattern: "Per-adapter timeout then goroutine cancel then circuit breaker then probe"
+              },
+              {
+                failure: "K8s pod OOMKilled during inference", color: "#1d4ed8", severity: "P1",
+                naive: "Pod restarts. In-flight requests dropped. Session lost. User starts over.",
+                real: "Liveness probe fails fast — K8s restarts the pod in under 30s. Session state lives in Redis (not in-process), so restarted pod reconnects to existing session. Readiness probe prevents traffic to pod until model is loaded and warm. HPA scales out before memory pressure hits.",
+                pattern: "Redis session state then liveness probe then readiness probe then HPA pre-scale"
+              },
+              {
+                failure: "Production force-push (actual incident)", color: "#6d28d9", severity: "P0",
+                naive: "Roll back. Fix forward. Fire the person responsible.",
+                real: "Wired staging environment to production PostgreSQL + vector DB + Redis. Redirected prod DNS to staging. 24 minutes to full service restoration. Zero data loss. Root cause: no branch protection on main. Fix: mandatory PR review + commit signing + staging to prod deploy pipeline.",
+                pattern: "Redirect DNS then staging as prod then fix root cause then process change"
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}20`, borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ padding: '12px 18px 10px', background: `${item.color}08`, borderBottom: `1px solid ${item.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 800, color: '#0d0d0d' }}>{item.failure}</div>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: item.color, background: `${item.color}18`, border: `1px solid ${item.color}30`, borderRadius: 10, padding: '2px 9px' }}>{item.severity}</span>
+                </div>
+                <div style={{ padding: '14px 18px 16px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#dc2626', letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>Naive approach</div>
+                  <div style={{ fontSize: 12, color: '#888', lineHeight: 1.6, marginBottom: 12, fontStyle: 'italic' }}>{item.naive}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#0a9280', letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>What I actually built</div>
+                  <div style={{ fontSize: 12, color: '#444', lineHeight: 1.7, marginBottom: 12 }}>{item.real}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: item.color, background: `${item.color}10`, border: `1px solid ${item.color}20`, borderRadius: 6, padding: '5px 10px' }}>{item.pattern}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* RESILIENCE PRINCIPLE CALLOUT */}
+          <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 12, padding: '18px 24px', display: 'flex', alignItems: 'flex-start', gap: 20, flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 240 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>The design principle</div>
+              <div style={{ fontSize: 14, color: '#ccc', lineHeight: 1.8 }}>Resilience is not about preventing failures. It is about <strong style={{ color: '#f0f0f0' }}>bounding the blast radius</strong> when they happen. Every service has a defined degradation path: full service → cached fallback → safe default → human escalation. No path ends in silence or a 500 error.</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 180 }}>
+              {[
+                { label: 'P0 incidents', val: '1', sub: 'resolved in 24 min' },
+                { label: 'Silent failures', val: '0', sub: 'everything is logged' },
+                { label: 'DLQ reduction', val: '60%', sub: 'after pattern analysis' },
+                { label: 'Session loss on pod restart', val: '0', sub: 'Redis session state' },
+              ].map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 900, color: '#0a9280', minWidth: 50 }}>{s.val}</div>
+                  <div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#f0f0f0', fontWeight: 700 }}>{s.label}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555' }}>{s.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
         {/* STACK */}
         <div id="sec-stack" className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>
@@ -1311,19 +1698,26 @@ export default function AmexTechFit() {
 
       {/* FLOATING JD CHECKLIST */}
       {!trackerOpen ? (
-        <div className="jd-tracker-pill" onClick={() => setTrackerOpen(true)}>
-          <span className="pill-dot" />
-          <span className="pill-count">{checked.size}/8</span>
-          <span>JD Checklist — click to review</span>
-          {timerActive && <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: timeLeft <= 60 ? '#dc2626' : '#0a9280', fontWeight: 700, marginLeft: 4 }}>{fmtTime(timeLeft)}</span>}
-          <span className="pill-arrow">→</span>
+        <div className="jd-fab-wrap" onClick={() => setTrackerOpen(true)}>
+          <div className="jd-fab-label">
+            Click Here
+            {timerActive && <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: timeLeft <= 60 ? '#f87171' : '#0abfa8', fontWeight: 800, marginLeft: 8 }}>{fmtTime(timeLeft)}</span>}
+          </div>
+          <div className="jd-fab">
+            <div className="jd-fab-ring" />
+            <div className="jd-fab-ring jd-fab-ring2" />
+            <div className="jd-fab-inner">
+              <div className="jd-fab-num">{checked.size}/12</div>
+              <div className="jd-fab-lbl">checklist</div>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="jd-tracker-panel">
           <div className="jd-tracker-head">
             <div>
-              <div className="jd-tracker-title">JD Requirement Checklist</div>
-              <div className="jd-tracker-sub">CHECK OFF EACH REQUIREMENT AS YOU REVIEW IT</div>
+              <div className="jd-tracker-title">Amex JD — Requirements Checklist</div>
+              <div className="jd-tracker-sub">CHECK OFF EACH AS YOU VERIFY IT IN THIS PAGE</div>
             </div>
             <button className="jd-tracker-close" onClick={() => setTrackerOpen(false)}>x</button>
           </div>
@@ -1331,7 +1725,7 @@ export default function AmexTechFit() {
           {/* TIMER + PROGRESS */}
           <div style={{ padding: '12px 16px 8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888', fontWeight: 600 }}>{checked.size}/8 checked</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888', fontWeight: 600 }}>{checked.size}/12 checked</span>
               {timerActive && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: timeLeft <= 60 ? '#dc2626' : '#0a9280', animation: 'blink 1s infinite' }} />
@@ -1342,7 +1736,7 @@ export default function AmexTechFit() {
             </div>
             {/* Progress bar */}
             <div style={{ background: '#1a1a1a', borderRadius: 6, height: 4, overflow: 'hidden' }}>
-              <div style={{ background: timerActive && timeLeft <= 60 ? 'linear-gradient(90deg, #dc2626, #f87171)' : 'linear-gradient(90deg, #0a9280, #0abfa8)', height: '100%', width: `${(checked.size / 8) * 100}%`, borderRadius: 6, transition: 'width .4s ease, background .3s' }} />
+              <div style={{ background: timerActive && timeLeft <= 60 ? 'linear-gradient(90deg, #dc2626, #f87171)' : 'linear-gradient(90deg, #0a9280, #0abfa8)', height: '100%', width: `${(checked.size / 12) * 100}%`, borderRadius: 6, transition: 'width .4s ease, background .3s' }} />
             </div>
             {/* Timer progress bar (draining) */}
             {timerActive && (
@@ -1373,8 +1767,8 @@ export default function AmexTechFit() {
           <div className="jd-tracker-footer">
             <div className="jd-tracker-footer-text">
               {!timerActive && checked.size === 0 && <>Click each requirement to check it off and jump to the evidence. <strong>Timer starts on first check.</strong></>}
-              {timerActive && checked.size < 8 && <><strong>{8 - checked.size} remaining</strong> — checklist resets in {fmtTime(timeLeft)}. Check them all off.</>}
-              {checked.size === 8 && <><strong>All 8 requirements verified.</strong> Every single one maps to a production system.</>}
+              {timerActive && checked.size < 12 && <><strong>{12 - checked.size} remaining</strong> — checklist resets in {fmtTime(timeLeft)}. Check them all off.</>}
+              {checked.size === 12 && <><strong>All 12 requirements verified.</strong> Every single one maps to a production system.</>}
             </div>
           </div>
         </div>

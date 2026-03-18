@@ -1,10 +1,57 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const hrJdNav = [
+  { req: 'Business → Technical Translation', section: 'sec-biz-tech', proof: 'Boardroom brief → production system, 3 times', metric: 'Resso · Lawline · Corol' },
+  { req: 'Discovery-First Approach', section: 'sec-biz-req-hr', proof: 'Shadowed TTC, interviewed 4 attorneys, 2–3 days with clients', metric: 'Before writing a line of code' },
+  { req: 'Stakeholder Alignment', section: 'sec-biz-req-hr', proof: 'Eval dashboards shared weekly. Clients sign off on metrics', metric: 'No surprises. Ever.' },
+  { req: 'LLM Security + Zero Hallucination', section: 'sec-hallucination-hr', proof: '6-layer defense: schema, RAG, SHAP, confidence, retry, DLQ', metric: '14% → 3.8% hallucination' },
+  { req: 'Observability + Production Ownership', section: 'sec-observability-hr', proof: 'OpenTelemetry, Prometheus, Grafana, 500-doc eval pipeline', metric: 'Monitors every system shipped' },
+  { req: 'Resilience + Failure Mode Design', section: 'sec-resilience-hr', proof: 'P0 resolved in 24 min. Circuit breakers, DLQ, Redis state', metric: 'P0 → 24 min → interview on time' },
+  { req: 'Azure / Cloud Depth', section: 'sec-water', proof: 'Azure OpenAI, AKS, deployment slots, data residency', metric: 'AWS certified · Azure prod' },
+  { req: 'Language Runtime Decisions', section: 'sec-languages-hr', proof: 'Python vs Java vs Go — with latency numbers', metric: 'Go 180ms vs Python 800ms' },
+  { req: 'Full-Stack + BA-to-Tech Bridge', section: 'sec-water', proof: 'Solo end-to-end on 3 production systems', metric: 'Every layer. Every time.' },
+  { req: 'Deep ML/AI Foundation', section: 'sec-water', proof: 'PyTorch, SHAP, RAG, GGUF, LangGraph in prod', metric: 'Not academic — deployed' },
+];
 
 export default function AmexHRFit() {
   const [videoOpen, setVideoOpen] = useState<string | null>(null);
   const [ressoOpen, setRessoOpen] = useState(true);
   const [corolOpen, setCorolOpen] = useState(true);
+  const [trackerOpen, setTrackerOpen] = useState(false);
+  const [checked, setChecked] = useState<Set<number>>(new Set());
+  const [timeLeft, setTimeLeft] = useState(240);
+  const [timerActive, setTimerActive] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startTimer = () => {
+    if (timerActive) return;
+    setTimerActive(true);
+    setTimeLeft(240);
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          setChecked(new Set());
+          setTimerActive(false);
+          return 240;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const toggleCheck = (idx: number) => {
+    const next = new Set(checked);
+    if (next.has(idx)) { next.delete(idx); } else { next.add(idx); if (!timerActive) startTimer(); }
+    setChecked(next);
+    const el = document.getElementById(hrJdNav[idx].section);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const fmtTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+
+  useEffect(() => { return () => { if (timerRef.current) clearInterval(timerRef.current); }; }, []);
 
   return (
     <>
@@ -202,9 +249,49 @@ export default function AmexHRFit() {
         .back:hover { color:#0a9280; }
 
 
+        /* FLOATING HR CHECKLIST */
+        @keyframes floatBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+        @keyframes rippleOut { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(2.4); opacity: 0; } }
+        @keyframes fd { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes blink2 { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+        .hr-fab-wrap { position: fixed; bottom: 28px; right: 28px; z-index: 500; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; }
+        .hr-fab-label { background: #111; color: #0abfa8; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 7px 18px; border-radius: 8px; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.4); border: 1px solid #0a928050; position: relative; animation: floatBob 2.2s ease-in-out infinite; }
+        .hr-fab-label::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #111; }
+        .hr-fab { position: relative; width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(145deg, #0abfa8, #087060); border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 30px rgba(10,146,128,.6); transition: transform .2s, box-shadow .2s; }
+        .hr-fab:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(10,146,128,.8); }
+        .hr-fab-ring { position: absolute; inset: -2px; border-radius: 50%; border: 2px solid rgba(10,191,168,.6); animation: rippleOut 2s ease-out infinite; }
+        .hr-fab-ring2 { animation-delay: 1s; }
+        .hr-fab-inner { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .hr-fab-num { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #fff; line-height: 1; }
+        .hr-fab-lbl { font-family: 'JetBrains Mono', monospace; font-size: 7px; color: rgba(255,255,255,.85); letter-spacing: .08em; text-transform: uppercase; }
+        .hr-tracker-panel { position: fixed; bottom: 24px; right: 24px; z-index: 500; width: 380px; max-height: 85vh; overflow-y: auto; background: #0d0d0d; border: 1px solid #222; border-radius: 16px; box-shadow: 0 16px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06); animation: fd .2s ease; }
+        .hr-tracker-panel::-webkit-scrollbar { width: 4px; }
+        .hr-tracker-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        .hr-tracker-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; background: #0d0d0d; z-index: 2; }
+        .hr-tracker-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: #f0f0f0; }
+        .hr-tracker-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0a9280; letter-spacing: .12em; font-weight: 600; }
+        .hr-tracker-close { width: 26px; height: 26px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; color: #888; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .hr-tracker-item { display: flex; align-items: flex-start; gap: 11px; padding: 10px 16px; border-bottom: 1px solid #111; cursor: pointer; transition: background .15s; }
+        .hr-tracker-item:hover { background: #111; }
+        .hr-tracker-item:last-child { border-bottom: none; }
+        .hr-tracker-cb { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #333; background: #111; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+        .hr-tracker-cb.done { background: #0a9280; border-color: #0a9280; }
+        .hr-tracker-req { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #f0f0f0; line-height: 1.3; margin-bottom: 2px; }
+        .hr-tracker-proof { font-size: 11px; color: #888; line-height: 1.4; margin-bottom: 3px; }
+        .hr-tracker-metric { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0a9280; font-weight: 600; }
+        .hr-tracker-footer { padding: 12px 16px; border-top: 1px solid #1a1a1a; }
+        .hr-tracker-footer-text { font-size: 12px; color: #666; line-height: 1.5; }
+
+        /* SPEC CARDS */
+        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+        .spec-card { background: #fafaf8; border: 1px solid #e0e0da; border-radius: 10px; padding: 16px 18px; }
+        .spec-title { font-size: 13px; font-weight: 700; color: #111; margin-bottom: 7px; letter-spacing: .01em; }
+        .spec-text { font-size: 13px; color: #555; line-height: 1.7; }
+        .spec-text code { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #ebebeb; padding: 1px 5px; border-radius: 3px; }
+
         @media (max-width: 640px) {
           .shell { padding: 28px 16px 60px; }
-          .auth-grid, .built-grid, .pillars, .video-grid { grid-template-columns: 1fr; }
+          .auth-grid, .built-grid, .pillars, .video-grid, .spec-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -613,7 +700,7 @@ export default function AmexHRFit() {
 
 
         {/* BUSINESS REQUIREMENTS & PROBLEM SOLVING */}
-        <div className="section">
+        <div id="sec-biz-req-hr" className="section">
           <div className="eyebrow">Business Requirement Approach</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Discovery → Spec → Alignment → Delivery: end-to-end business ownership.</div>
           <p className="body-p" style={{ marginBottom: 28 }}>I have never waited for a PM to hand me requirements. Every project started with me in the room with stakeholders — understanding the real problem, translating it to specs, aligning everyone on the plan, and staying accountable until delivery.</p>
@@ -745,6 +832,218 @@ export default function AmexHRFit() {
 
         <div className="divider" />
 
+        {/* LANGUAGE & RUNTIME — INTENTIONAL DECISIONS */}
+        <div id="sec-languages-hr" className="section">
+          <div className="eyebrow">Engineering Judgment · Language Selection</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Every technology choice was deliberate — not default</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Senior engineers do not pick languages because they are comfortable. They pick them because the trade-offs fit the problem. Here is how I think through every runtime decision — with numbers to back it up.</p>
+
+          <div style={{ background: '#fff', border: '1.5px solid #e0e0da', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: '#fafaf8', padding: '16px 22px 14px', borderBottom: '1px solid #ebebeb' }}>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 800, color: '#0d0d0d' }}>Python vs Java vs Go — why each language lives where it does</div>
+            </div>
+            <div style={{ padding: '18px 22px 22px' }}>
+              <div className="spec-grid">
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Why Python for ML, not Java</div>
+                  <div className="spec-text">Java JVM cold start: 2–8 seconds. Unacceptable for containerised inference pods. PyTorch, SHAP, and LangGraph have no Java equivalents — you would be bridging JNI calls into C++ with marshalling overhead on every inference. Python FastAPI with uvicorn achieves <strong>sub-5ms p99 latency</strong> for structured inference. The ML ecosystem simply does not exist in Java.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#b87000' }}>Why Go for the network layer, not Node</div>
+                  <div className="spec-text">Node.js is single-threaded — it uses an event loop for I/O, not true parallelism. Go goroutines are multiplexed across OS threads: 1,000 goroutines costs ~4MB. The same load in Node: ~1GB. At 200 concurrent voice sessions × 5 tool calls per turn, Go handled the fan-out at <strong>180ms end-to-end</strong>. Python at the same load: 800ms. The maths was not close.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#7c3aed' }}>The GIL problem, explained plainly</div>
+                  <div className="spec-text">Python's Global Interpreter Lock means only one thread executes at a time. asyncio masks this for I/O — it does not fix it for CPU-bound work. Model inference is CPU-bound. We moved concurrency to Go (which has no GIL) and kept ML logic in Python. <strong>Each process does exactly what it is fastest at.</strong> The boundary is a local Unix socket — sub-1ms overhead.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>The Amex implication</div>
+                  <div className="spec-text">Amex runs Java and Python at scale. I understand the trade-offs deeply — when to use each, how they interact, and where the performance cliffs are. I will not advocate for a rewrite. I will understand the existing architecture, identify where the language choice is causing friction, and propose targeted solutions backed by data.</div>
+                </div>
+              </div>
+              <div style={{ background: '#0d0d0d', borderRadius: 10, padding: '14px 18px', display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#555', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, flexShrink: 0 }}>Measured latency at 200 concurrent sessions</div>
+                {[
+                  { label: 'Go MCP layer', val: '180ms', color: '#0abfa8' },
+                  { label: 'Node equivalent', val: '420ms', color: '#b87000' },
+                  { label: 'Python only', val: '800ms', color: '#dc2626' },
+                  { label: 'Python cold start', val: '380ms', color: '#0abfa8' },
+                  { label: 'Java cold start', val: '4,200ms', color: '#dc2626' },
+                ].map((b, i) => (
+                  <div key={i} style={{ textAlign: 'center' }}>
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: b.color }}>{b.val}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555', marginTop: 2 }}>{b.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
+        {/* ZERO HALLUCINATION — HR ANGLE */}
+        <div id="sec-hallucination-hr" className="section">
+          <div className="eyebrow">Quality Engineering · Accountability</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Zero Hallucination — I ship AI that can be trusted</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>In financial services, a hallucinated AI response is not a UX bug — it is a compliance incident. I built a 6-layer defense that dropped hallucination rate from <strong>14% to 3.8%</strong> at Resso and to near-zero at Lawline. Every layer is independently verifiable.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginBottom: 20 }}>
+            {[
+              { num: '01', title: 'Schema-First Output Constraints', color: '#0a9280', bg: '#f0fdfb', desc: 'Every LLM output passes through a Pydantic BaseModel. Required fields, enum constraints, confidence score ranges. The model cannot hallucinate a field that does not exist in the schema. Structurally impossible to produce malformed output.', metric: '14% → 3.8%', metricLabel: 'hallucination' },
+              { num: '02', title: 'RAG — Ground Every Claim', color: '#7c3aed', bg: '#f5f3ff', desc: 'Retrieval-Augmented Generation: retrieve document chunks first, generate strictly from those chunks. At Lawline: FAISS vector store over case documents. If the answer is not in the source, the model says so. No confabulation.', metric: 'Zero', metricLabel: 'hallucinated citations' },
+              { num: '03', title: 'SHAP Explainability', color: '#b87000', bg: '#fffbeb', desc: 'For ML models (Corol UHPC): SHAP values decompose every prediction into per-feature contributions. Engineers audit why a strength value was predicted. No black-box inference where stakes are high.', metric: 'R² 0.73', metricLabel: 'with full audit trail' },
+              { num: '04', title: 'Confidence-Gated Routing', color: '#1d4ed8', bg: '#eff6ff', desc: 'Every model output carries a confidence score. Below threshold: route to human review, not to downstream action. The system knows what it does not know and admits it rather than guessing.', metric: 'Human review', metricLabel: 'on all low-confidence' },
+              { num: '05', title: 'Constrained Re-prompt', color: '#dc2626', bg: '#fef2f2', desc: 'On validation failure: re-prompt the LLM with the exact schema error. Max 3 attempts. After that: safe default + dead letter queue. 80% of validation failures recovered on re-prompt.', metric: '80%', metricLabel: 'failures recovered' },
+              { num: '06', title: 'DLQ Pattern Analysis', color: '#6d28d9', bg: '#faf5ff', desc: 'Every failed interaction enters a dead letter queue with full context. Reviewed weekly. DLQ analysis over 3 months identified 4 systematic prompt gaps driving 60% of failures — fixed each one.', metric: '60%', metricLabel: 'DLQ volume reduced' },
+            ].map((layer, i) => (
+              <div key={i} style={{ background: layer.bg, border: `1.5px solid ${layer.color}25`, borderRadius: 12, padding: '14px 16px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 900, color: `${layer.color}25`, lineHeight: 1, flexShrink: 0 }}>{layer.num}</div>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 800, color: '#0d0d0d', lineHeight: 1.3 }}>{layer.title}</div>
+                </div>
+                <div style={{ fontSize: 12, color: '#555', lineHeight: 1.65, marginBottom: 10 }}>{layer.desc}</div>
+                <div style={{ background: '#0d0d0d', borderRadius: 6, padding: '6px 10px', display: 'inline-flex', flexDirection: 'column' }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: layer.color }}>{layer.metric}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 7, color: '#666' }}>{layer.metricLabel}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 12, padding: '16px 20px' }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>Why this matters at Amex</div>
+            <div style={{ fontSize: 13, color: '#999', lineHeight: 1.8 }}>Financial AI that hallucinates is a regulatory incident. Every layer in this stack directly maps to financial AI safety requirements: schema constraints prevent invalid transaction data, confidence gating prevents uncertain recommendations from reaching customers, DLQ analysis creates an audit trail of every failure. <strong style={{ color: '#f0f0f0' }}>I have already built the safety architecture fintech requires — in production, not on a whiteboard.</strong></div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
+        {/* OBSERVABILITY — HR ANGLE */}
+        <div id="sec-observability-hr" className="section">
+          <div className="eyebrow">Production Ownership · You cannot fix what you cannot see</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Observability — I monitor every system I ship</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Shipping is not the end of the job. I own the systems I build after they go live — logs, metrics, traces, alerts, and daily eval dashboards. When something breaks, I know about it before the user does.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
+            {[
+              {
+                title: 'Structured Logging', color: '#0a9280',
+                desc: 'Every FastAPI request emits structured JSON: request_id, session_id, tool_name, input/output tokens, latency_ms, validation result, retry count. Machine-parseable — no regex needed. Audit-ready format for regulated environments.',
+                tags: ['JSON structured logs', 'Correlation IDs', 'Zero PII in logs', 'Audit-ready']
+              },
+              {
+                title: 'Distributed Tracing', color: '#7c3aed',
+                desc: 'OpenTelemetry spans from WebSocket ingest through LangGraph state through Go MCP server through tool adapters. Every hop is a child span. When a voice turn exceeds 800ms SLA, the trace shows exactly which node added the latency.',
+                tags: ['OpenTelemetry', 'Span per tool call', 'SLA violation detection', 'Cross-service traces']
+              },
+              {
+                title: 'Prometheus + Grafana Dashboards', color: '#dc2626',
+                desc: 'Per-persona dashboards: tool call latency histogram, validation failure counter, DLQ depth gauge, context retention rate. PagerDuty alert if p99 exceeds 1.5s for 3 minutes. I see spikes before clients call.',
+                tags: ['Prometheus histograms', 'Grafana per-persona', 'PagerDuty alerts', 'SLO burn rate']
+              },
+              {
+                title: 'LLM Eval Pipeline', color: '#b87000',
+                desc: '500-document automated eval suite on every git push: accuracy (F1), context retention, latency percentiles, hallucination rate. Build blocked if accuracy drops more than 2% from baseline. Regression-detected before it reaches production.',
+                tags: ['500-doc golden set', 'F1 entity accuracy', 'Build-blocking checks', 'Daily regression detection']
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}20`, borderRadius: 12, padding: '16px 18px' }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d', marginBottom: 8 }}>{item.title}</div>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.75, marginBottom: 10 }}>{item.desc}</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                  {item.tags.map(t => <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: item.color, background: `${item.color}10`, border: `1px solid ${item.color}20`, borderRadius: 4, padding: '2px 7px' }}>{t}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#fafaf8', border: '1px solid #e0e0da', borderRadius: 10, padding: '16px 20px' }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>Metrics I watch every morning</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18 }}>
+              {['p99 agent response latency', 'Validation failure rate', 'DLQ depth', 'Context retention score', 'Tool call success rate', 'Hallucination rate'].map((m, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, color: '#444' }}>
+                  <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#0a9280', flexShrink: 0 }} />{m}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
+        {/* RESILIENCE ENGINEERING — HR ANGLE */}
+        <div id="sec-resilience-hr" className="section">
+          <div className="eyebrow">Engineering Maturity · Failure Mode Design</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>I design for failure before I write the happy path</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Junior engineers write code that works when everything goes right. Senior engineers enumerate what can go wrong before writing a line. Here is how I handle each critical failure mode in the systems I shipped — and the P0 I resolved the morning of this interview.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+            {[
+              {
+                failure: 'LLM API timeout / rate limit', severity: 'P1', color: '#dc2626',
+                naive: 'Throw an exception, page the engineer, user sees an error.',
+                real: 'Exponential backoff with jitter (100ms to 200ms to 400ms + random offset). After 3 attempts: safe fallback response + DLQ entry. Rate limit: token bucket on our side before hitting the API. Zero silent failures.',
+                pattern: 'Retry + jitter + circuit breaker + graceful fallback'
+              },
+              {
+                failure: 'Schema validation failure', severity: 'P2', color: '#b87000',
+                naive: 'Crash the request, log the error, hope it does not recur.',
+                real: 'Re-prompt with the exact Pydantic error. Max 3 attempts, each with the previous error context. 80% of failures recovered on re-prompt. Remainder to DLQ for pattern analysis.',
+                pattern: 'Constrained re-prompt x3 then DLQ then pattern fix'
+              },
+              {
+                failure: 'K8s pod OOMKilled during inference', severity: 'P1', color: '#1d4ed8',
+                naive: 'Pod restarts, in-flight requests dropped, user session lost.',
+                real: 'Session state in Redis — not in-process. Restarted pod reconnects to existing session. Readiness probe prevents traffic until model is warm. HPA scales out before memory pressure hits.',
+                pattern: 'Redis state + liveness probe + readiness probe + HPA'
+              },
+              {
+                failure: 'Production force-push (March 17, 2026)', severity: 'P0', color: '#6d28d9',
+                naive: 'Rollback. Escalate. Fire the intern.',
+                real: 'Wired staging to prod PostgreSQL + vector DB + Redis. Redirected DNS to staging. 24 minutes to full restoration. Zero data loss. Fixed root cause: mandatory PR review + commit signing. Made the Amex interview on time.',
+                pattern: 'DNS redirect + staging-as-prod + root cause fix + process change'
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}20`, borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ padding: '12px 16px 10px', background: `${item.color}08`, borderBottom: `1px solid ${item.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 800, color: '#0d0d0d' }}>{item.failure}</div>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: item.color, background: `${item.color}18`, border: `1px solid ${item.color}30`, borderRadius: 10, padding: '2px 9px' }}>{item.severity}</span>
+                </div>
+                <div style={{ padding: '12px 16px 14px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#dc2626', letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 4 }}>Naive approach</div>
+                  <div style={{ fontSize: 12, color: '#888', lineHeight: 1.6, marginBottom: 10, fontStyle: 'italic' }}>{item.naive}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#0a9280', letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 4 }}>What I built</div>
+                  <div style={{ fontSize: 12, color: '#444', lineHeight: 1.7, marginBottom: 10 }}>{item.real}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: item.color, background: `${item.color}10`, border: `1px solid ${item.color}20`, borderRadius: 6, padding: '5px 10px' }}>{item.pattern}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 12, padding: '18px 22px', display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <div style={{ flex: 1, minWidth: 220 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>The principle</div>
+              <div style={{ fontSize: 13, color: '#ccc', lineHeight: 1.8 }}>Resilience is not about preventing failures — it is about <strong style={{ color: '#f0f0f0' }}>bounding the blast radius</strong>. Every service has a degradation path: full service → cached fallback → safe default → human escalation. No path ends in silence or a 500.</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[
+                { val: '24 min', label: 'P0 resolution time' },
+                { val: '0', label: 'silent failures (everything logged)' },
+                { val: '60%', label: 'DLQ reduction after pattern analysis' },
+                { val: '0', label: 'session losses on pod restart' },
+              ].map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 900, color: '#0a9280', minWidth: 52 }}>{s.val}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#888' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
         {/* FULL STACK */}
         <div className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>
@@ -845,6 +1144,146 @@ export default function AmexHRFit() {
           </div>
         </div>
 
+        <div className="divider" />
+
+        {/* BUSINESS TO TECH BRIDGE */}
+        <div id="sec-biz-tech" className="section">
+          <div className="eyebrow">The Bridge · Business Requirement to Production System</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>I am the translator between the boardroom and the codebase</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Most engineers wait for someone to hand them a ticket. I sit in the room where the problem is first articulated, translate it into a spec, build it, ship it, and report back in the language the business understands. Here is that exact loop — shown end-to-end on real projects.</p>
+
+          {[
+            {
+              project: 'Resso.ai', color: '#0a9280', bg: '#f0fdfb',
+              biz: 'Enterprise clients are losing revenue because their AI call agents drop context mid-conversation and confuse customers. The CEO wants a fix in 30 days.',
+              gap: 'The business problem is "lost revenue." The technical problem is stateful multi-turn conversation at sub-second latency under concurrency. These are not the same sentence.',
+              tech: 'LangGraph StateGraph for deterministic state transitions. Redis for sub-5ms session reads between turns. K8s HPA to scale before peak. Go goroutines for concurrent tool calls. Pydantic for schema-validated outputs.',
+              outcome: 'Context retention 72% → 98%. Hallucination 14% → 3.8%. Client renewed and expanded from 1 persona to 5. The business metric (revenue retention) moved because the right technical decisions were made.',
+            },
+            {
+              project: 'Lawline.tech', color: '#dc2626', bg: '#fef2f2',
+              biz: 'Attorneys want AI research assistance but cannot use any cloud service. Attorney-client privilege means one data leak ends careers. The requirement is "AI that cannot breach privilege."',
+              gap: '"Cannot breach privilege" is a legal constraint, not a feature request. Translating it means: zero external HTTP calls, all inference local, encrypted storage with attorney-controlled keys, exportable audit log.',
+              tech: 'GGUF-quantised local model. AES-256 encrypted FAISS index. FastAPI with network firewall rules blocking outbound. Local audit log exportable as PDF. Zero telemetry — not reduced telemetry.',
+              outcome: 'Zero compliance incidents. Platform is live. Attorneys demo the "zero outbound packets" screen to their law society contacts. The architecture became the sales pitch.',
+            },
+            {
+              project: 'Corol UHPC', color: '#b87000', bg: '#fffbeb',
+              biz: 'Research engineers spend hours on each physical concrete test. The lab director wants to run more mix experiments per week without expanding the lab team.',
+              gap: '"More experiments per week" is not a data science brief. It means: prediction latency under 3 seconds, R² high enough for engineers to trust without physical verification, explainability they can show their PI.',
+              tech: 'Random Forest (not XGBoost) for variance stability on small dataset. SHAP for feature-level explainability. FastAPI endpoint with Pydantic mix schema. React dashboard usable mid-experiment on any machine.',
+              outcome: 'Engineers screen hundreds of mixes in one afternoon that previously took weeks. 12 daily users. The tool was trusted because the business requirement (explain your reasoning) was baked into the model, not bolted on.',
+            },
+          ].map((item, i) => (
+            <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}25`, borderRadius: 16, overflow: 'hidden', marginBottom: 18 }}>
+              <div style={{ background: `${item.bg}`, padding: '14px 22px 12px', borderBottom: `1px solid ${item.color}15` }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 800, color: '#0d0d0d' }}>{item.project}</div>
+              </div>
+              <div style={{ padding: '16px 22px 18px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <div style={{ background: '#fafaf8', border: '1px solid #ebebeb', borderRadius: 8, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: item.color, letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>Business said</div>
+                  <div style={{ fontSize: 13, color: '#444', lineHeight: 1.7 }}>{item.biz}</div>
+                </div>
+                <div style={{ background: '#fafaf8', border: '1px solid #ebebeb', borderRadius: 8, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#7c3aed', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>The translation gap</div>
+                  <div style={{ fontSize: 13, color: '#555', lineHeight: 1.7 }}>{item.gap}</div>
+                </div>
+                <div style={{ background: '#fafaf8', border: '1px solid #ebebeb', borderRadius: 8, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#1d4ed8', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>Technical decisions made</div>
+                  <div style={{ fontSize: 13, color: '#444', lineHeight: 1.7 }}>{item.tech}</div>
+                </div>
+                <div style={{ background: item.bg, border: `1px solid ${item.color}20`, borderRadius: 8, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>Business outcome</div>
+                  <div style={{ fontSize: 13, color: '#444', lineHeight: 1.7 }}>{item.outcome}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="divider" />
+
+        {/* WATER — ROLE ADAPTABILITY */}
+        <div id="sec-water" className="section">
+          <div className="eyebrow">Adaptability · Be Like Water</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>I fit the shape of any role — with depth, not dilution</div>
+          <p className="body-p" style={{ marginBottom: 8 }}>Most engineers are T-shaped: deep in one thing, shallow elsewhere. I am more like water — I take the shape of whatever role the team needs, without losing the depth that makes me useful. Here is the evidence across every role Amex might need.</p>
+          <p className="body-p" style={{ marginBottom: 28 }}>The key: every role below is backed by <strong>production systems, not side projects</strong>. And underpinning all of it is deep ML/AI fluency — which means I understand why the tools work, not just how to use them.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 24 }}>
+            {[
+              {
+                role: 'Azure / Cloud Engineer', color: '#0078d4', bg: '#eff6ff',
+                depth: 'Azure OpenAI GPT-4o deployment slots with zero-downtime staging → prod swap. Azure AKS with HPA + liveness/readiness probes. Azure data residency configured for Canadian compliance. AWS certified: EC2, S3, Lambda, SageMaker.',
+                proof: 'Resso.ai runs on Azure in production. 200+ concurrent sessions. Zero unplanned downtime.',
+                ml: 'Understand how Azure OpenAI deployment quotas, TPM limits, and dedicated capacity affect model response latency — not just that they exist.'
+              },
+              {
+                role: 'CI/CD Engineer', color: '#6d28d9', bg: '#f5f3ff',
+                depth: 'GitHub Actions pipelines: build → test → eval → deploy. Automated 500-doc LLM eval on every push — build blocked on accuracy regression. K8s rolling updates. Staging environments wired to production data stores for realistic testing.',
+                proof: 'The morning of this interview: restored a broken prod environment in 24 minutes by redirecting DNS to staging. Root cause fixed. PR review enforced.',
+                ml: 'Know that LLM eval pipelines need different CI gates than traditional unit tests — F1, hallucination rate, and context retention are not pass/fail booleans.'
+              },
+              {
+                role: 'LLM Security Engineer', color: '#dc2626', bg: '#fef2f2',
+                depth: 'Prompt injection defense in production. AES-256 encrypted vector stores. Zero-egress enforcement at the MCP layer — adapters blocked from making external calls. Local audit logs exportable for court. Zero PII in structured logs.',
+                proof: 'Lawline.tech: zero compliance incidents. Attorneys use the "zero outbound packets" demo as their trust proof.',
+                ml: 'Understand jailbreak vectors, indirect prompt injection via retrieved documents, and why RAG-based systems need output filtering on top of retrieval filtering.'
+              },
+              {
+                role: 'Prompt Engineer', color: '#b87000', bg: '#fffbeb',
+                depth: 'Prompt engineering is not creative writing — it is systematic. Built constrained re-prompt loops: schema error → structured correction → retry. Persona prompts for 30+ enterprise clients. Chain-of-thought prompts for multi-step legal reasoning. System prompt versioning in git.',
+                proof: 'Context retention 72% → 98%. The difference was prompt architecture, not model upgrade.',
+                ml: 'Know why chain-of-thought works (forces scratchpad reasoning), when few-shot beats zero-shot, and how to measure prompt quality with automated eval.'
+              },
+              {
+                role: 'Full-Stack AI Engineer', color: '#0a9280', bg: '#f0fdfb',
+                depth: 'FastAPI backend + Next.js 15 App Router frontend + WebSocket real-time layer + Prisma ORM + PostgreSQL + Redis. Built every layer. No handoff to frontend specialists, no handoff to backend specialists. The entire system is mine.',
+                proof: 'Resso.ai platform end-to-end. Lawline.tech end-to-end. TTC full-stack capstone. Solo on all three.',
+                ml: 'Can wire a PyTorch model prediction directly into a React dashboard with a FastAPI endpoint in between — and understand the latency budget at each hop.'
+              },
+              {
+                role: 'Business Analyst to Tech', color: '#0e7490', bg: '#ecfeff',
+                depth: 'Shadowed TTC staff for a full day before writing a line of code. Interviewed 4 attorneys before speccing Lawline. Sat with enterprise call centre clients for 2–3 days at Resso. Every project started with me in the room with the people who had the problem.',
+                proof: 'Every project on this page. None started with a ticket. All started with a conversation.',
+                ml: 'Can translate "our AI is giving wrong answers" into a hallucination rate metric, identify which of the 6 defense layers is failing, and fix it — without needing a BA to mediate.'
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}20`, borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ background: item.bg, padding: '12px 16px 10px', borderBottom: `1px solid ${item.color}15` }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 800, color: '#0d0d0d' }}>{item.role}</div>
+                </div>
+                <div style={{ padding: '12px 16px 14px' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: item.color, letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>Depth</div>
+                  <div style={{ fontSize: 12, color: '#444', lineHeight: 1.65, marginBottom: 10 }}>{item.depth}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#0a9280', letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>Production proof</div>
+                  <div style={{ fontSize: 12, color: '#555', lineHeight: 1.6, marginBottom: 10 }}>{item.proof}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#7c3aed', letterSpacing: '.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>ML/AI understanding underneath</div>
+                  <div style={{ fontSize: 12, color: '#777', lineHeight: 1.6, background: '#f5f3ff', border: '1px solid #7c3aed15', borderRadius: 6, padding: '7px 10px' }}>{item.ml}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 14, padding: '22px 26px' }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.16em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 12 }}>The ML/AI foundation that makes all of this possible</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+              {[
+                { title: 'Model internals', color: '#0abfa8', text: 'Understand transformer attention, context window limits, temperature effects, and why chain-of-thought forces better reasoning. This is not a user-level understanding — it drives architectural decisions.' },
+                { title: 'Training and eval', color: '#7c3aed', text: 'Built custom eval pipelines. Know F1 vs. accuracy trade-offs. Understand when R² is the wrong metric. Can design a golden dataset, detect distribution shift, and run regression tests on model updates.' },
+                { title: 'Production ML patterns', color: '#b87000', text: 'RAG architecture, vector store trade-offs (HNSW vs flat index), SHAP explainability, model quantization (GGUF), ensemble methods. Deployed all of these. They are not academic references.' },
+              ].map((item, i) => (
+                <div key={i}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: item.color, marginBottom: 6 }}>{item.title}</div>
+                  <div style={{ fontSize: 13, color: '#999', lineHeight: 1.75 }}>{item.text}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
         <div className="cta">
           <div className="cta-h">The frameworks are built. The proof is above. Make the call.</div>
           <div className="cta-p" style={{ marginBottom: 20 }}>Production AI. Leadership under pressure. Enterprise-level conversations. Day one contributor — not a six-month ramp.</div>
@@ -855,6 +1294,81 @@ export default function AmexHRFit() {
           </div>
         </div>
       </div>
+
+      {/* FLOATING HR CHECKLIST */}
+      {!trackerOpen ? (
+        <div className="hr-fab-wrap" onClick={() => setTrackerOpen(true)}>
+          <div className="hr-fab-label">
+            Click Here
+            {timerActive && <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: timeLeft <= 60 ? '#f87171' : '#0abfa8', fontWeight: 800, marginLeft: 8 }}>{fmtTime(timeLeft)}</span>}
+          </div>
+          <div className="hr-fab">
+            <div className="hr-fab-ring" />
+            <div className="hr-fab-ring hr-fab-ring2" />
+            <div className="hr-fab-inner">
+              <div className="hr-fab-num">{checked.size}/10</div>
+              <div className="hr-fab-lbl">checklist</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="hr-tracker-panel">
+          <div className="hr-tracker-head">
+            <div>
+              <div className="hr-tracker-title">Amex HR — Requirements Checklist</div>
+              <div className="hr-tracker-sub">CHECK OFF EACH AS YOU VERIFY IT IN THIS PAGE</div>
+            </div>
+            <button className="hr-tracker-close" onClick={() => setTrackerOpen(false)}>x</button>
+          </div>
+
+          <div style={{ padding: '12px 16px 8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888', fontWeight: 600 }}>{checked.size}/10 checked</span>
+              {timerActive && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: timeLeft <= 60 ? '#dc2626' : '#0a9280', animation: 'blink2 1s infinite' }} />
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: timeLeft <= 60 ? '#dc2626' : '#0a9280', fontWeight: 800, letterSpacing: '.06em' }}>{fmtTime(timeLeft)}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555', letterSpacing: '.1em' }}>RESETS</span>
+                </div>
+              )}
+            </div>
+            <div style={{ background: '#1a1a1a', borderRadius: 6, height: 4, overflow: 'hidden' }}>
+              <div style={{ background: timerActive && timeLeft <= 60 ? 'linear-gradient(90deg, #dc2626, #f87171)' : 'linear-gradient(90deg, #0a9280, #0abfa8)', height: '100%', width: `${(checked.size / 10) * 100}%`, borderRadius: 6, transition: 'width .4s ease, background .3s' }} />
+            </div>
+            {timerActive && (
+              <div style={{ background: '#1a1a1a', borderRadius: 6, height: 2, overflow: 'hidden', marginTop: 4 }}>
+                <div style={{ background: timeLeft <= 60 ? '#dc262660' : '#0a928040', height: '100%', width: `${(timeLeft / 240) * 100}%`, borderRadius: 6, transition: 'width 1s linear' }} />
+              </div>
+            )}
+          </div>
+
+          <div style={{ padding: '4px 0 4px' }}>
+            {hrJdNav.map((item, idx) => {
+              const isChecked = checked.has(idx);
+              return (
+                <div key={idx} className="hr-tracker-item" onClick={() => toggleCheck(idx)}>
+                  <div className={`hr-tracker-cb${isChecked ? ' done' : ''}`}>
+                    {isChecked && <span style={{ color: '#fff', fontSize: 9, fontWeight: 800 }}>✓</span>}
+                  </div>
+                  <div style={{ flex: 1, opacity: isChecked ? 0.5 : 1, transition: 'opacity .2s' }}>
+                    <div className="hr-tracker-req" style={{ textDecoration: isChecked ? 'line-through' : 'none' }}>{item.req}</div>
+                    <div className="hr-tracker-proof">{item.proof}</div>
+                    <div className="hr-tracker-metric">{item.metric}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="hr-tracker-footer">
+            <div className="hr-tracker-footer-text">
+              {!timerActive && checked.size === 0 && <>Click each to check it off and jump to the evidence. <strong>Timer starts on first check.</strong></>}
+              {timerActive && checked.size < 10 && <><strong>{10 - checked.size} remaining</strong> — resets in {fmtTime(timeLeft)}.</>}
+              {checked.size === 10 && <><strong>All 10 verified.</strong> Every one maps to a production system.</>}
+            </div>
+          </div>
+        </div>
+      )}
 
       {videoOpen && (
         <div className="overlay" onClick={() => setVideoOpen(null)}>
