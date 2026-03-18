@@ -960,6 +960,150 @@ export default function AmexTechFit() {
 
         <div className="divider" />
 
+        {/* MCP PLATFORM ARCHITECTURE */}
+        <div className="section">
+          <div className="eyebrow">Platform Architecture · MCP Integration</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>One protocol, every system: why I built MCP servers as the integration backbone.</div>
+          <p className="body-p" style={{ marginBottom: 28 }}>Every system I built — voice AI, legal research, UHPC prediction, transit matching — needed the same thing: an LLM that could call external tools reliably, validate responses, retry on failure, and never lose a request. Instead of custom glue code per project, I designed a <strong>unified MCP server layer</strong> that became the architectural pattern across all four platforms.</p>
+
+          {/* WHY MCP ARCHITECTURE */}
+          <div style={{ background: '#111', borderRadius: 14, overflow: 'hidden', marginBottom: 24, border: '1px solid #2a2a2a' }}>
+            <div style={{ padding: '20px 24px 14px', borderBottom: '1px solid #222' }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: '#0a9280', fontWeight: 700, marginBottom: 6 }}>Why This Architectural Approach</div>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#f0f0f0', letterSpacing: '-.02em' }}>The problem with direct API coupling</div>
+            </div>
+            <div style={{ padding: '18px 24px 22px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              <div style={{ background: '#1a1a1a', border: '1px solid #dc262640', borderRadius: 10, padding: '14px 16px' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.16em', textTransform: 'uppercase', color: '#dc2626', fontWeight: 700, marginBottom: 8 }}>Without MCP (what most teams do)</div>
+                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.7 }}>LLM calls a REST endpoint directly. If schema changes, agent breaks. If you add a new tool, you rewrite the prompt. If a call fails, the agent hallucinates a response. <strong style={{ color: '#dc2626' }}>Every integration is a snowflake.</strong> Testing is manual. Retry logic is per-endpoint. No observability.</div>
+              </div>
+              <div style={{ background: '#1a1a1a', border: '1px solid #0a928040', borderRadius: 10, padding: '14px 16px' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.16em', textTransform: 'uppercase', color: '#0a9280', fontWeight: 700, marginBottom: 8 }}>With MCP Server Layer (what I built)</div>
+                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.7 }}>Agent emits standardized <code style={{ color: '#0a9280', background: '#0a928015', padding: '1px 5px', borderRadius: 3, fontSize: 11.5 }}>tool_call</code> JSON. MCP server validates via Pydantic, routes to the right adapter (REST, gRPC, WebSocket), handles retry + DLQ. <strong style={{ color: '#0a9280' }}>New tool = new adapter, zero agent changes.</strong> One protocol, every system.</div>
+              </div>
+            </div>
+          </div>
+
+          {/* MCP FLOW DIAGRAM */}
+          <div style={{ background: '#fff', border: '1.5px solid #e0e0da', borderRadius: 14, overflow: 'hidden', marginBottom: 24 }}>
+            <div style={{ padding: '18px 24px 14px', borderBottom: '1px solid #ebebeb', background: '#fafaf8' }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700 }}>MCP Server Protocol Flow</div>
+            </div>
+            <div style={{ padding: '22px 24px 26px' }}>
+              <div style={{ display: 'flex', alignItems: 'stretch', gap: 0, flexWrap: 'wrap', rowGap: 12 }}>
+                {[
+                  { label: 'LLM Agent', sub: 'emits tool_call', color: '#7c3aed', bg: '#f5f3ff' },
+                  { label: 'Pydantic Schema', sub: 'validates JSON', color: '#0a9280', bg: '#f0fdfb' },
+                  { label: 'MCP Router', sub: 'Go goroutines', color: '#b87000', bg: '#fffbeb' },
+                  { label: 'Adapter Layer', sub: 'REST / gRPC / WS', color: '#1d4ed8', bg: '#eff6ff' },
+                  { label: 'External Tool', sub: 'DB / API / Model', color: '#555', bg: '#f4f4f1' },
+                  { label: 'Retry + DLQ', sub: '3 attempts → dead letter', color: '#dc2626', bg: '#fef2f2' },
+                ].map((node, i, arr) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ background: node.bg, border: `1.5px solid ${node.color}30`, borderRadius: 10, padding: '12px 14px', textAlign: 'center', minWidth: 100 }}>
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, color: node.color, lineHeight: 1.3 }}>{node.label}</div>
+                      <div style={{ fontSize: 10, color: '#888', marginTop: 3, lineHeight: 1.3 }}>{node.sub}</div>
+                    </div>
+                    {i < arr.length - 1 && <div style={{ color: '#ccc', fontSize: 14, padding: '0 6px', flexShrink: 0 }}>→</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* PER-SYSTEM MCP INTEGRATION */}
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 14 }}>How MCP Integrates Across Each System</div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+            {/* Resso MCP */}
+            <div style={{ background: '#fff', border: '1.5px solid #0a928025', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ background: '#f0fdfb', padding: '12px 16px', borderBottom: '1px solid #0a928015' }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d' }}>Resso.ai</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', fontWeight: 600 }}>VOICE AI · MCP IN GO</div>
+              </div>
+              <div style={{ padding: '14px 16px' }}>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.7 }}>Agent sends <code style={{ fontSize: 11, color: '#0a7a6a', background: '#e4faf5', padding: '1px 5px', borderRadius: 3 }}>tool_call</code> JSON during live voice conversations. MCP server in Go routes to CRM lookups, booking APIs, knowledge base retrieval — all via goroutines for concurrent execution. <strong>200+ sessions, each calling 3–5 tools per turn, sub-800ms total.</strong></div>
+                <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                  {['Go goroutines', 'REST + gRPC adapters', 'Redis session', 'Pydantic validation', 'DLQ after 3 retries'].map(t => (
+                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a7a6a', background: '#e4faf5', border: '1px solid #0a928030', borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Lawline MCP */}
+            <div style={{ background: '#fff', border: '1.5px solid #dc262625', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ background: '#fef2f2', padding: '12px 16px', borderBottom: '1px solid #dc262615' }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d' }}>Lawline.tech</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#dc2626', fontWeight: 600 }}>LEGAL AI · AIR-GAPPED MCP</div>
+              </div>
+              <div style={{ padding: '14px 16px' }}>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.7 }}>Same MCP protocol — but <strong>every adapter is local</strong>. No external HTTP calls. Tool calls route to encrypted local vector DB, local GGUF model, local audit log. The MCP layer enforced the zero-egress invariant at the protocol level: if an adapter tried to make an external call, the router rejected it.</div>
+                <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                  {['Zero-egress enforcement', 'Local-only adapters', 'AES-256 vector DB', 'Audit log tool', 'Pydantic + citation regex'].map(t => (
+                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#c01a08', background: '#fef2f2', border: '1px solid #dc262630', borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Corol MCP */}
+            <div style={{ background: '#fff', border: '1.5px solid #b8700025', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ background: '#fffbeb', padding: '12px 16px', borderBottom: '1px solid #b8700015' }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d' }}>Corol (UHPC)</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#b87000', fontWeight: 600 }}>MATERIALS ML · MODEL-AS-TOOL</div>
+              </div>
+              <div style={{ padding: '14px 16px' }}>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.7 }}>The ML ensemble model itself was registered as a tool in the MCP protocol. Scientists queried through the React UI, which sent <code style={{ fontSize: 11, color: '#9a6000', background: '#fffbeb', padding: '1px 5px', borderRadius: 3 }}>predict_strength</code> tool calls to FastAPI. Same Pydantic validation, same retry logic, same structured response format — but the &quot;tool&quot; was an in-process ML model, not an external API.</div>
+                <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                  {['Model-as-tool pattern', 'FastAPI adapter', 'SHAP as tool response', 'Pydantic mix schema', 'Batch prediction mode'].map(t => (
+                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9a6000', background: '#fffbeb', border: '1px solid #b8700030', borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* TTC MCP */}
+            <div style={{ background: '#fff', border: '1.5px solid #1d4ed825', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ background: '#eff6ff', padding: '12px 16px', borderBottom: '1px solid #1d4ed815' }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d' }}>TTC Lost &amp; Found</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#1d4ed8', fontWeight: 600 }}>TRANSIT AI · MULTI-TOOL PIPELINE</div>
+              </div>
+              <div style={{ padding: '14px 16px' }}>
+                <div style={{ fontSize: 13, color: '#555', lineHeight: 1.7 }}>Each step in the matching pipeline is a registered tool: <code style={{ fontSize: 11, color: '#1d4ed8', background: '#eff6ff', padding: '1px 5px', borderRadius: 3 }}>extract_features</code>, <code style={{ fontSize: 11, color: '#1d4ed8', background: '#eff6ff', padding: '1px 5px', borderRadius: 3 }}>match_items</code>, <code style={{ fontSize: 11, color: '#1d4ed8', background: '#eff6ff', padding: '1px 5px', borderRadius: 3 }}>notify_rider</code>. The orchestrator chains tool calls sequentially, with confidence-gated branching: high-confidence matches skip manual review and trigger notification directly.</div>
+                <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                  {['CV tool', 'Semantic match tool', 'pgvector tool', 'Notification tool', 'Confidence-gated routing'].map(t => (
+                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#1d4ed8', background: '#eff6ff', border: '1px solid #1d4ed830', borderRadius: 4, padding: '2px 7px' }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* KEY ARCHITECTURAL DECISIONS */}
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 14 }}>Key Architectural Decisions</div>
+          <div className="spec-grid" style={{ marginBottom: 0 }}>
+            <div className="spec-card">
+              <div className="spec-title" style={{ color: '#0a9280' }}>Why Go for the MCP network layer?</div>
+              <div className="spec-text">Python GIL serializes threads. In a voice platform with 200+ concurrent sessions each making 3–5 tool calls, Python could not handle the fan-out. Go goroutines gave us <strong>true concurrency</strong>. Each tool call is a goroutine with its own timeout, retry counter, and circuit breaker. The Python agent calls the Go server over a local socket — separation of concerns at the process boundary.</div>
+            </div>
+            <div className="spec-card">
+              <div className="spec-title" style={{ color: '#7c3aed' }}>Why Pydantic schema validation on every call?</div>
+              <div className="spec-text">LLMs hallucinate JSON. A missing field in a <code>tool_call</code> crashes the adapter. Pydantic <code>BaseModel</code> on every inbound request: strict types, required fields, enum constraints. If validation fails → constrained re-prompt to the LLM with the schema error. After 3 failures → safe default + dead letter queue. <strong>Zero silent failures in production.</strong></div>
+            </div>
+            <div className="spec-card">
+              <div className="spec-title" style={{ color: '#dc2626' }}>Why dead letter queues, not just retries?</div>
+              <div className="spec-text">Retries handle transient failures. But some calls fail permanently (wrong schema, unavailable service, rate limit). After 3 retries, the request moves to a DLQ with full context: original tool_call, error trace, session ID. We review DLQ daily. <strong>Every failed interaction is a training signal</strong> — we used DLQ analysis to improve prompts and reduce failure rates by 60%.</div>
+            </div>
+            <div className="spec-card">
+              <div className="spec-title" style={{ color: '#1d4ed8' }}>Why this pattern scales across domains</div>
+              <div className="spec-text">Voice AI, legal research, materials ML, transit matching — <strong>four completely different domains, one architectural pattern</strong>. The MCP protocol does not care what the tool does. It only cares about: valid input schema, adapter routing, timeout, retry policy, structured output. New domain = new adapters plugged into the same server. Zero changes to the agent, the router, or the validation layer.</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
         {/* STACK */}
         <div className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>
