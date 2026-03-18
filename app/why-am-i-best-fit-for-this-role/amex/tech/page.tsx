@@ -27,9 +27,10 @@ export default function AmexTechFit() {
   const [ressoOpen, setRessoOpen] = useState(true);
   const [corolOpen, setCorolOpen] = useState(true);
   const [trackerOpen, setTrackerOpen] = useState(false);
-  const [activeReq, setActiveReq] = useState(-1);
-  const [seen, setSeen] = useState<Set<number>>(new Set());
-  const seenRef = useRef<Set<number>>(new Set());
+  const [checked, setChecked] = useState<Set<number>>(new Set());
+  const [timeLeft, setTimeLeft] = useState(240); // 4 minutes in seconds
+  const [timerActive, setTimerActive] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const jdNav = [
     { req: 'LLM-Powered Agentic Features', section: 'sec-architecture', proof: 'Multi-agent voice orchestration at Resso.ai', metric: 'sub-800ms · 200+ sessions' },
@@ -42,47 +43,39 @@ export default function AmexTechFit() {
     { req: 'Fintech + Regulated Environments', section: 'sec-lawline', proof: '7 enterprise clients. Zero telemetry at Lawline', metric: '7 enterprise clients' },
   ];
 
-  // Section → which requirements it proves
-  const sectionToReqs: Record<string, number[]> = {
-    'sec-architecture': [0, 6],
-    'sec-lawline': [1, 7],
-    'sec-mcp': [2, 5],
-    'sec-stack': [3, 4],
-    'sec-jdmap': [0, 1, 2, 3, 4, 5, 6, 7],
+  // Start the 4-min timer on first check
+  const startTimer = () => {
+    if (timerActive) return;
+    setTimerActive(true);
+    setTimeLeft(240);
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          // Time's up — reset everything
+          if (timerRef.current) clearInterval(timerRef.current);
+          setChecked(new Set());
+          setTimerActive(false);
+          return 240;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   useEffect(() => {
-    const sectionIds = Object.keys(sectionToReqs);
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          const reqIndices = sectionToReqs[id];
-          if (reqIndices) {
-            let changed = false;
-            reqIndices.forEach(idx => {
-              if (!seenRef.current.has(idx)) { seenRef.current.add(idx); changed = true; }
-            });
-            if (changed) setSeen(new Set(seenRef.current));
-          }
-        }
-      });
-    }, { threshold: 0.15 });
-
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, []);
 
-  const scrollToReq = (idx: number) => {
-    setActiveReq(idx);
-    setTrackerOpen(false);
+  const toggleCheck = (idx: number) => {
+    const next = new Set(checked);
+    if (next.has(idx)) { next.delete(idx); } else { next.add(idx); if (!timerActive) startTimer(); }
+    setChecked(next);
+    // Scroll to the section
     const el = document.getElementById(jdNav[idx].section);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  const fmtTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
   return (
     <>
@@ -1320,51 +1313,69 @@ export default function AmexTechFit() {
       {!trackerOpen ? (
         <div className="jd-tracker-pill" onClick={() => setTrackerOpen(true)}>
           <span className="pill-dot" />
-          <span className="pill-count">{seen.size}/8</span>
-          <span>{seen.size < 8 ? 'JD Requirements — scroll to check them off' : 'All 8 JD requirements verified'}</span>
+          <span className="pill-count">{checked.size}/8</span>
+          <span>JD Checklist — click to review</span>
+          {timerActive && <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: timeLeft <= 60 ? '#dc2626' : '#0a9280', fontWeight: 700, marginLeft: 4 }}>{fmtTime(timeLeft)}</span>}
           <span className="pill-arrow">→</span>
         </div>
       ) : (
         <div className="jd-tracker-panel">
           <div className="jd-tracker-head">
             <div>
-              <div className="jd-tracker-title">{seen.size}/8 Requirements Reviewed</div>
-              <div className="jd-tracker-sub">AMEX JD 26003145 · SCROLL OR CLICK TO CHECK OFF</div>
+              <div className="jd-tracker-title">JD Requirement Checklist</div>
+              <div className="jd-tracker-sub">CHECK OFF EACH REQUIREMENT AS YOU REVIEW IT</div>
             </div>
             <button className="jd-tracker-close" onClick={() => setTrackerOpen(false)}>x</button>
           </div>
 
-          {/* PROGRESS BAR */}
-          <div style={{ padding: '12px 16px 4px' }}>
-            <div style={{ background: '#1a1a1a', borderRadius: 6, height: 6, overflow: 'hidden' }}>
-              <div style={{ background: 'linear-gradient(90deg, #0a9280, #0abfa8)', height: '100%', width: `${(seen.size / 8) * 100}%`, borderRadius: 6, transition: 'width .5s ease' }} />
+          {/* TIMER + PROGRESS */}
+          <div style={{ padding: '12px 16px 8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888', fontWeight: 600 }}>{checked.size}/8 checked</span>
+              {timerActive && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: timeLeft <= 60 ? '#dc2626' : '#0a9280', animation: 'blink 1s infinite' }} />
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: timeLeft <= 60 ? '#dc2626' : '#0a9280', fontWeight: 800, letterSpacing: '.06em' }}>{fmtTime(timeLeft)}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#555', letterSpacing: '.1em' }}>RESETS</span>
+                </div>
+              )}
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#555' }}>{seen.size < 8 ? 'Scroll down to check off more' : 'All requirements covered'}</span>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', fontWeight: 700 }}>{seen.size}/8</span>
+            {/* Progress bar */}
+            <div style={{ background: '#1a1a1a', borderRadius: 6, height: 4, overflow: 'hidden' }}>
+              <div style={{ background: timerActive && timeLeft <= 60 ? 'linear-gradient(90deg, #dc2626, #f87171)' : 'linear-gradient(90deg, #0a9280, #0abfa8)', height: '100%', width: `${(checked.size / 8) * 100}%`, borderRadius: 6, transition: 'width .4s ease, background .3s' }} />
             </div>
+            {/* Timer progress bar (draining) */}
+            {timerActive && (
+              <div style={{ background: '#1a1a1a', borderRadius: 6, height: 2, overflow: 'hidden', marginTop: 4 }}>
+                <div style={{ background: timeLeft <= 60 ? '#dc262660' : '#0a928040', height: '100%', width: `${(timeLeft / 240) * 100}%`, borderRadius: 6, transition: 'width 1s linear' }} />
+              </div>
+            )}
           </div>
 
           <div className="jd-tracker-body">
             {jdNav.map((item, i) => {
-              const isSeen = seen.has(i);
+              const isChecked = checked.has(i);
               return (
-                <div key={i} className="jd-tracker-item" onClick={() => scrollToReq(i)} style={{ opacity: isSeen ? 1 : 0.55 }}>
-                  <div className="jd-tracker-chk" style={{ background: isSeen ? '#0a9280' : '#333', border: isSeen ? 'none' : '2px solid #555', fontSize: isSeen ? 11 : 10 }}>
-                    {isSeen ? '✓' : (i + 1)}
+                <div key={i} className="jd-tracker-item" onClick={() => toggleCheck(i)}>
+                  {/* Checkbox */}
+                  <div style={{ width: 22, height: 22, borderRadius: 5, border: isChecked ? '2px solid #0a9280' : '2px solid #444', background: isChecked ? '#0a9280' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer', transition: 'all .2s', marginTop: 1 }}>
+                    {isChecked && <span style={{ color: '#fff', fontSize: 13, fontWeight: 700, lineHeight: 1 }}>✓</span>}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div className="jd-tracker-req" style={{ textDecoration: isSeen ? 'none' : 'none', color: isSeen ? '#e0e0e0' : '#777' }}>{item.req}</div>
-                    <div className="jd-tracker-proof" style={{ color: isSeen ? '#888' : '#555' }}>{item.proof}</div>
-                    {isSeen && <div className="jd-tracker-metric">{item.metric}</div>}
-                    {!isSeen && <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#555', marginTop: 4 }}>Click to jump to evidence →</div>}
+                    <div className="jd-tracker-req" style={{ color: isChecked ? '#0a9280' : '#ccc', textDecoration: isChecked ? 'line-through' : 'none', textDecorationColor: '#0a928060' }}>{item.req}</div>
+                    <div className="jd-tracker-proof" style={{ color: isChecked ? '#555' : '#777' }}>{item.proof}</div>
+                    <div className="jd-tracker-metric" style={{ opacity: isChecked ? 0.5 : 1 }}>{item.metric}</div>
                   </div>
                 </div>
               );
             })}
           </div>
           <div className="jd-tracker-footer">
-            <div className="jd-tracker-footer-text">{seen.size < 8 ? <><strong>{8 - seen.size} remaining</strong> — keep scrolling or click an item to jump there.</> : <><strong>All 8 requirements verified.</strong> Every line maps to a production system.</>}</div>
+            <div className="jd-tracker-footer-text">
+              {!timerActive && checked.size === 0 && <>Click each requirement to check it off and jump to the evidence. <strong>Timer starts on first check.</strong></>}
+              {timerActive && checked.size < 8 && <><strong>{8 - checked.size} remaining</strong> — checklist resets in {fmtTime(timeLeft)}. Check them all off.</>}
+              {checked.size === 8 && <><strong>All 8 requirements verified.</strong> Every single one maps to a production system.</>}
+            </div>
           </div>
         </div>
       )}
