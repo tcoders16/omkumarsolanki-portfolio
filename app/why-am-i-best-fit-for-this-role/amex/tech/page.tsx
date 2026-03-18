@@ -433,8 +433,8 @@ export default function AmexTechFit() {
               <div className="auth-img-zone" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden' }}>
                 <img src="/images/portfolio/LostAndFound.png" alt="TTC Lost & Found system" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 1 }} />
                 <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%)' }}>
-                  <div className="auth-org" style={{ color: '#fff' }}>TTC</div>
-                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(122,88,0,0.85)', borderColor: 'rgba(200,160,48,0.5)', backdropFilter: 'blur(4px)' }}>Capstone · Pitching May 2026</span>
+                  <div className="auth-org" style={{ color: '#fff' }}>Lost and Found</div>
+                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(122,88,0,0.85)', borderColor: 'rgba(200,160,48,0.5)', backdropFilter: 'blur(4px)' }}>TTC · Capstone · Pitching May 2026</span>
                 </div>
               </div>
               <div className="auth-body">
@@ -457,8 +457,8 @@ export default function AmexTechFit() {
               <div className="auth-img-zone" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden' }}>
                 <img src="/images/portfolio/rogers_pre.JPG" alt="Rogers meeting" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block', opacity: 1 }} />
                 <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%)' }}>
-                  <div className="auth-org" style={{ color: '#fff' }}>Rogers</div>
-                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(192,26,8,0.85)', borderColor: 'rgba(232,50,20,0.5)', backdropFilter: 'blur(4px)' }}>$1M Investment · Rogers President</span>
+                  <div className="auth-org" style={{ color: '#fff' }}>Lawline.tech</div>
+                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(192,26,8,0.85)', borderColor: 'rgba(232,50,20,0.5)', backdropFilter: 'blur(4px)' }}>$1M · Rogers President</span>
                 </div>
               </div>
               <div className="auth-body">
@@ -992,7 +992,7 @@ export default function AmexTechFit() {
             <div style={{ background: 'linear-gradient(135deg, #eff6ff, #fff)', borderBottom: '1px solid #1d4ed820', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#1d4ed8', marginBottom: 5, fontWeight: 700 }}>Capstone · Transit AI · Pitching May 2026</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>TTC Lost &amp; Found - Intelligent Transit Recovery</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Lost and Found - Intelligent Transit Recovery</div>
                 <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Full-stack capstone. AI-powered item matching across Toronto&apos;s entire transit network.</div>
               </div>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#1d4ed8', background: '#eff6ff', border: '1px solid #1d4ed840', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>Pitching May 2026</span>
@@ -1157,7 +1157,7 @@ export default function AmexTechFit() {
             {/* TTC MCP */}
             <div style={{ background: '#fff', border: '1.5px solid #1d4ed825', borderRadius: 12, overflow: 'hidden' }}>
               <div style={{ background: '#eff6ff', padding: '12px 16px', borderBottom: '1px solid #1d4ed815' }}>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d' }}>TTC Lost &amp; Found</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 800, color: '#0d0d0d' }}>Lost and Found <span style={{ color: '#1d4ed8', fontSize: 11, fontWeight: 600 }}>(TTC)</span></div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#1d4ed8', fontWeight: 600 }}>TRANSIT AI · MULTI-TOOL PIPELINE</div>
               </div>
               <div style={{ padding: '14px 16px' }}>

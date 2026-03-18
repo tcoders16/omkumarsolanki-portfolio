@@ -420,7 +420,7 @@ export default function AmexHRFit() {
                 status: '● 12 engineers · daily'
               },
               {
-                company: 'TTC Lost & Found',
+                company: 'Lost and Found',
                 color: '#1d4ed8', bg: 'linear-gradient(135deg, #eff6ff, #fff)',
                 border: '#1d4ed830',
                 problem: "Toronto's transit system handles 1.7 million riders daily and tracks lost items on paper logs and phone calls. Staff match items manually. Recovery rates are low. Nobody built a better system.",
@@ -485,8 +485,8 @@ export default function AmexHRFit() {
               <div className="auth-img-zone" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden' }}>
                 <img src="/images/portfolio/LostAndFound.png" alt="TTC Lost & Found system" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 1 }} />
                 <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%)' }}>
-                  <div className="auth-org" style={{ color: '#fff' }}>TTC</div>
-                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(122,88,0,0.85)', borderColor: 'rgba(200,160,48,0.5)', backdropFilter: 'blur(4px)' }}>Capstone · Pitching May 2026</span>
+                  <div className="auth-org" style={{ color: '#fff' }}>Lost and Found</div>
+                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(122,88,0,0.85)', borderColor: 'rgba(200,160,48,0.5)', backdropFilter: 'blur(4px)' }}>TTC · Capstone · Pitching May 2026</span>
                 </div>
               </div>
               <div className="auth-body">
@@ -511,8 +511,8 @@ export default function AmexHRFit() {
               <div className="auth-img-zone" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden' }}>
                 <img src="/images/portfolio/rogers_pre.JPG" alt="Rogers meeting" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block', opacity: 1 }} />
                 <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%)' }}>
-                  <div className="auth-org" style={{ color: '#fff' }}>Rogers</div>
-                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(192,26,8,0.85)', borderColor: 'rgba(232,50,20,0.5)', backdropFilter: 'blur(4px)' }}>$1M Investment · Rogers President</span>
+                  <div className="auth-org" style={{ color: '#fff' }}>Lawline.tech</div>
+                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(192,26,8,0.85)', borderColor: 'rgba(232,50,20,0.5)', backdropFilter: 'blur(4px)' }}>$1M · Rogers President</span>
                 </div>
               </div>
               <div className="auth-body">
