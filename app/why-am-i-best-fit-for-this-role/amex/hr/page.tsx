@@ -612,6 +612,139 @@ export default function AmexHRFit() {
 
 
 
+        {/* BUSINESS REQUIREMENTS & PROBLEM SOLVING */}
+        <div className="section">
+          <div className="eyebrow">Business Requirement Approach</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Discovery → Spec → Alignment → Delivery: end-to-end business ownership.</div>
+          <p className="body-p" style={{ marginBottom: 28 }}>I have never waited for a PM to hand me requirements. Every project started with me in the room with stakeholders — understanding the real problem, translating it to specs, aligning everyone on the plan, and staying accountable until delivery.</p>
+
+          {/* RESSO BIZ REQ */}
+          <div style={{ background: '#fff', border: '1.5px solid #0a928030', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdfb, #fff)', borderBottom: '1px solid #0a928020', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#0a9280', marginBottom: 4, fontWeight: 700 }}>Production · AI Startup · 2024–Present</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Resso.ai — Multi-Agent Voice Platform</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#0a9280', background: '#e4faf5', border: '1px solid #0a928040', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>● LIVE</span>
+            </div>
+            <div style={{ padding: '20px 24px 24px' }}>
+              <div className="spec-grid">
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Requirement Discovery</div>
+                  <div className="spec-text">Sat with enterprise clients (fintech, healthcare) for 2–3 days before writing a line of code. Mapped their current call workflows — where agents dropped context, what triggered escalation, which silences meant confusion vs. thinking. <strong>Built the spec from observed pain, not assumptions.</strong></div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#7c3aed' }}>Translation to Engineering Spec</div>
+                  <div className="spec-text">Converted stakeholder pain into measurable acceptance criteria: barge-in response under 400ms, context retention across 8+ turns, topic-switch without re-greeting the caller. Each criterion became a test in our eval pipeline. Stakeholders signed off on metrics, not vague feature descriptions.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Stakeholder Alignment</div>
+                  <div className="spec-text">Weekly eval dashboard shared with clients: per-persona accuracy, latency percentiles, completion rate. Stakeholders could see their own numbers before approval calls. <strong>No surprises. No "it's almost ready."</strong> Every deployment had a client-signed eval report attached.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#b87000' }}>Delivered Business Outcome</div>
+                  <div className="spec-text">Hallucination rate dropped from 14% to 3.8%. Context retention 72% → 98%. 200+ concurrent sessions at sub-800ms end-to-end. Clients renewed. One client expanded from 1 persona to 5 within 3 months of go-live — the product worked well enough they wanted more of it.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* COROL BIZ REQ */}
+          <div style={{ background: '#fff', border: '1.5px solid #6d28d930', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #f5f3ff, #fff)', borderBottom: '1px solid #6d28d920', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#6d28d9', marginBottom: 4, fontWeight: 700 }}>Production · Healthcare AI · 2023–2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — Hospital AI (3 systems, 7 clients)</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#6d28d9', background: '#f5f3ff', border: '1px solid #6d28d940', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>7 Enterprise Clients</span>
+            </div>
+            <div style={{ padding: '20px 24px 24px' }}>
+              <div className="spec-grid">
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#6d28d9' }}>Requirement Discovery</div>
+                  <div className="spec-text">Spent a week embedded with clinical staff at HariKrushna — pharmacists, nurses, admin. Mapped every manual lookup: drug references, patient protocol checks, discharge summaries. Discovered that <strong>the real bottleneck was lookup time during rounds</strong>, not report generation. Pivoted spec accordingly.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Translation to Engineering Spec</div>
+                  <div className="spec-text">Compliance first: IT and legal sign-off required before any AI deployment. I wrote the data-flow diagram showing zero egress, encrypted-at-rest index, no external calls — in plain English for the compliance team, not just engineers. Got sign-off in week 2. Spec included performance SLAs: sub-1s retrieval, 99%+ uptime, graceful degradation.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Stakeholder Alignment</div>
+                  <div className="spec-text">Three hospitals had different IT leads with different concerns. Ran separate technical walkthroughs with each. Hospital A cared about HIPAA audit trails. Hospital B wanted EMR integration. Hospital C needed offline-capable fallback. <strong>Each got a customized deployment plan</strong> built on the same core architecture.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#dc2626' }}>Delivered Business Outcome</div>
+                  <div className="spec-text">Automated eval pipeline: 500-doc benchmark ran on every code push, regression detected before any deployment. All 3 hospitals went live. 7 enterprise clients total by the end of the engagement. The compliance-first approach turned into a sales differentiator — clients referred us to their networks because of the audit trail.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* LAWLINE BIZ REQ */}
+          <div style={{ background: '#fff', border: '1.5px solid #dc262630', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #fff5f5, #fff)', borderBottom: '1px solid #dc262618', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#dc2626', marginBottom: 4, fontWeight: 700 }}>Live · Legal AI · 2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Lawline.tech — Attorney-Grade Legal AI</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#dc2626', background: '#fef2f2', border: '1px solid #dc262640', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>● LIVE</span>
+            </div>
+            <div style={{ padding: '20px 24px 24px' }}>
+              <div className="spec-grid">
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#dc2626' }}>Requirement Discovery</div>
+                  <div className="spec-text">Interviewed 4 attorneys before writing a line of code. The real requirement was not "AI search" — it was <strong>privilege-safe research that held up in court</strong>. Attorneys needed to prove, if challenged, that no client data ever left their office. That became the primary constraint that shaped every architectural decision.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#b87000' }}>Translation to Engineering Spec</div>
+                  <div className="spec-text">Translated privilege requirements to concrete system invariants: (1) zero external HTTP calls after initial setup, (2) all embeddings encrypted at rest with attorney-controlled keys, (3) structured local audit log exportable as PDF for court. Every spec item had a test proving the invariant held.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Stakeholder Alignment</div>
+                  <div className="spec-text">Attorneys are not technical. Ran a demo showing network activity monitor: zero outbound packets during a query. That visual proof — <strong>watching the network stay silent</strong> while the AI worked — closed the trust gap faster than any technical document. Attorneys shared that demo with their law society contacts.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#6d28d9' }}>Delivered Business Outcome</div>
+                  <div className="spec-text">Platform is live at lawline.tech. Attorneys use it for case research daily. The zero-telemetry architecture became a word-of-mouth differentiator — in a profession where trust is the product, <strong>the architecture was the pitch</strong>. Zero compliance incidents since launch.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* TTC BIZ REQ */}
+          <div style={{ background: '#fff', border: '1.5px solid #1d4ed830', borderRadius: 16, overflow: 'hidden', marginBottom: 4 }}>
+            <div style={{ background: 'linear-gradient(135deg, #eff6ff, #fff)', borderBottom: '1px solid #1d4ed820', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#1d4ed8', marginBottom: 4, fontWeight: 700 }}>Capstone · Transit AI · Pitching May 2026</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>TTC Lost &amp; Found — Intelligent Transit Recovery</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#1d4ed8', background: '#eff6ff', border: '1px solid #1d4ed840', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>Pitching May 2026</span>
+            </div>
+            <div style={{ padding: '20px 24px 24px' }}>
+              <div className="spec-grid">
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Requirement Discovery</div>
+                  <div className="spec-text">Shadowed TTC lost-and-found staff at Union Station for a full day. Watched them manually cross-reference printed item logs with incoming online submissions. The bottleneck was not staff — it was <strong>the absence of any matching logic</strong>. A "blue bag" report matched nothing because there was no system to match it to.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Translation to Engineering Spec</div>
+                  <div className="spec-text">Defined success as measurable recovery-rate improvement. Spec required: (1) ML match confidence score per pair, (2) staff-facing review queue ranked by confidence, (3) automated notification to rider within 24 hours of high-confidence match, (4) admin analytics showing recovery trends over time.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#7c3aed' }}>Stakeholder Alignment</div>
+                  <div className="spec-text">TTC has procurement, IT security, and operations — three different stakeholders with different concerns. Built a presentation layer showing each audience only their relevant metrics. Operations saw recovery rates. IT saw the security model. Procurement saw cost vs. manual-staff comparison. <strong>Same product, three different narratives, all true.</strong></div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#b87000' }}>Delivered Business Outcome</div>
+                  <div className="spec-text">Full system built: submission portal, staff dashboard, ML matching pipeline, notification system, admin analytics. Production-ready architecture. Pitching to TTC stakeholders in <strong>May 2026</strong> with a working demo and recovery-rate projections based on 3 months of historical TTC data.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
         {/* FULL STACK */}
         <div className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>

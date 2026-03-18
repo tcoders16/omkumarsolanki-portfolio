@@ -708,6 +708,258 @@ export default function AmexTechFit() {
           </div>
         </div>
 
+        {/* ARCHITECTURE DEEP DIVES */}
+        <div className="section">
+          <div className="eyebrow">End-to-End Architecture</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Problem → Tech → Architecture → Outcome: four systems, every layer owned.</div>
+          <p className="body-p" style={{ marginBottom: 28 }}>Not a contributor. Not a feature engineer. The person who understood why the system needed to exist, designed how it would work, picked the right tech, and shipped a working product. Four times over.</p>
+
+          {/* RESSO ARCHITECTURE */}
+          <div style={{ background: '#fff', border: '1.5px solid #0a928030', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdfb, #fff)', borderBottom: '1px solid #0a928020', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#0a9280', marginBottom: 5, fontWeight: 700 }}>Production · AI Startup · 2024–Present</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Resso.ai — Multi-Agent Voice Platform</div>
+                <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Full-stack AI engineer. Owned architecture, backend, infra, and product.</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#0a9280', background: '#e4faf5', border: '1px solid #0a928040', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>● LIVE · resso.ai</span>
+            </div>
+            <div style={{ padding: '22px 24px 26px' }}>
+              <div style={{ background: '#f0fdfb', border: '1px solid #0a928025', borderRadius: 10, padding: '14px 18px', marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#0a9280', fontWeight: 700, marginBottom: 7 }}>The Business Problem</div>
+                <div style={{ fontSize: 14, color: '#333', lineHeight: 1.75 }}>Enterprise clients needed <strong>AI voice agents</strong> for their customer calls — real-time, low latency, switching topics mid-conversation without losing context. No off-shelf solution handled barge-in detection, silence timeout, and multi-persona routing together. <strong>We had to build it from scratch.</strong></div>
+              </div>
+              <div style={{ marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 12 }}>Architecture Flow</div>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', rowGap: 8 }}>
+                  {[
+                    { label: 'WebSocket\nIngest', color: '#0a9280' },
+                    { label: 'LangGraph\nState Machine', color: '#7c3aed' },
+                    { label: 'GPT-4o\nRouting', color: '#1d4ed8' },
+                    { label: 'MCP Tool\nServer (Go)', color: '#b87000' },
+                    { label: 'Redis\nSession', color: '#dc2626' },
+                    { label: 'K8s HPA\nScale-out', color: '#0a9280' },
+                  ].map((node, i, arr) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ background: '#fafaf8', border: `1.5px solid ${node.color}35`, borderRadius: 8, padding: '8px 12px', textAlign: 'center', minWidth: 82 }}>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: node.color, whiteSpace: 'pre-line', lineHeight: 1.4 }}>{node.label}</div>
+                      </div>
+                      {i < arr.length - 1 && <div style={{ color: '#ccc', fontSize: 14, padding: '0 4px', flexShrink: 0 }}>→</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="spec-grid" style={{ marginBottom: 18 }}>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Why LangGraph over raw LangChain?</div>
+                  <div className="spec-text">LangGraph gave us a <code>StateGraph</code> with explicit node transitions — critical for multi-turn voice where state (topic, silence, barge-in) had to be deterministic. Raw LangChain chains lost context on branching conversation paths.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#7c3aed' }}>Why MCP servers in Go, not Python?</div>
+                  <div className="spec-text">Python GIL blocks concurrent tool calls. Go goroutines handled 200+ simultaneous sessions with <code>sub-800ms</code> end-to-end. Impossible with Python threads. Tool adapters (REST, gRPC, WebSocket) all lived in the Go network layer.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Why Azure OpenAI over direct OpenAI API?</div>
+                  <div className="spec-text">Enterprise SLA, Canadian data residency, dedicated capacity. Azure deployment slot strategy: staging → prod swap with <code>zero-downtime</code> rollouts. K8s HPA integration out-of-the-box with Azure AKS.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#dc2626' }}>Why Redis for session state?</div>
+                  <div className="spec-text">Conversation context needed <code>sub-5ms</code> reads between turns. PostgreSQL too slow for real-time. Redis TTL-based sessions auto-expired stale conversations, preventing memory leaks across 200+ live concurrent sessions.</div>
+                </div>
+              </div>
+              <div className="chips-row" style={{ marginTop: 0 }}>
+                {[{ n: 'sub-800ms', l: 'E2E latency' }, { n: '200+', l: 'Concurrent sessions' }, { n: '14%→3.8%', l: 'Hallucination rate' }, { n: '72%→98%', l: 'Context retention' }, { n: '5 deploys', l: 'Zero-downtime' }].map((c, i) => (
+                  <div key={i} className="chip"><div className="chip-n" style={{ color: '#0a9280', fontSize: 14 }}>{c.n}</div><div className="chip-l">{c.l}</div></div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* COROL ARCHITECTURE */}
+          <div style={{ background: '#fff', border: '1.5px solid #6d28d930', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #f5f3ff, #fff)', borderBottom: '1px solid #6d28d920', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#6d28d9', marginBottom: 5, fontWeight: 700 }}>Production · Healthcare AI · 2023–2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — On-Premise Hospital AI (3 systems)</div>
+                <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Designed RAG pipeline for HariKrushna hospital network. Air-gapped, HIPAA-compliant, zero cloud egress.</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#6d28d9', background: '#f5f3ff', border: '1px solid #6d28d940', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>7 Enterprise Clients</span>
+            </div>
+            <div style={{ padding: '22px 24px 26px' }}>
+              <div style={{ background: '#f5f3ff', border: '1px solid #6d28d925', borderRadius: 10, padding: '14px 18px', marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#6d28d9', fontWeight: 700, marginBottom: 7 }}>The Business Problem</div>
+                <div style={{ fontSize: 14, color: '#333', lineHeight: 1.75 }}>Three hospitals needed AI assistants over internal medical documents — patient records, protocols, drug references. <strong>No data could leave the building.</strong> Cloud LLMs were legally off the table. The system had to run on 16 GB commodity hardware, return sub-second answers, and pass compliance review before any deployment to clinical staff.</div>
+              </div>
+              <div style={{ marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 12 }}>Architecture Flow</div>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', rowGap: 8 }}>
+                  {[
+                    { label: 'Doc\nIngestion', color: '#6d28d9' },
+                    { label: 'Semantic\nChunking', color: '#7c3aed' },
+                    { label: 'HNSW\nVector Index', color: '#0a9280' },
+                    { label: 'Cross-Encoder\nRerank', color: '#1d4ed8' },
+                    { label: 'GGUF\nInference', color: '#b87000' },
+                    { label: 'Kafka\nEvent Bus', color: '#dc2626' },
+                  ].map((node, i, arr) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ background: '#fafaf8', border: `1.5px solid ${node.color}35`, borderRadius: 8, padding: '8px 12px', textAlign: 'center', minWidth: 82 }}>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: node.color, whiteSpace: 'pre-line', lineHeight: 1.4 }}>{node.label}</div>
+                      </div>
+                      {i < arr.length - 1 && <div style={{ color: '#ccc', fontSize: 14, padding: '0 4px', flexShrink: 0 }}>→</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="spec-grid" style={{ marginBottom: 18 }}>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#6d28d9' }}>Why GGUF-quantized models, not API?</div>
+                  <div className="spec-text">HIPAA and hospital policy: <strong>no data egress</strong>. GGUF 4-bit quantization let Mistral-7B run on commodity 16 GB hardware at 12–18 tok/s. <code>q4_K_M</code> gave 97% quality at 28% of the FP16 memory footprint — the only way to make on-prem AI viable.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Why HNSW over flat vector search?</div>
+                  <div className="spec-text">With 40K+ hospital documents, flat cosine search took 280ms per query. HNSW reduced that to <code>sub-18ms</code> with ef=64, m=16. Approximate nearest neighbors at 99.2% recall — medical accuracy without cloud latency or external dependency.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Why a cross-encoder reranker?</div>
+                  <div className="spec-text">Bi-encoder retrieval gets top-32 candidates fast. Cross-encoder reranks top-32 → top-5 with full attention. In medical context, <strong>rank position matters</strong> — wrong document in top-1 could mean wrong drug dosage. Reranker was non-negotiable for clinical safety.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#dc2626' }}>Why Kafka across 3 hospital systems?</div>
+                  <div className="spec-text">Three separate hospital networks with different EMR systems needed a shared event bus. Kafka: partitioned topics per-hospital, consumer groups per-department, <code>idempotent producers</code> for exactly-once semantics when syncing patient records across sites.</div>
+                </div>
+              </div>
+              <div className="chips-row" style={{ marginTop: 0 }}>
+                {[{ n: 'sub-1s', l: 'Retrieval latency' }, { n: '7', l: 'Enterprise clients' }, { n: '16 GB', l: 'Hardware footprint' }, { n: '99.2%', l: 'Recall accuracy' }, { n: 'Air-gapped', l: 'Zero cloud egress' }].map((c, i) => (
+                  <div key={i} className="chip"><div className="chip-n" style={{ color: '#6d28d9', fontSize: 14 }}>{c.n}</div><div className="chip-l">{c.l}</div></div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* LAWLINE ARCHITECTURE */}
+          <div style={{ background: '#fff', border: '1.5px solid #dc262630', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #fff5f5, #fff)', borderBottom: '1px solid #dc262618', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#dc2626', marginBottom: 5, fontWeight: 700 }}>Live · Legal AI · 2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Lawline.tech — Attorney-Grade Legal AI</div>
+                <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Sole engineer. Attorney-client privilege, zero telemetry, fully on-premise inference.</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#dc2626', background: '#fef2f2', border: '1px solid #dc262640', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>● LIVE · lawline.tech</span>
+            </div>
+            <div style={{ padding: '22px 24px 26px' }}>
+              <div style={{ background: '#fef2f2', border: '1px solid #dc262620', borderRadius: 10, padding: '14px 18px', marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#dc2626', fontWeight: 700, marginBottom: 7 }}>The Business Problem</div>
+                <div style={{ fontSize: 14, color: '#333', lineHeight: 1.75 }}>Attorneys needed an AI research assistant over their case documents — but <strong>attorney-client privilege made any cloud LLM legally unusable</strong>. Every query, every document, every response had to remain local. We built a fully air-gapped platform with zero telemetry, local inference, and an audit log attorneys could present in court if the system was ever challenged.</div>
+              </div>
+              <div style={{ marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 12 }}>Architecture Flow</div>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', rowGap: 8 }}>
+                  {[
+                    { label: 'Local\nDoc Upload', color: '#dc2626' },
+                    { label: 'AES-256\nEncrypted Index', color: '#b87000' },
+                    { label: 'GGUF\nLocal Inference', color: '#dc2626' },
+                    { label: 'Pydantic\nValidation', color: '#0a9280' },
+                    { label: 'Zero-log\nAudit Trail', color: '#6d28d9' },
+                  ].map((node, i, arr) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ background: '#fafaf8', border: `1.5px solid ${node.color}35`, borderRadius: 8, padding: '8px 12px', textAlign: 'center', minWidth: 82 }}>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: node.color, whiteSpace: 'pre-line', lineHeight: 1.4 }}>{node.label}</div>
+                      </div>
+                      {i < arr.length - 1 && <div style={{ color: '#ccc', fontSize: 14, padding: '0 4px', flexShrink: 0 }}>→</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="spec-grid" style={{ marginBottom: 18 }}>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#dc2626' }}>Why zero-telemetry architecture?</div>
+                  <div className="spec-text">Attorney-client privilege is a <strong>legal privilege, not a preference</strong>. Any telemetry — even crash logs sent externally — could create a discovery obligation. We built structured local logging with <code>zero external calls</code>. Attorneys can export logs as court-admissible evidence.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#b87000' }}>Why AES-256 encrypted vector store?</div>
+                  <div className="spec-text">Case documents are privileged records. We used AES-256 encrypted FAISS index with key derivation from attorney credentials. <strong>A stolen machine cannot expose document embeddings</strong> without the attorney passphrase — encryption at rest by default.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Why Pydantic on every LLM output?</div>
+                  <div className="spec-text">In legal context, a hallucinated case citation is malpractice risk. Every output through <code>BaseModel</code> schema validation: citation-format regex, confidence threshold checks, fallback: "I cannot find a source for this in your documents." 6-layer hallucination defense system.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#6d28d9' }}>Why build the entire stack solo?</div>
+                  <div className="spec-text">The attorneys needed a single point of accountability across every privacy boundary. I owned FastAPI backend, Next.js frontend, model quantization pipeline, and deployment. That <strong>single-owner architecture was itself a selling point</strong> — attorneys knew exactly who to call.</div>
+                </div>
+              </div>
+              <div className="chips-row" style={{ marginTop: 0 }}>
+                {[{ n: 'Zero', l: 'External telemetry' }, { n: 'AES-256', l: 'Doc encryption' }, { n: 'Live', l: 'lawline.tech' }, { n: '6-layer', l: 'Hallucination defense' }, { n: '100%', l: 'Local inference' }].map((c, i) => (
+                  <div key={i} className="chip"><div className="chip-n" style={{ color: '#dc2626', fontSize: 14 }}>{c.n}</div><div className="chip-l">{c.l}</div></div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* TTC ARCHITECTURE */}
+          <div style={{ background: '#fff', border: '1.5px solid #1d4ed830', borderRadius: 16, overflow: 'hidden', marginBottom: 4 }}>
+            <div style={{ background: 'linear-gradient(135deg, #eff6ff, #fff)', borderBottom: '1px solid #1d4ed820', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#1d4ed8', marginBottom: 5, fontWeight: 700 }}>Capstone · Transit AI · Pitching May 2026</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>TTC Lost &amp; Found — Intelligent Transit Recovery</div>
+                <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Full-stack capstone. AI-powered item matching across Toronto&apos;s entire transit network.</div>
+              </div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#1d4ed8', background: '#eff6ff', border: '1px solid #1d4ed840', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>Pitching May 2026</span>
+            </div>
+            <div style={{ padding: '22px 24px 26px' }}>
+              <div style={{ background: '#eff6ff', border: '1px solid #1d4ed820', borderRadius: 10, padding: '14px 18px', marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#1d4ed8', fontWeight: 700, marginBottom: 7 }}>The Business Problem</div>
+                <div style={{ fontSize: 14, color: '#333', lineHeight: 1.75 }}>TTC handles thousands of lost items per year with a <strong>manual, paper-based tracking system</strong>. Riders submit reports online. Staff match items by eye. Recovery rates are low, turnaround is slow, there is no ML component. We are building an intelligent matching engine that links rider reports to found items using computer vision and semantic text similarity — and a dashboard TTC staff can actually use.</div>
+              </div>
+              <div style={{ marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 12 }}>Architecture Flow</div>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', rowGap: 8 }}>
+                  {[
+                    { label: 'Rider\nSubmission', color: '#1d4ed8' },
+                    { label: 'CV Feature\nExtraction', color: '#0a9280' },
+                    { label: 'Semantic\nEmbedding', color: '#7c3aed' },
+                    { label: 'pgvector\nMatching', color: '#b87000' },
+                    { label: 'Staff\nDashboard', color: '#1d4ed8' },
+                    { label: 'SMS/Email\nNotify', color: '#dc2626' },
+                  ].map((node, i, arr) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ background: '#fafaf8', border: `1.5px solid ${node.color}35`, borderRadius: 8, padding: '8px 12px', textAlign: 'center', minWidth: 82 }}>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: node.color, whiteSpace: 'pre-line', lineHeight: 1.4 }}>{node.label}</div>
+                      </div>
+                      {i < arr.length - 1 && <div style={{ color: '#ccc', fontSize: 14, padding: '0 4px', flexShrink: 0 }}>→</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="spec-grid" style={{ marginBottom: 18 }}>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Why combine CV + semantic text matching?</div>
+                  <div className="spec-text">Text descriptions of lost items are vague ("blue bag"). CV features from staff photos are precise but need a similarity engine. Combined: CV extracts colour/shape embeddings, semantic model matches description to photo features. <strong>Neither alone is reliable enough for production.</strong></div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#0a9280' }}>Why Next.js 15 + pgvector in PostgreSQL?</div>
+                  <div className="spec-text">TTC staff need a fast dashboard on existing hardware — no special ML stack. Next.js server components gave <code>0ms client waterfall</code> on the staff portal. pgvector extension handles both structured queries and vector similarity in one database, zero extra infra.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#7c3aed' }}>Why async notification queues?</div>
+                  <div className="spec-text">TTC riders do not have an app. Outreach had to use channels they already have. Async notification queues with retry logic, priority by match-confidence score: high-confidence triggers <strong>immediate SMS</strong>, low-confidence triggers weekly email digest.</div>
+                </div>
+                <div className="spec-card">
+                  <div className="spec-title" style={{ color: '#b87000' }}>Scope: this is production architecture</div>
+                  <div className="spec-text">Submission portal, staff dashboard, ML matching pipeline, notification system, admin analytics — all production-ready. Not a prototype. Every component designed to hand off to TTC engineering after the <strong>May 2026 pitch</strong>.</div>
+                </div>
+              </div>
+              <div className="chips-row" style={{ marginTop: 0 }}>
+                {[{ n: 'CV + NLP', l: 'Dual matching' }, { n: 'Next.js 15', l: 'Full-stack' }, { n: 'pgvector', l: 'Vector search' }, { n: 'May 2026', l: 'TTC pitch' }, { n: 'Full system', l: 'Every layer owned' }].map((c, i) => (
+                  <div key={i} className="chip"><div className="chip-n" style={{ color: '#1d4ed8', fontSize: 14 }}>{c.n}</div><div className="chip-l">{c.l}</div></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+
         {/* STACK */}
         <div className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>
