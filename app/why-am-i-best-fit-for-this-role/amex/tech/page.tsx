@@ -26,6 +26,7 @@ export default function AmexTechFit() {
   const [expanded, setExpanded] = useState<number | null>(null);
   const [ressoOpen, setRessoOpen] = useState(true);
   const [corolOpen, setCorolOpen] = useState(true);
+  const [trackerOpen, setTrackerOpen] = useState(false);
 
   return (
     <>
@@ -253,11 +254,38 @@ export default function AmexTechFit() {
         .back:hover { color:#0a9280; }
 
 
+        /* FLOATING JD TRACKER */
+        .jd-tracker-pill { position: fixed; bottom: 24px; right: 24px; z-index: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; background: #0d0d0d; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; padding: 12px 20px; border-radius: 40px; box-shadow: 0 8px 32px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08); transition: all .25s; letter-spacing: .04em; }
+        .jd-tracker-pill:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(10,146,128,.4); }
+        .jd-tracker-pill .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: #0a9280; animation: blink 2s infinite; flex-shrink: 0; }
+        .jd-tracker-pill .pill-count { color: #0a9280; font-size: 13px; font-weight: 800; }
+        .jd-tracker-panel { position: fixed; bottom: 24px; right: 24px; z-index: 500; width: 380px; max-height: 85vh; overflow-y: auto; background: #0d0d0d; border: 1px solid #222; border-radius: 16px; box-shadow: 0 16px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06); animation: fd .2s ease; }
+        .jd-tracker-panel::-webkit-scrollbar { width: 4px; }
+        .jd-tracker-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        .jd-tracker-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; background: #0d0d0d; z-index: 2; }
+        .jd-tracker-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: #f0f0f0; }
+        .jd-tracker-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0a9280; letter-spacing: .12em; font-weight: 600; }
+        .jd-tracker-close { width: 28px; height: 28px; border-radius: 50%; background: #1a1a1a; border: 1px solid #2a2a2a; color: #888; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+        .jd-tracker-close:hover { background: #222; color: #fff; border-color: #333; }
+        .jd-tracker-body { padding: 10px 12px 16px; }
+        .jd-tracker-item { display: flex; gap: 10px; padding: 10px 10px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; }
+        .jd-tracker-item:hover { background: #1a1a1a; }
+        .jd-tracker-chk { width: 22px; height: 22px; border-radius: 50%; background: #0a9280; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .jd-tracker-req { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: #e0e0e0; line-height: 1.4; margin-bottom: 3px; }
+        .jd-tracker-proof { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #888; line-height: 1.5; }
+        .jd-tracker-proof strong { color: #0a9280; font-weight: 600; }
+        .jd-tracker-metric { display: inline-flex; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0a9280; background: #0a928015; border: 1px solid #0a928030; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        .jd-tracker-footer { padding: 12px 20px 16px; border-top: 1px solid #1a1a1a; }
+        .jd-tracker-footer-text { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #555; line-height: 1.6; text-align: center; }
+        .jd-tracker-footer-text strong { color: #0a9280; }
+
         @media (max-width: 640px) {
           .shell { padding: 28px 16px 60px; }
           .auth-grid, .spec-grid, .video-grid, .pillars, .lawline-cols, .lawline-metrics { grid-template-columns: 1fr; }
           .breadth-cat { min-width: 90px; font-size: 8px; }
           .cta { flex-direction: column; }
+          .jd-tracker-panel { width: calc(100vw - 32px); right: 16px; bottom: 16px; }
+          .jd-tracker-pill { bottom: 16px; right: 16px; }
         }
       `}</style>
 
@@ -332,7 +360,7 @@ export default function AmexTechFit() {
         </div>
 
         {/* AUTHORITY */}
-        <div className="section">
+        <div id="sec-authority" className="section">
           <div className="eyebrow">Operating Above the Title</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Pitching to directors and presidents — before any career required it.</div>
           <p className="body-p" style={{ marginBottom: 0 }}>A deployment-ready AI system for 1.7M TTC riders — pitched to the Director. A $1M commercial conversation with the President of Rogers. These are not networking stories. They are proof of operating at a level most engineers reach years later, if at all.</p>
@@ -391,7 +419,7 @@ export default function AmexTechFit() {
 
 
         {/* LAWLINE.TECH */}
-        <div className="section">
+        <div id="sec-lawline" className="section">
           <div className="eyebrow">Founder · Builder · Operator</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Lawline.tech — custom RAG stack, air-gapped, already in a $1M investment conversation.</div>
           <p className="body-p" style={{ marginBottom: 18 }}>
@@ -514,7 +542,7 @@ export default function AmexTechFit() {
         <div className="divider" />
 
         {/* JD MAP */}
-        <div className="section">
+        <div id="sec-jdmap" className="section">
           <div className="eyebrow">JD Match · 8 of 8 Requirements</div>
           <div className="sh2" style={{ marginBottom: 8 }}>What Amex needs. What I have shipped. Every single one.</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, background: '#fff', border: '1px solid #0a928030', borderRadius: 10, padding: '12px 18px', marginBottom: 22 }}>
@@ -709,7 +737,7 @@ export default function AmexTechFit() {
         </div>
 
         {/* ARCHITECTURE DEEP DIVES */}
-        <div className="section">
+        <div id="sec-architecture" className="section">
           <div className="eyebrow">End-to-End Architecture</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Problem → Tech → Architecture → Outcome: four systems, every layer owned.</div>
           <p className="body-p" style={{ marginBottom: 28 }}>Not a contributor. Not a feature engineer. The person who understood why the system needed to exist, designed how it would work, picked the right tech, and shipped a working product. Four times over.</p>
@@ -961,7 +989,7 @@ export default function AmexTechFit() {
         <div className="divider" />
 
         {/* MCP PLATFORM ARCHITECTURE */}
-        <div className="section">
+        <div id="sec-mcp" className="section">
           <div className="eyebrow">Platform Architecture · MCP Integration</div>
           <div className="sh2" style={{ marginBottom: 6 }}>One protocol, every system: why I built MCP servers as the integration backbone.</div>
           <p className="body-p" style={{ marginBottom: 28 }}>Every system I built — voice AI, legal research, UHPC prediction, transit matching — needed the same thing: an LLM that could call external tools reliably, validate responses, retry on failure, and never lose a request. Instead of custom glue code per project, I designed a <strong>unified MCP server layer</strong> that became the architectural pattern across all four platforms.</p>
@@ -1105,7 +1133,7 @@ export default function AmexTechFit() {
         <div className="divider" />
 
         {/* STACK */}
-        <div className="section">
+        <div id="sec-stack" className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>
           <div className="sh2" style={{ marginBottom: 6 }}>iOS to blockchain, CI/CD to cloud — every layer, every time.</div>
           <p className="body-p" style={{ marginBottom: 20 }}>Deep in AI/ML. Wide across the entire stack. I don&apos;t hand off to specialists — I understand every layer and bridge it back to what the business needs.</p>
@@ -1164,7 +1192,7 @@ export default function AmexTechFit() {
         </div>
 
         {/* PLATFORMS */}
-        <div className="section">
+        <div id="sec-platforms" className="section">
           <div className="eyebrow">Live in Production</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Not demos. Systems with real users, real load, real stakes.</div>
           <div className="video-grid">
@@ -1223,6 +1251,50 @@ export default function AmexTechFit() {
               <p>Add your video URL here</p>
               <p>{videoOpen === "resso" ? "resso-demo.mp4" : "uhpc-demo.mp4"}</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* FLOATING JD TRACKER */}
+      {!trackerOpen ? (
+        <div className="jd-tracker-pill" onClick={() => setTrackerOpen(true)}>
+          <span className="pill-dot" />
+          <span className="pill-count">8/8</span>
+          <span>JD Requirements Covered</span>
+          <span style={{ fontSize: 14, marginLeft: 2 }}>↑</span>
+        </div>
+      ) : (
+        <div className="jd-tracker-panel">
+          <div className="jd-tracker-head">
+            <div>
+              <div className="jd-tracker-title">This Is What You&apos;re Looking For</div>
+              <div className="jd-tracker-sub">AMEX JD 26003145 · 8 of 8 REQUIREMENTS</div>
+            </div>
+            <button className="jd-tracker-close" onClick={() => setTrackerOpen(false)}>✕</button>
+          </div>
+          <div className="jd-tracker-body">
+            {[
+              { req: 'LLM-Powered Agentic Features', proof: 'Multi-agent voice orchestration at Resso.ai — LangGraph state machines, barge-in detection, topic switching in real time.', metric: 'sub-800ms · 200+ sessions', section: 'sec-architecture' },
+              { req: 'RAG Over Enterprise Data', proof: 'Custom RAG pipeline at Lawline.tech — HNSW vector stores, semantic chunking, cross-encoder rerankers. Air-gapped, on-prem.', metric: 'sub-1s retrieval · 7 clients', section: 'sec-lawline' },
+              { req: 'Agent Orchestration + Tool Calling', proof: 'Production MCP servers in Go — tool_call JSON → Pydantic validation → adapter routing (REST, gRPC). Retry + DLQ across 4 systems.', metric: '4 systems · one protocol', section: 'sec-mcp' },
+              { req: 'Python, Go, TypeScript', proof: 'Python: FastAPI, PyTorch, LangChain across all roles. Go: MCP network layer (goroutines). TypeScript: Next.js 15 platform + Prisma ORM.', metric: 'All 3 in production', section: 'sec-stack' },
+              { req: 'AWS, Kubernetes, Kafka', proof: 'AWS certified (EC2, S3, Lambda, SageMaker). Kafka event pipeline (3 hospital systems, exactly-once). K8s: HPA, rolling updates, probes.', metric: 'Production across all three', section: 'sec-stack' },
+              { req: 'Schema Validation + Structured Outputs', proof: 'Pydantic BaseModel on every LLM output. Constrained re-prompt on failure. After 3 retries: safe default + dead letter queue.', metric: '14% → 3.8% hallucination', section: 'sec-mcp' },
+              { req: 'Evaluation and Monitoring', proof: 'Per-persona eval dashboards at Resso. 500-doc automated eval pipeline at Corol with regression detection on every push.', metric: '72% → 98% retention', section: 'sec-architecture' },
+              { req: 'Fintech + Regulated Environments', proof: '7 enterprise clients (fintech, healthcare, legal). Compliance sign-off before every deploy. Lawline: attorney-client privilege, zero telemetry.', metric: '7 enterprise clients', section: 'sec-lawline' },
+            ].map((item, i) => (
+              <a key={i} className="jd-tracker-item" href={`#${item.section}`} onClick={() => setTrackerOpen(false)} style={{ textDecoration: 'none' }}>
+                <div className="jd-tracker-chk">✓</div>
+                <div style={{ flex: 1 }}>
+                  <div className="jd-tracker-req">{item.req}</div>
+                  <div className="jd-tracker-proof">{item.proof}</div>
+                  <div className="jd-tracker-metric">{item.metric}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className="jd-tracker-footer">
+            <div className="jd-tracker-footer-text"><strong>8 of 8 requirements</strong> mapped to production systems with real metrics. Click any requirement to jump to the evidence.</div>
           </div>
         </div>
       )}
