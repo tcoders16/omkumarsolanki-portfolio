@@ -388,6 +388,9 @@ const experience = [
     url: "https://www.resso.ai",
     accentColor: "#27856b",
     Viz: WaveformViz,
+    screenshots: [
+      { src: "/images/portfolio/resso.png", label: "Resso.ai — Real-time interview scoring platform", arch: "WebRTC · PyTorch · ONNX · AWS" },
+    ],
   },
   {
     num: "02",
@@ -403,6 +406,9 @@ const experience = [
     url: "https://www.corol.org",
     accentColor: "#27856b",
     Viz: ScatterViz,
+    screenshots: [
+      { src: "/images/portfolio/uhpc.png", label: "UHPC formulation prediction platform", arch: "XGBoost · SHAP attribution · R²=0.89" },
+    ],
   },
 ];
 
@@ -424,6 +430,9 @@ const personalProjects = [
     url: "https://lawline.tech",
     accentColor: "#8b5cf6",
     Viz: LawlineViz,
+    screenshots: [
+      { src: "/images/portfolio/lawline.png", label: "Lawline.tech — Live SaaS product", arch: "Fine-tuned LLM · HNSW · FastAPI" },
+    ],
   },
   {
     num: "02",
@@ -439,6 +448,7 @@ const personalProjects = [
     url: null,
     accentColor: "#8b5cf6",
     Viz: MCPViz,
+    screenshots: [] as { src: string; label: string; arch?: string }[],
   },
   {
     num: "03",
@@ -454,6 +464,27 @@ const personalProjects = [
     url: null,
     accentColor: "#c8973a",
     Viz: RAGViz,
+    screenshots: [] as { src: string; label: string; arch?: string }[],
+  },
+  {
+    num: "04",
+    title: "TTC Lost & Found",
+    subtitle: "Transit Capstone · Pitching to TTC Director — May 2025",
+    role: "Full-Stack Engineer",
+    saas: false,
+    description:
+      "Built a complete digital Lost & Found system for the Toronto Transit Commission — one of North America's largest transit networks. The platform digitizes the entire claim lifecycle: TTC staff report found items via a mobile app, each item gets a unique QR-tagged scan record, and owners submit claims through a mobile-first portal. An AI similarity-matching engine connects found items to incoming claims using description embeddings. Pitching this to the TTC Director in May 2025.",
+    extra:
+      "Full pipeline: mobile item reporting → QR generation → owner claim portal → AI description similarity matching → staff approval dashboard. Built for TTC's operational constraints — works on spotty transit WiFi, handles hundreds of daily items, fully auditable claim history.",
+    impact: "Full claim lifecycle · AI item matching · Mobile-first · Pitching to TTC Director May 2025",
+    formula: "match(claim, item) = cosine(E(desc_claim), E(desc_item)) > θ → notify_owner",
+    tags: ["Next.js", "TypeScript", "AI Matching", "QR Code", "Mobile-First", "PostgreSQL", "FastAPI"],
+    url: null,
+    accentColor: "#c01a08",
+    Viz: ScatterViz,
+    screenshots: [
+      { src: "/images/portfolio/LostAndFound.png", label: "TTC Lost & Found — System overview", arch: "Full-stack · AI similarity matching engine" },
+    ],
   },
 ];
 
@@ -609,6 +640,82 @@ export default function Work() {
               }}>
                 <p.Viz />
               </div>
+
+              {/* Screenshots Gallery */}
+              {"screenshots" in p && Array.isArray((p as any).screenshots) && (p as any).screenshots.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.48rem",
+                    color: "var(--dim)",
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                    fontWeight: 600,
+                  }}>
+                    Live Screenshots
+                  </div>
+                  <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 6 }}>
+                    {(p as any).screenshots.map((img: { src: string; label: string; arch?: string }, idx: number) => (
+                      <div
+                        key={idx}
+                        style={{
+                          flexShrink: 0,
+                          width: idx === 0 ? 300 : 200,
+                          borderRadius: 6,
+                          overflow: "hidden",
+                          border: `1px solid ${p.accentColor}30`,
+                          position: "relative",
+                          background: "#0a0a0a",
+                        }}
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.label}
+                          style={{
+                            width: "100%",
+                            display: "block",
+                            height: idx === 0 ? 175 : 110,
+                            objectFit: "cover",
+                            opacity: 0.93,
+                          }}
+                        />
+                        <div style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          background: "linear-gradient(transparent, rgba(0,0,0,0.85))",
+                          padding: "18px 9px 8px",
+                        }}>
+                          <span style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "0.46rem",
+                            color: "#e8e8e8",
+                            letterSpacing: "0.04em",
+                            display: "block",
+                            marginBottom: 2,
+                          }}>
+                            {img.label}
+                          </span>
+                          {img.arch && (
+                            <span style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.4rem",
+                              color: p.accentColor,
+                              letterSpacing: "0.04em",
+                              display: "block",
+                              opacity: 0.85,
+                            }}>
+                              {img.arch}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Description */}
               <p style={{
@@ -791,6 +898,82 @@ export default function Work() {
               }}>
                 <p.Viz />
               </div>
+
+              {/* Screenshots Gallery */}
+              {"screenshots" in p && Array.isArray((p as any).screenshots) && (p as any).screenshots.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.48rem",
+                    color: "var(--dim)",
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                    fontWeight: 600,
+                  }}>
+                    Live Screenshots
+                  </div>
+                  <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 6 }}>
+                    {(p as any).screenshots.map((img: { src: string; label: string; arch?: string }, idx: number) => (
+                      <div
+                        key={idx}
+                        style={{
+                          flexShrink: 0,
+                          width: idx === 0 ? 300 : 200,
+                          borderRadius: 6,
+                          overflow: "hidden",
+                          border: `1px solid ${p.accentColor}30`,
+                          position: "relative",
+                          background: "#0a0a0a",
+                        }}
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.label}
+                          style={{
+                            width: "100%",
+                            display: "block",
+                            height: idx === 0 ? 175 : 110,
+                            objectFit: "cover",
+                            opacity: 0.93,
+                          }}
+                        />
+                        <div style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          background: "linear-gradient(transparent, rgba(0,0,0,0.85))",
+                          padding: "18px 9px 8px",
+                        }}>
+                          <span style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "0.46rem",
+                            color: "#e8e8e8",
+                            letterSpacing: "0.04em",
+                            display: "block",
+                            marginBottom: 2,
+                          }}>
+                            {img.label}
+                          </span>
+                          {img.arch && (
+                            <span style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.4rem",
+                              color: p.accentColor,
+                              letterSpacing: "0.04em",
+                              display: "block",
+                              opacity: 0.85,
+                            }}>
+                              {img.arch}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Description */}
               <p style={{

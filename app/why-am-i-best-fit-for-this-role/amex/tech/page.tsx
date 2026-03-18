@@ -114,8 +114,8 @@ export default function AmexTechFit() {
         @media (max-width: 640px) { .auth-grid { grid-template-columns: 1fr; } }
         .auth-card { background: #fff; border: 1px solid #e0e0da; border-radius: 14px; overflow: hidden; transition: box-shadow .2s, transform .2s; }
         .auth-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,.07); transform: translateY(-3px); }
-        .auth-img-zone { width: 100%; aspect-ratio: 16/7; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .auth-img-zone img { width: 100%; height: 100%; object-fit: contain; padding: 20px 44px; }
+        .auth-img-zone { width: 100%; aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .auth-img-zone img { width: 100%; height: 100%; object-fit: cover; padding: 0; }
         .auth-img-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 16px 18px; }
         .auth-org { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 5px; }
         .auth-chip { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; font-weight: 600; border: 1px solid; }
@@ -339,11 +339,11 @@ export default function AmexTechFit() {
 
           <div className="auth-grid">
             <div className="auth-card">
-              <div className="auth-img-zone" style={{ background: 'linear-gradient(135deg, #fefce8, #f9f7e8)' }}>
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Toronto_Transit_Commission_logo.svg/1200px-Toronto_Transit_Commission_logo.svg.png" alt="TTC" style={{ opacity: .28 }} />
-                <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, #fefce8f2 40%, transparent)' }}>
-                  <div className="auth-org" style={{ color: '#7a5800' }}>TTC</div>
-                  <span className="auth-chip" style={{ color: '#7a5800', background: '#f5e9b8', borderColor: '#c8a030' }}>Capstone · Pitching May 2026</span>
+              <div className="auth-img-zone" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden' }}>
+                <img src="/images/portfolio/LostAndFound.png" alt="TTC Lost & Found system" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 1 }} />
+                <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%)' }}>
+                  <div className="auth-org" style={{ color: '#fff' }}>TTC</div>
+                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(122,88,0,0.85)', borderColor: 'rgba(200,160,48,0.5)', backdropFilter: 'blur(4px)' }}>Capstone · Pitching May 2026</span>
                 </div>
               </div>
               <div className="auth-body">
@@ -359,16 +359,15 @@ export default function AmexTechFit() {
                 </div>
                 <div className="auth-status" style={{ color: '#7a5800' }}>
                   <span className="auth-dot" style={{ background: '#7a5800' }} />Pitch Scheduled · May 2026
-                </div>
-              </div>
+                </div></div>
             </div>
 
             <div className="auth-card">
-              <div className="auth-img-zone" style={{ background: 'linear-gradient(135deg, #fff1f0, #f9f7f7)' }}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Rogers_logo.svg/1200px-Rogers_logo.svg.png" alt="Rogers" style={{ opacity: .22 }} />
-                <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, #fff1f0f2 40%, transparent)' }}>
-                  <div className="auth-org" style={{ color: '#c01a08' }}>Rogers</div>
-                  <span className="auth-chip" style={{ color: '#c01a08', background: '#fde0db', borderColor: '#e8321460' }}>$1M Investment · Rogers President</span>
+              <div className="auth-img-zone" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden' }}>
+                <img src="/images/portfolio/rogers_pre.JPG" alt="Rogers meeting" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block', opacity: 1 }} />
+                <div className="auth-img-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%)' }}>
+                  <div className="auth-org" style={{ color: '#fff' }}>Rogers</div>
+                  <span className="auth-chip" style={{ color: '#fff', background: 'rgba(192,26,8,0.85)', borderColor: 'rgba(232,50,20,0.5)', backdropFilter: 'blur(4px)' }}>$1M Investment · Rogers President</span>
                 </div>
               </div>
               <div className="auth-body">
@@ -399,6 +398,10 @@ export default function AmexTechFit() {
             No third-party legal APIs. No OpenAI in prod. A fully custom RAG pipeline — HNSW retrieval, GGUF-quantized models, cross-encoder reranking, Pydantic validation on every output. Hallucination rate: <strong style={{ color: '#c01a08' }}>14% → 3.8%</strong> through six layers of validation. Now in an active <strong>$1M investment conversation</strong> with the President of Rogers.
           </p>
           <div className="lawline-card">
+            <div style={{ borderRadius: '12px 12px 0 0', overflow: 'hidden', position: 'relative', background: '#0a0a0a', lineHeight: 0 }}>
+              <img src="/images/portfolio/lawline.png" alt="Lawline.tech platform" style={{ width: '100%', height: 'auto', display: 'block', opacity: 0.93 }} />
+              <div style={{ position: 'absolute', bottom: 14, left: 18, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#fff', letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.75, background: '#0008', padding: '3px 8px', borderRadius: 4 }}>lawline.tech · live platform</div>
+            </div>
             <div className="lawline-header">
               <div className="lawline-brand">
                 <div className="lawline-icon">L</div>
@@ -444,10 +447,9 @@ export default function AmexTechFit() {
                   <div className="lawline-metric-n">0</div>
                   <div className="lawline-metric-l">Telemetry &middot; cloud calls in prod</div>
                 </div>
-              </div>
+              </div></div>
             </div>
           </div>
-        </div>
 
         <div className="divider" />
 
@@ -770,33 +772,29 @@ export default function AmexTechFit() {
           <div className="eyebrow">Live in Production</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Not demos. Systems with real users, real load, real stakes.</div>
           <div className="video-grid">
-            <div className="video-card" onClick={() => setVideoOpen("resso")}>
-              <div className="video-thumb" style={{ background: 'linear-gradient(135deg, #e4faf5, #f0fdf9)' }}>
-                <div className="play-wrap">
-                  <div className="v-name" style={{ color: '#0a7a6a' }}>Resso.ai</div>
-                  <div className="v-sub" style={{ color: '#0a928080' }}>AGENT ORCHESTRATION</div>
-                  <div className="play-btn" style={{ background: '#0a9280', color: '#fff' }}>▶</div>
-                </div>
+            <a href="https://www.resso.ai" target="_blank" rel="noopener" className="video-card" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <div className="video-thumb" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden', position: 'relative' }}>
+                <img src="/images/portfolio/resso.png" alt="Resso.ai" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 0.9 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0006 30%, transparent)' }} />
+                <div style={{ position: 'absolute', top: 12, right: 12, background: '#0a9280', color: '#fff', fontFamily: "'JetBrains Mono', monospace", fontSize: 9, padding: '3px 8px', borderRadius: 4, letterSpacing: '0.1em' }}>LIVE ↗</div>
               </div>
               <div className="v-info">
                 <div className="v-title">Multi-Agent Real-Time Conversation Platform</div>
                 <div className="v-desc">sub-800ms · Azure OpenAI GPT-4o · LangGraph · K8s</div>
               </div>
-            </div>
+            </a>
 
-            <div className="video-card" onClick={() => setVideoOpen("uhpc")}>
-              <div className="video-thumb" style={{ background: 'linear-gradient(135deg, #fffbeb, #faf7ee)' }}>
-                <div className="play-wrap">
-                  <div className="v-name" style={{ color: '#b87000' }}>UHPC Platform</div>
-                  <div className="v-sub" style={{ color: '#b8700080' }}>ML PREDICTION</div>
-                  <div className="play-btn" style={{ background: '#c47d00', color: '#fff' }}>▶</div>
-                </div>
+            <a href="https://www.corol.org" target="_blank" rel="noopener" className="video-card" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <div className="video-thumb" style={{ background: '#0a0a0a', padding: 0, overflow: 'hidden', position: 'relative' }}>
+                <img src="/images/portfolio/uhpc.png" alt="UHPC Platform" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 0.9 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0006 30%, transparent)' }} />
+                <div style={{ position: 'absolute', top: 12, right: 12, background: '#c47d00', color: '#fff', fontFamily: "'JetBrains Mono', monospace", fontSize: 9, padding: '3px 8px', borderRadius: 4, letterSpacing: '0.1em' }}>LIVE ↗</div>
               </div>
               <div className="v-info">
                 <div className="v-title">Concrete Strength Prediction Dashboard</div>
-                <div className="v-desc">R² 0.73 · Random Forest · FastAPI · React</div>
+                <div className="v-desc">R² 0.73 · XGBoost · SHAP explainability · FastAPI</div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
 
