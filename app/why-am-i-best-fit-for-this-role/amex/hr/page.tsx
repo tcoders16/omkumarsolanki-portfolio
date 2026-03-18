@@ -3,15 +3,15 @@ import { useState, useEffect, useRef } from "react";
 
 const hrJdNav = [
   { req: 'Business → Technical Translation', section: 'sec-biz-tech', proof: 'Boardroom brief → production system, 3 times', metric: 'Resso · Lawline · Corol' },
-  { req: 'Discovery-First Approach', section: 'sec-biz-req-hr', proof: 'Shadowed TTC, interviewed 4 attorneys, 2–3 days with clients', metric: 'Before writing a line of code' },
+  { req: 'Discovery-First Approach', section: 'sec-biz-req-hr', proof: 'Shadowed TTC, interviewed 4 attorneys, 2-3 days with clients', metric: 'Before writing a line of code' },
   { req: 'Stakeholder Alignment', section: 'sec-biz-req-hr', proof: 'Eval dashboards shared weekly. Clients sign off on metrics', metric: 'No surprises. Ever.' },
   { req: 'LLM Security + Zero Hallucination', section: 'sec-hallucination-hr', proof: '6-layer defense: schema, RAG, SHAP, confidence, retry, DLQ', metric: '14% → 3.8% hallucination' },
   { req: 'Observability + Production Ownership', section: 'sec-observability-hr', proof: 'OpenTelemetry, Prometheus, Grafana, 500-doc eval pipeline', metric: 'Monitors every system shipped' },
   { req: 'Resilience + Failure Mode Design', section: 'sec-resilience-hr', proof: 'P0 resolved in 24 min. Circuit breakers, DLQ, Redis state', metric: 'P0 → 24 min → interview on time' },
   { req: 'Azure / Cloud Depth', section: 'sec-water', proof: 'Azure OpenAI, AKS, deployment slots, data residency', metric: 'AWS certified · Azure prod' },
-  { req: 'Language Runtime Decisions', section: 'sec-languages-hr', proof: 'Python vs Java vs Go — with latency numbers', metric: 'Go 180ms vs Python 800ms' },
+  { req: 'Language Runtime Decisions', section: 'sec-languages-hr', proof: 'Python vs Java vs Go - with latency numbers', metric: 'Go 180ms vs Python 800ms' },
   { req: 'Full-Stack + BA-to-Tech Bridge', section: 'sec-water', proof: 'Solo end-to-end on 3 production systems', metric: 'Every layer. Every time.' },
-  { req: 'Deep ML/AI Foundation', section: 'sec-water', proof: 'PyTorch, SHAP, RAG, GGUF, LangGraph in prod', metric: 'Not academic — deployed' },
+  { req: 'Deep ML/AI Foundation', section: 'sec-water', proof: 'PyTorch, SHAP, RAG, GGUF, LangGraph in prod', metric: 'Not academic - deployed' },
 ];
 
 export default function AmexHRFit() {
@@ -341,7 +341,7 @@ export default function AmexHRFit() {
           <span className="badge badge-co">American Express · AI Engineer I · Agentic AI</span>
         </div>
 
-        {/* HERO — HR VERSION */}
+        {/* HERO - HR VERSION */}
         <div className="hero">
           <div className="hero-eyebrow">American Express · AI Engineer I · March 17, 2026</div>
           <h1 className="hero-h1">I find the problem.<br />Build the fix. <em>Own the outcome.</em></h1>
@@ -350,9 +350,9 @@ export default function AmexHRFit() {
           </p>
         </div>
 
-        {/* 30-SECOND SUMMARY — what an HR person needs in one glance */}
+        {/* 30-SECOND SUMMARY - what an HR person needs in one glance */}
         <div style={{ background: '#0d0d0d', borderRadius: 16, padding: '28px 32px', marginBottom: 52 }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.2em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 20 }}>30-second summary — what I do and what changes when I join</div>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.2em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 20 }}>30-second summary - what I do and what changes when I join</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16 }}>
             {[
               { n: '4', label: 'production systems shipped', sub: 'Not demos. Real users daily.' },
@@ -382,12 +382,12 @@ export default function AmexHRFit() {
                 color: '#0a9280', bg: 'linear-gradient(135deg, #f0fdfb, #fff)',
                 border: '#0a928030',
                 problem: 'Edtech clients were losing learners because AI call agents forgot context mid-conversation and kept restarting from zero. Students dropped off. Clients lost engagement.',
-                action: 'Sat with edtech clients for 2–3 days before writing a line of code. Mapped exactly where context broke. Built the stateful platform from scratch. Owned every layer — model, API, infra, dashboard.',
+                action: 'Sat with edtech clients for 2-3 days before writing a line of code. Mapped exactly where context broke. Built the stateful platform from scratch. Owned every layer - model, API, infra, dashboard.',
                 quote: 'They renewed the contract and expanded from 1 AI persona to 5 within 3 months of go-live.',
                 outcomes: [
                   { before: '72%', after: '98%', label: 'Conversations stayed on track' },
                   { before: '14%', after: '3.8%', label: 'Wrong AI answers' },
-                  { before: '1', after: '5', label: 'Personas — client expanded' },
+                  { before: '1', after: '5', label: 'Personas - client expanded' },
                 ],
                 status: '● Live in production'
               },
@@ -395,8 +395,8 @@ export default function AmexHRFit() {
                 company: 'Lawline.tech',
                 color: '#dc2626', bg: 'linear-gradient(135deg, #fff5f5, #fff)',
                 border: '#dc262630',
-                problem: 'Attorneys needed AI for legal research but could not use any cloud service — one data leak and careers end. The privacy requirement was not a preference, it was a legal constraint.',
-                action: 'Interviewed 4 attorneys before speccing anything. Built a fully local AI — no data ever leaves the office. Showed them the proof on screen: zero outbound network traffic during a query. That closed the trust gap.',
+                problem: 'Attorneys needed AI for legal research but could not use any cloud service - one data leak and careers end. The privacy requirement was not a preference, it was a legal constraint.',
+                action: 'Interviewed 4 attorneys before speccing anything. Built a fully local AI - no data ever leaves the office. Showed them the proof on screen: zero outbound network traffic during a query. That closed the trust gap.',
                 quote: 'Attorneys started demoing the "zero outbound packets" screen to their law society contacts. The architecture became the sales pitch. Now in active $1M discussion with the President of Rogers.',
                 outcomes: [
                   { before: 'Cloud AI', after: 'Fully local', label: 'Privacy guarantee' },
@@ -410,7 +410,7 @@ export default function AmexHRFit() {
                 color: '#b87000', bg: 'linear-gradient(135deg, #fffbeb, #fff)',
                 border: '#b8700030',
                 problem: 'Research engineers were running hours of physical lab tests for every concrete mix experiment. They could only test a handful of combinations per week when they needed to test hundreds.',
-                action: 'Shadowed the engineers for 3 days — watched every step, learned the domain. Built an ML model that predicts strength in 2 seconds. Made it explainable so scientists could see their own expertise reflected in the results.',
+                action: 'Shadowed the engineers for 3 days - watched every step, learned the domain. Built an ML model that predicts strength in 2 seconds. Made it explainable so scientists could see their own expertise reflected in the results.',
                 quote: 'Scientists who started as skeptics ended up demoing the tool to their own colleagues. They trusted it because it matched what they already knew.',
                 outcomes: [
                   { before: 'Hours', after: '2 sec', label: 'Per test prediction' },
@@ -425,7 +425,7 @@ export default function AmexHRFit() {
                 border: '#1d4ed830',
                 problem: "Toronto's transit system handles 1.7 million riders daily and tracks lost items on paper logs and phone calls. Staff match items manually. Recovery rates are low. Nobody built a better system.",
                 action: 'Shadowed TTC staff at Union Station for a full day before writing a line of code. Built the AI matching engine, staff dashboard, rider portal, and notification system. Pitching to the Director in May 2026.',
-                quote: 'This is a capstone project — but it is production-ready architecture, not a school demo. The TTC Director is the stakeholder.',
+                quote: 'This is a capstone project - but it is production-ready architecture, not a school demo. The TTC Director is the stakeholder.',
                 outcomes: [
                   { before: 'Paper logs', after: 'AI-matched', label: 'Item recovery process' },
                   { before: '1.7M riders', after: 'City-scale', label: 'Scope of impact' },
@@ -451,7 +451,7 @@ export default function AmexHRFit() {
                     <div style={{ fontSize: 14, color: '#555', lineHeight: 1.75, fontStyle: 'italic' }}>{item.quote}</div>
                   </div>
                 </div>
-                {/* Outcome chips — before → after */}
+                {/* Outcome chips - before → after */}
                 <div style={{ padding: '0 22px 18px', display: 'flex', gap: 8, flexWrap: 'wrap' as const }}>
                   {item.outcomes.map((o, j) => (
                     <div key={j} style={{ background: '#fff', border: `1px solid ${item.color}20`, borderRadius: 10, padding: '10px 14px', flex: '1 1 110px' }}>
@@ -474,7 +474,7 @@ export default function AmexHRFit() {
         {/* AUTHORITY */}
         <div className="section">
           <div className="eyebrow">Operating Above the Title</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>Pitching to directors and presidents — before any job required it.</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Pitching to directors and presidents - before any job required it.</div>
           <p className="body-p" style={{ marginBottom: 0 }}>
             Most candidates list skills. This is different. A capstone pitch directly to the TTC Director. An active $1M investment conversation with the President of Rogers. Real rooms. Real stakes. Real outcomes.
           </p>
@@ -490,9 +490,9 @@ export default function AmexHRFit() {
                 </div>
               </div>
               <div className="auth-body">
-                <div className="auth-title">An AI system for 1.7M daily riders — built as a capstone, pitched to the Director</div>
+                <div className="auth-title">An AI system for 1.7M daily riders - built as a capstone, pitched to the Director</div>
                 <div className="auth-desc">
-                  The TTC handles <strong>1.7 million passengers every day</strong> — and loses track of their belongings on manual paper logs and phone calls. I built the fix: <strong>NLP vector matching against live inventory</strong>, SMS status updates, self-serve passenger portal, staff triage dashboard. Claim resolution 3x faster. Pitching this to the TTC Director in May 2026. Not a demo. A deployment-ready proposal.
+                  The TTC handles <strong>1.7 million passengers every day</strong> - and loses track of their belongings on manual paper logs and phone calls. I built the fix: <strong>NLP vector matching against live inventory</strong>, SMS status updates, self-serve passenger portal, staff triage dashboard. Claim resolution 3x faster. Pitching this to the TTC Director in May 2026. Not a demo. A deployment-ready proposal.
                 </div>
                 <div className="auth-tags">
                   <span className="auth-tag" style={{ color: '#7a5800', borderColor: '#c8a03060', background: '#fefce8' }}>TTC Director · May 2026</span>
@@ -516,9 +516,9 @@ export default function AmexHRFit() {
                 </div>
               </div>
               <div className="auth-body">
-                <div className="auth-title">In a $1M conversation with the President of a $15B company — before any career title required it</div>
+                <div className="auth-title">In a $1M conversation with the President of a $15B company - before any career title required it</div>
                 <div className="auth-desc">
-                  Rogers runs <strong>$15B+ in annual revenue</strong>. I am in an active <strong>$1M investment discussion</strong> with their President around <a href="https://www.lawline.tech" target="_blank" rel="noopener" style={{ color: '#c01a08', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>Lawline.tech ↗</a> — a legal AI platform live in production, serving users today. The pitch: <strong>enterprise licensing for Rogers' legal and compliance teams</strong>, B2B resale path. Sub-4% hallucination on legal eval sets. This is not networking — it is a real commercial conversation at the highest level.
+                  Rogers runs <strong>$15B+ in annual revenue</strong>. I am in an active <strong>$1M investment discussion</strong> with their President around <a href="https://www.lawline.tech" target="_blank" rel="noopener" style={{ color: '#c01a08', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>Lawline.tech ↗</a> - a legal AI platform live in production, serving users today. The pitch: <strong>enterprise licensing for Rogers' legal and compliance teams</strong>, B2B resale path. Sub-4% hallucination on legal eval sets. This is not networking - it is a real commercial conversation at the highest level.
                 </div>
                 <div className="auth-tags">
                   <span className="auth-tag" style={{ color: '#c01a08', borderColor: '#e8321440', background: '#fff5f5' }}>$1M Investment · Rogers</span>
@@ -539,9 +539,9 @@ export default function AmexHRFit() {
         {/* LAWLINE.TECH */}
         <div className="section">
           <div className="eyebrow">Founder · Builder · Operator</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>Lawline.tech — live, scaling, and already in a $1M investment conversation.</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>Lawline.tech - live, scaling, and already in a $1M investment conversation.</div>
           <p className="body-p" style={{ marginBottom: 18 }}>
-            Not a portfolio piece. Not a proof of concept. A legal AI platform in production — with real users, real enterprise conversations, and a hallucination rate that dropped from 14% to <strong style={{ color: '#c01a08' }}>3.8%</strong> through six layers of validation.
+            Not a portfolio piece. Not a proof of concept. A legal AI platform in production - with real users, real enterprise conversations, and a hallucination rate that dropped from 14% to <strong style={{ color: '#c01a08' }}>3.8%</strong> through six layers of validation.
           </p>
           <div className="lawline-card">
             <div style={{ borderRadius: '12px 12px 0 0', overflow: 'hidden', position: 'relative', background: '#0a0a0a', lineHeight: 0 }}>
@@ -569,7 +569,7 @@ export default function AmexHRFit() {
                 </div>
                 <div className="lawline-col">
                   <div className="lawline-col-label">The AI Answer</div>
-                  <div className="lawline-col-text">RAG over <strong>Canadian statutes, case law, and compliance docs.</strong> Instant, cited, attorney-client-privilege-safe answers. Air-gapped for enterprise — no data leaves the client&apos;s environment.</div>
+                  <div className="lawline-col-text">RAG over <strong>Canadian statutes, case law, and compliance docs.</strong> Instant, cited, attorney-client-privilege-safe answers. Air-gapped for enterprise - no data leaves the client&apos;s environment.</div>
                 </div>
                 <div className="lawline-col">
                   <div className="lawline-col-label">Built With</div>
@@ -611,27 +611,27 @@ export default function AmexHRFit() {
 
             <div className="tl">
               <div className="tl-item">
-                <div className="tl-t">8:00 AM — The call</div>
-                <div className="tl-txt">Founder calls. Production is down. First move — <strong>call the intern</strong> and ask calmly: what did you push last night?</div>
+                <div className="tl-t">8:00 AM - The call</div>
+                <div className="tl-txt">Founder calls. Production is down. First move - <strong>call the intern</strong> and ask calmly: what did you push last night?</div>
               </div>
               <div className="tl-item">
-                <div className="tl-t">8:10 AM — Root cause</div>
+                <div className="tl-t">8:10 AM - Root cause</div>
                 <div className="tl-txt">He <strong>force-pushed to production</strong> without review. Vector DB connection pool broke. Agent routing crashed downstream.</div>
               </div>
               <div className="tl-item">
-                <div className="tl-t">8:20 AM — Decision</div>
+                <div className="tl-t">8:20 AM - Decision</div>
                 <div className="tl-txt"><strong>Did not patch prod under pressure.</strong> Spun up staging, wired it to production databases, redirected live traffic. Customers back in minutes.</div>
               </div>
               <div className="tl-item">
-                <div className="tl-t">9:00 AM — Restored</div>
+                <div className="tl-t">9:00 AM - Restored</div>
                 <div className="tl-txt"><strong>Zero data loss. Zero session interruption.</strong> Founder confirmed. Proper rollback running in parallel.</div>
               </div>
               <div className="tl-item">
-                <div className="tl-t">9:15 AM — Harder conversation</div>
-                <div className="tl-txt">CEO wanted to fire the intern. I stepped in — walked him through what broke, set a clear standard, and <strong>saved his job</strong>.</div>
+                <div className="tl-t">9:15 AM - Harder conversation</div>
+                <div className="tl-txt">CEO wanted to fire the intern. I stepped in - walked him through what broke, set a clear standard, and <strong>saved his job</strong>.</div>
               </div>
               <div className="tl-item">
-                <div className="tl-t">12:30 PM — This interview</div>
+                <div className="tl-t">12:30 PM - This interview</div>
                 <div className="tl-txt"><strong>On time. Prepared. Calm.</strong> This is what owning production looks like.</div>
               </div>
             </div>
@@ -652,7 +652,7 @@ export default function AmexHRFit() {
             </div>
             <div className="pillar">
               <div className="pillar-title">Redirected prod in minutes. Because I built it.</div>
-              <div className="pillar-text">Knew exactly which wire to pull — because I laid every wire. Ownership is not a title. It is what happens when no one else can fix it.</div>
+              <div className="pillar-text">Knew exactly which wire to pull - because I laid every wire. Ownership is not a title. It is what happens when no one else can fix it.</div>
             </div>
           </div>
         </div>
@@ -674,7 +674,7 @@ export default function AmexHRFit() {
                 </div>
               </div>
               <div className="wc-right">
-                <span className="wc-period">2023 — Present</span>
+                <span className="wc-period">2023 - Present</span>
                 <span className="wc-arrow">▾</span>
               </div>
             </div>
@@ -682,7 +682,7 @@ export default function AmexHRFit() {
             {ressoOpen && (
               <div className="wc-body">
                 <p className="body-p">
-                  Real-time AI conversation platform. I built the entire AI layer — <span className="hl">multi-agent routing, context memory, persona engine, and evaluation pipeline</span>. Sub-800ms response under live load, 30+ personas, 200+ live sessions.
+                  Real-time AI conversation platform. I built the entire AI layer - <span className="hl">multi-agent routing, context memory, persona engine, and evaluation pipeline</span>. Sub-800ms response under live load, 30+ personas, 200+ live sessions.
                 </p>
 
                 <div className="chips-row">
@@ -703,15 +703,15 @@ export default function AmexHRFit() {
                 <div className="built-grid">
                   <div className="built-card">
                     <div className="built-title">Agent Orchestration Layer</div>
-                    <div className="built-desc">State-machine routing that switches agents in real time as the conversation shifts — barge-in, topic switch, silence timeout all handled automatically.</div>
+                    <div className="built-desc">State-machine routing that switches agents in real time as the conversation shifts - barge-in, topic switch, silence timeout all handled automatically.</div>
                   </div>
                   <div className="built-card">
                     <div className="built-title">Context Memory System</div>
-                    <div className="built-desc">Vector session memory over HNSW index. Only relevant past turns are retrieved — no context window overflow, no lost thread.</div>
+                    <div className="built-desc">Vector session memory over HNSW index. Only relevant past turns are retrieved - no context window overflow, no lost thread.</div>
                   </div>
                   <div className="built-card">
                     <div className="built-title">30+ Persona Engine</div>
-                    <div className="built-desc">Each client gets a versioned AI persona — tone, knowledge base, tool access. Changing one persona never breaks another.</div>
+                    <div className="built-desc">Each client gets a versioned AI persona - tone, knowledge base, tool access. Changing one persona never breaks another.</div>
                   </div>
                   <div className="built-card">
                     <div className="built-title">Evaluation Dashboards</div>
@@ -722,7 +722,7 @@ export default function AmexHRFit() {
                 <div className="align-block" style={{ background: '#e4faf5', borderColor: '#0a928040' }}>
                   <div className="align-label" style={{ color: '#0a9280' }}>Why this aligns to Amex</div>
                   <div className="align-text">
-                    Amex's AI agents handle real financial conversations — disputes, fraud, account management. <strong>I built that system already.</strong> Different domain, identical architecture: multi-agent routing, context memory, live performance monitoring. The only thing that changes is the training data.
+                    Amex's AI agents handle real financial conversations - disputes, fraud, account management. <strong>I built that system already.</strong> Different domain, identical architecture: multi-agent routing, context memory, live performance monitoring. The only thing that changes is the training data.
                   </div>
                 </div>
               </div>
@@ -745,7 +745,7 @@ export default function AmexHRFit() {
                 </div>
               </div>
               <div className="wc-right">
-                <span className="wc-period">2023 — 2024</span>
+                <span className="wc-period">2023 - 2024</span>
                 <span className="wc-arrow">▾</span>
               </div>
             </div>
@@ -753,7 +753,7 @@ export default function AmexHRFit() {
             {corolOpen && (
               <div className="wc-body">
                 <p className="body-p">
-                  Built an <span className="hl-amber">AI strength prediction platform</span> for Ultra-High Performance Concrete — a domain I had zero background in when I started. 12 research engineers used it daily to replace hours of manual testing with a 2-second prediction.
+                  Built an <span className="hl-amber">AI strength prediction platform</span> for Ultra-High Performance Concrete - a domain I had zero background in when I started. 12 research engineers used it daily to replace hours of manual testing with a 2-second prediction.
                 </p>
 
                 <div className="chips-row">
@@ -786,14 +786,14 @@ export default function AmexHRFit() {
                   </div>
                   <div className="built-card">
                     <div className="built-title">Business Outcome First</div>
-                    <div className="built-desc">Measured success in hours saved per week, fewer physical tests, lower material waste — not just R² score.</div>
+                    <div className="built-desc">Measured success in hours saved per week, fewer physical tests, lower material waste - not just R² score.</div>
                   </div>
                 </div>
 
                 <div className="align-block" style={{ background: '#fffbeb', borderColor: '#d9920040' }}>
                   <div className="align-label" style={{ color: '#b87000' }}>Why this aligns to Amex</div>
                   <div className="align-text">
-                    Financial risk, credit models, dispute logic — a domain I do not know yet. But I learned concrete science in weeks by sitting with experts and building tools they actually trusted. <strong>That is the exact same ramp.</strong> I will do it again, faster, with higher stakes, and I will enjoy it.
+                    Financial risk, credit models, dispute logic - a domain I do not know yet. But I learned concrete science in weeks by sitting with experts and building tools they actually trusted. <strong>That is the exact same ramp.</strong> I will do it again, faster, with higher stakes, and I will enjoy it.
                   </div>
                 </div>
               </div>
@@ -807,14 +807,14 @@ export default function AmexHRFit() {
         <div id="sec-biz-req-hr" className="section">
           <div className="eyebrow">Business Requirement Approach</div>
           <div className="sh2" style={{ marginBottom: 6 }}>Discovery → Spec → Alignment → Delivery: end-to-end business ownership.</div>
-          <p className="body-p" style={{ marginBottom: 28 }}>I have never waited for a PM to hand me requirements. Every project started with me in the room with stakeholders — understanding the real problem, translating it to specs, aligning everyone on the plan, and staying accountable until delivery.</p>
+          <p className="body-p" style={{ marginBottom: 28 }}>I have never waited for a PM to hand me requirements. Every project started with me in the room with stakeholders - understanding the real problem, translating it to specs, aligning everyone on the plan, and staying accountable until delivery.</p>
 
           {/* RESSO BIZ REQ */}
           <div style={{ background: '#fff', border: '1.5px solid #0a928030', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
             <div style={{ background: 'linear-gradient(135deg, #f0fdfb, #fff)', borderBottom: '1px solid #0a928020', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#0a9280', marginBottom: 4, fontWeight: 700 }}>Production · AI Startup · 2024–Present</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Resso.ai — Multi-Agent Voice Platform</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#0a9280', marginBottom: 4, fontWeight: 700 }}>Production · AI Startup · 2024-Present</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Resso.ai - Multi-Agent Voice Platform</div>
               </div>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#0a9280', background: '#e4faf5', border: '1px solid #0a928040', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>● LIVE</span>
             </div>
@@ -822,7 +822,7 @@ export default function AmexHRFit() {
               <div className="spec-grid">
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Requirement Discovery</div>
-                  <div className="spec-text">Sat with enterprise clients (edtech) for 2–3 days before writing a line of code. Mapped their current call workflows — where agents dropped context, what triggered escalation, which silences meant confusion vs. thinking. <strong>Built the spec from observed pain, not assumptions.</strong></div>
+                  <div className="spec-text">Sat with enterprise clients (edtech) for 2-3 days before writing a line of code. Mapped their current call workflows - where agents dropped context, what triggered escalation, which silences meant confusion vs. thinking. <strong>Built the spec from observed pain, not assumptions.</strong></div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#7c3aed' }}>Translation to Engineering Spec</div>
@@ -834,7 +834,7 @@ export default function AmexHRFit() {
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#b87000' }}>Delivered Business Outcome</div>
-                  <div className="spec-text">Hallucination rate dropped from 14% to 3.8%. Context retention 72% → 98%. 200+ concurrent sessions at sub-800ms end-to-end. Clients renewed. One client expanded from 1 persona to 5 within 3 months of go-live — the product worked well enough they wanted more of it.</div>
+                  <div className="spec-text">Hallucination rate dropped from 14% to 3.8%. Context retention 72% → 98%. 200+ concurrent sessions at sub-800ms end-to-end. Clients renewed. One client expanded from 1 persona to 5 within 3 months of go-live - the product worked well enough they wanted more of it.</div>
                 </div>
               </div>
             </div>
@@ -844,8 +844,8 @@ export default function AmexHRFit() {
           <div style={{ background: '#fff', border: '1.5px solid #b8700030', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
             <div style={{ background: 'linear-gradient(135deg, #fffbeb, #fff)', borderBottom: '1px solid #b8700018', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#b87000', marginBottom: 4, fontWeight: 700 }}>Production · Materials ML · 2023–2024</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — UHPC Strength Prediction Platform</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#b87000', marginBottom: 4, fontWeight: 700 }}>Production · Materials ML · 2023-2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol - UHPC Strength Prediction Platform</div>
               </div>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#b87000', background: '#fffbeb', border: '1px solid #b8700040', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>12 Engineers · Daily Use</span>
             </div>
@@ -853,7 +853,7 @@ export default function AmexHRFit() {
               <div className="spec-grid">
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#b87000' }}>Requirement Discovery</div>
-                  <div className="spec-text">Shadowed 12 research engineers for 3 days before touching the data. Watched them run physical lab tests, record results manually, and repeat for every mix variation. <strong>The real bottleneck was not analysis — it was the hours waiting for each physical test result.</strong> That single insight changed the entire problem framing: predict before you pour.</div>
+                  <div className="spec-text">Shadowed 12 research engineers for 3 days before touching the data. Watched them run physical lab tests, record results manually, and repeat for every mix variation. <strong>The real bottleneck was not analysis - it was the hours waiting for each physical test result.</strong> That single insight changed the entire problem framing: predict before you pour.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Translation to Engineering Spec</div>
@@ -861,7 +861,7 @@ export default function AmexHRFit() {
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#1d4ed8' }}>Stakeholder Alignment</div>
-                  <div className="spec-text">Research engineers are skeptical of ML by default — they spent years building intuition about concrete behaviour. Used SHAP to show that the model&apos;s top features matched their expertise exactly. <strong>Seeing the model reflect their domain knowledge</strong> converted them from critics to champions. They demoed the tool to the broader team themselves.</div>
+                  <div className="spec-text">Research engineers are skeptical of ML by default - they spent years building intuition about concrete behaviour. Used SHAP to show that the model&apos;s top features matched their expertise exactly. <strong>Seeing the model reflect their domain knowledge</strong> converted them from critics to champions. They demoed the tool to the broader team themselves.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#dc2626' }}>Delivered Business Outcome</div>
@@ -876,7 +876,7 @@ export default function AmexHRFit() {
             <div style={{ background: 'linear-gradient(135deg, #fff5f5, #fff)', borderBottom: '1px solid #dc262618', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#dc2626', marginBottom: 4, fontWeight: 700 }}>Live · Legal AI · 2024</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Lawline.tech — Attorney-Grade Legal AI</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Lawline.tech - Attorney-Grade Legal AI</div>
               </div>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#dc2626', background: '#fef2f2', border: '1px solid #dc262640', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>● LIVE</span>
             </div>
@@ -884,7 +884,7 @@ export default function AmexHRFit() {
               <div className="spec-grid">
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#dc2626' }}>Requirement Discovery</div>
-                  <div className="spec-text">Interviewed 4 attorneys before writing a line of code. The real requirement was not "AI search" — it was <strong>privilege-safe research that held up in court</strong>. Attorneys needed to prove, if challenged, that no client data ever left their office. That became the primary constraint that shaped every architectural decision.</div>
+                  <div className="spec-text">Interviewed 4 attorneys before writing a line of code. The real requirement was not "AI search" - it was <strong>privilege-safe research that held up in court</strong>. Attorneys needed to prove, if challenged, that no client data ever left their office. That became the primary constraint that shaped every architectural decision.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#b87000' }}>Translation to Engineering Spec</div>
@@ -892,11 +892,11 @@ export default function AmexHRFit() {
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Stakeholder Alignment</div>
-                  <div className="spec-text">Attorneys are not technical. Ran a demo showing network activity monitor: zero outbound packets during a query. That visual proof — <strong>watching the network stay silent</strong> while the AI worked — closed the trust gap faster than any technical document. Attorneys shared that demo with their law society contacts.</div>
+                  <div className="spec-text">Attorneys are not technical. Ran a demo showing network activity monitor: zero outbound packets during a query. That visual proof - <strong>watching the network stay silent</strong> while the AI worked - closed the trust gap faster than any technical document. Attorneys shared that demo with their law society contacts.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#6d28d9' }}>Delivered Business Outcome</div>
-                  <div className="spec-text">Platform is live at lawline.tech. Attorneys use it for case research daily. The zero-telemetry architecture became a word-of-mouth differentiator — in a profession where trust is the product, <strong>the architecture was the pitch</strong>. Zero compliance incidents since launch.</div>
+                  <div className="spec-text">Platform is live at lawline.tech. Attorneys use it for case research daily. The zero-telemetry architecture became a word-of-mouth differentiator - in a profession where trust is the product, <strong>the architecture was the pitch</strong>. Zero compliance incidents since launch.</div>
                 </div>
               </div>
             </div>
@@ -907,7 +907,7 @@ export default function AmexHRFit() {
             <div style={{ background: 'linear-gradient(135deg, #eff6ff, #fff)', borderBottom: '1px solid #1d4ed820', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#1d4ed8', marginBottom: 4, fontWeight: 700 }}>Capstone · Transit AI · Pitching May 2026</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>TTC Lost &amp; Found — Intelligent Transit Recovery</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>TTC Lost &amp; Found - Intelligent Transit Recovery</div>
               </div>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#1d4ed8', background: '#eff6ff', border: '1px solid #1d4ed840', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>Pitching May 2026</span>
             </div>
@@ -915,7 +915,7 @@ export default function AmexHRFit() {
               <div className="spec-grid">
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#1d4ed8' }}>Requirement Discovery</div>
-                  <div className="spec-text">Shadowed TTC lost-and-found staff at Union Station for a full day. Watched them manually cross-reference printed item logs with incoming online submissions. The bottleneck was not staff — it was <strong>the absence of any matching logic</strong>. A "blue bag" report matched nothing because there was no system to match it to.</div>
+                  <div className="spec-text">Shadowed TTC lost-and-found staff at Union Station for a full day. Watched them manually cross-reference printed item logs with incoming online submissions. The bottleneck was not staff - it was <strong>the absence of any matching logic</strong>. A "blue bag" report matched nothing because there was no system to match it to.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Translation to Engineering Spec</div>
@@ -923,7 +923,7 @@ export default function AmexHRFit() {
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#7c3aed' }}>Stakeholder Alignment</div>
-                  <div className="spec-text">TTC has procurement, IT security, and operations — three different stakeholders with different concerns. Built a presentation layer showing each audience only their relevant metrics. Operations saw recovery rates. IT saw the security model. Procurement saw cost vs. manual-staff comparison. <strong>Same product, three different narratives, all true.</strong></div>
+                  <div className="spec-text">TTC has procurement, IT security, and operations - three different stakeholders with different concerns. Built a presentation layer showing each audience only their relevant metrics. Operations saw recovery rates. IT saw the security model. Procurement saw cost vs. manual-staff comparison. <strong>Same product, three different narratives, all true.</strong></div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#b87000' }}>Delivered Business Outcome</div>
@@ -936,33 +936,33 @@ export default function AmexHRFit() {
 
         <div className="divider" />
 
-        {/* LANGUAGE & RUNTIME — INTENTIONAL DECISIONS */}
+        {/* LANGUAGE & RUNTIME - INTENTIONAL DECISIONS */}
         <div id="sec-languages-hr" className="section">
           <div className="eyebrow">Engineering Judgment · Language Selection</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>Every technology choice was deliberate — not default</div>
-          <p className="body-p" style={{ marginBottom: 24 }}>Senior engineers do not pick languages because they are comfortable. They pick them because the trade-offs fit the problem. Here is how I think through every runtime decision — with numbers to back it up.</p>
+          <div className="sh2" style={{ marginBottom: 6 }}>Every technology choice was deliberate - not default</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Senior engineers do not pick languages because they are comfortable. They pick them because the trade-offs fit the problem. Here is how I think through every runtime decision - with numbers to back it up.</p>
 
           <div style={{ background: '#fff', border: '1.5px solid #e0e0da', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
             <div style={{ background: '#fafaf8', padding: '16px 22px 14px', borderBottom: '1px solid #ebebeb' }}>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 800, color: '#0d0d0d' }}>Python vs Java vs Go — why each language lives where it does</div>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 800, color: '#0d0d0d' }}>Python vs Java vs Go - why each language lives where it does</div>
             </div>
             <div style={{ padding: '18px 22px 22px' }}>
               <div className="spec-grid">
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Why Python for ML, not Java</div>
-                  <div className="spec-text">Java JVM cold start: 2–8 seconds. Unacceptable for containerised inference pods. PyTorch, SHAP, and LangGraph have no Java equivalents — you would be bridging JNI calls into C++ with marshalling overhead on every inference. Python FastAPI with uvicorn achieves <strong>sub-5ms p99 latency</strong> for structured inference. The ML ecosystem simply does not exist in Java.</div>
+                  <div className="spec-text">Java JVM cold start: 2-8 seconds. Unacceptable for containerised inference pods. PyTorch, SHAP, and LangGraph have no Java equivalents - you would be bridging JNI calls into C++ with marshalling overhead on every inference. Python FastAPI with uvicorn achieves <strong>sub-5ms p99 latency</strong> for structured inference. The ML ecosystem simply does not exist in Java.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#b87000' }}>Why Go for the network layer, not Node</div>
-                  <div className="spec-text">Node.js is single-threaded — it uses an event loop for I/O, not true parallelism. Go goroutines are multiplexed across OS threads: 1,000 goroutines costs ~4MB. The same load in Node: ~1GB. At 200 concurrent voice sessions × 5 tool calls per turn, Go handled the fan-out at <strong>180ms end-to-end</strong>. Python at the same load: 800ms. The maths was not close.</div>
+                  <div className="spec-text">Node.js is single-threaded - it uses an event loop for I/O, not true parallelism. Go goroutines are multiplexed across OS threads: 1,000 goroutines costs ~4MB. The same load in Node: ~1GB. At 200 concurrent voice sessions × 5 tool calls per turn, Go handled the fan-out at <strong>180ms end-to-end</strong>. Python at the same load: 800ms. The maths was not close.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#7c3aed' }}>The GIL problem, explained plainly</div>
-                  <div className="spec-text">Python's Global Interpreter Lock means only one thread executes at a time. asyncio masks this for I/O — it does not fix it for CPU-bound work. Model inference is CPU-bound. We moved concurrency to Go (which has no GIL) and kept ML logic in Python. <strong>Each process does exactly what it is fastest at.</strong> The boundary is a local Unix socket — sub-1ms overhead.</div>
+                  <div className="spec-text">Python's Global Interpreter Lock means only one thread executes at a time. asyncio masks this for I/O - it does not fix it for CPU-bound work. Model inference is CPU-bound. We moved concurrency to Go (which has no GIL) and kept ML logic in Python. <strong>Each process does exactly what it is fastest at.</strong> The boundary is a local Unix socket - sub-1ms overhead.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#1d4ed8' }}>The Amex implication</div>
-                  <div className="spec-text">Amex runs Java and Python at scale. I understand the trade-offs deeply — when to use each, how they interact, and where the performance cliffs are. I will not advocate for a rewrite. I will understand the existing architecture, identify where the language choice is causing friction, and propose targeted solutions backed by data.</div>
+                  <div className="spec-text">Amex runs Java and Python at scale. I understand the trade-offs deeply - when to use each, how they interact, and where the performance cliffs are. I will not advocate for a rewrite. I will understand the existing architecture, identify where the language choice is causing friction, and propose targeted solutions backed by data.</div>
                 </div>
               </div>
               <div style={{ background: '#0d0d0d', borderRadius: 10, padding: '14px 18px', display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center' }}>
@@ -986,20 +986,20 @@ export default function AmexHRFit() {
 
         <div className="divider" />
 
-        {/* ZERO HALLUCINATION — HR ANGLE */}
+        {/* ZERO HALLUCINATION - HR ANGLE */}
         <div id="sec-hallucination-hr" className="section">
           <div className="eyebrow">Quality Engineering · Accountability</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>Zero Hallucination — I ship AI that can be trusted</div>
-          <p className="body-p" style={{ marginBottom: 24 }}>In financial services, a hallucinated AI response is not a UX bug — it is a compliance incident. I built a 6-layer defense that dropped hallucination rate from <strong>14% to 3.8%</strong> at Resso and to near-zero at Lawline. Every layer is independently verifiable.</p>
+          <div className="sh2" style={{ marginBottom: 6 }}>Zero Hallucination - I ship AI that can be trusted</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>In financial services, a hallucinated AI response is not a UX bug - it is a compliance incident. I built a 6-layer defense that dropped hallucination rate from <strong>14% to 3.8%</strong> at Resso and to near-zero at Lawline. Every layer is independently verifiable.</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginBottom: 20 }}>
             {[
               { num: '01', title: 'Schema-First Output Constraints', color: '#0a9280', bg: '#f0fdfb', desc: 'Every LLM output passes through a Pydantic BaseModel. Required fields, enum constraints, confidence score ranges. The model cannot hallucinate a field that does not exist in the schema. Structurally impossible to produce malformed output.', metric: '14% → 3.8%', metricLabel: 'hallucination' },
-              { num: '02', title: 'RAG — Ground Every Claim', color: '#7c3aed', bg: '#f5f3ff', desc: 'Retrieval-Augmented Generation: retrieve document chunks first, generate strictly from those chunks. At Lawline: FAISS vector store over case documents. If the answer is not in the source, the model says so. No confabulation.', metric: 'Zero', metricLabel: 'hallucinated citations' },
+              { num: '02', title: 'RAG - Ground Every Claim', color: '#7c3aed', bg: '#f5f3ff', desc: 'Retrieval-Augmented Generation: retrieve document chunks first, generate strictly from those chunks. At Lawline: FAISS vector store over case documents. If the answer is not in the source, the model says so. No confabulation.', metric: 'Zero', metricLabel: 'hallucinated citations' },
               { num: '03', title: 'SHAP Explainability', color: '#b87000', bg: '#fffbeb', desc: 'For ML models (Corol UHPC): SHAP values decompose every prediction into per-feature contributions. Engineers audit why a strength value was predicted. No black-box inference where stakes are high.', metric: 'R² 0.73', metricLabel: 'with full audit trail' },
               { num: '04', title: 'Confidence-Gated Routing', color: '#1d4ed8', bg: '#eff6ff', desc: 'Every model output carries a confidence score. Below threshold: route to human review, not to downstream action. The system knows what it does not know and admits it rather than guessing.', metric: 'Human review', metricLabel: 'on all low-confidence' },
               { num: '05', title: 'Constrained Re-prompt', color: '#dc2626', bg: '#fef2f2', desc: 'On validation failure: re-prompt the LLM with the exact schema error. Max 3 attempts. After that: safe default + dead letter queue. 80% of validation failures recovered on re-prompt.', metric: '80%', metricLabel: 'failures recovered' },
-              { num: '06', title: 'DLQ Pattern Analysis', color: '#6d28d9', bg: '#faf5ff', desc: 'Every failed interaction enters a dead letter queue with full context. Reviewed weekly. DLQ analysis over 3 months identified 4 systematic prompt gaps driving 60% of failures — fixed each one.', metric: '60%', metricLabel: 'DLQ volume reduced' },
+              { num: '06', title: 'DLQ Pattern Analysis', color: '#6d28d9', bg: '#faf5ff', desc: 'Every failed interaction enters a dead letter queue with full context. Reviewed weekly. DLQ analysis over 3 months identified 4 systematic prompt gaps driving 60% of failures - fixed each one.', metric: '60%', metricLabel: 'DLQ volume reduced' },
             ].map((layer, i) => (
               <div key={i} style={{ background: layer.bg, border: `1.5px solid ${layer.color}25`, borderRadius: 12, padding: '14px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
@@ -1017,23 +1017,23 @@ export default function AmexHRFit() {
 
           <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 12, padding: '16px 20px' }}>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>Why this matters at Amex</div>
-            <div style={{ fontSize: 13, color: '#999', lineHeight: 1.8 }}>Financial AI that hallucinates is a regulatory incident. Every layer in this stack directly maps to financial AI safety requirements: schema constraints prevent invalid transaction data, confidence gating prevents uncertain recommendations from reaching customers, DLQ analysis creates an audit trail of every failure. <strong style={{ color: '#f0f0f0' }}>I have already built the safety architecture fintech requires — in production, not on a whiteboard.</strong></div>
+            <div style={{ fontSize: 13, color: '#999', lineHeight: 1.8 }}>Financial AI that hallucinates is a regulatory incident. Every layer in this stack directly maps to financial AI safety requirements: schema constraints prevent invalid transaction data, confidence gating prevents uncertain recommendations from reaching customers, DLQ analysis creates an audit trail of every failure. <strong style={{ color: '#f0f0f0' }}>I have already built the safety architecture fintech requires - in production, not on a whiteboard.</strong></div>
           </div>
         </div>
 
         <div className="divider" />
 
-        {/* OBSERVABILITY — HR ANGLE */}
+        {/* OBSERVABILITY - HR ANGLE */}
         <div id="sec-observability-hr" className="section">
           <div className="eyebrow">Production Ownership · You cannot fix what you cannot see</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>Observability — I monitor every system I ship</div>
-          <p className="body-p" style={{ marginBottom: 24 }}>Shipping is not the end of the job. I own the systems I build after they go live — logs, metrics, traces, alerts, and daily eval dashboards. When something breaks, I know about it before the user does.</p>
+          <div className="sh2" style={{ marginBottom: 6 }}>Observability - I monitor every system I ship</div>
+          <p className="body-p" style={{ marginBottom: 24 }}>Shipping is not the end of the job. I own the systems I build after they go live - logs, metrics, traces, alerts, and daily eval dashboards. When something breaks, I know about it before the user does.</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
             {[
               {
                 title: 'Structured Logging', color: '#0a9280',
-                desc: 'Every FastAPI request emits structured JSON: request_id, session_id, tool_name, input/output tokens, latency_ms, validation result, retry count. Machine-parseable — no regex needed. Audit-ready format for regulated environments.',
+                desc: 'Every FastAPI request emits structured JSON: request_id, session_id, tool_name, input/output tokens, latency_ms, validation result, retry count. Machine-parseable - no regex needed. Audit-ready format for regulated environments.',
                 tags: ['JSON structured logs', 'Correlation IDs', 'Zero PII in logs', 'Audit-ready']
               },
               {
@@ -1076,11 +1076,11 @@ export default function AmexHRFit() {
 
         <div className="divider" />
 
-        {/* RESILIENCE ENGINEERING — HR ANGLE */}
+        {/* RESILIENCE ENGINEERING - HR ANGLE */}
         <div id="sec-resilience-hr" className="section">
           <div className="eyebrow">Engineering Maturity · Failure Mode Design</div>
           <div className="sh2" style={{ marginBottom: 6 }}>I design for failure before I write the happy path</div>
-          <p className="body-p" style={{ marginBottom: 24 }}>Junior engineers write code that works when everything goes right. Senior engineers enumerate what can go wrong before writing a line. Here is how I handle each critical failure mode in the systems I shipped — and the P0 I resolved the morning of this interview.</p>
+          <p className="body-p" style={{ marginBottom: 24 }}>Junior engineers write code that works when everything goes right. Senior engineers enumerate what can go wrong before writing a line. Here is how I handle each critical failure mode in the systems I shipped - and the P0 I resolved the morning of this interview.</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
             {[
@@ -1099,7 +1099,7 @@ export default function AmexHRFit() {
               {
                 failure: 'K8s pod OOMKilled during inference', severity: 'P1', color: '#1d4ed8',
                 naive: 'Pod restarts, in-flight requests dropped, user session lost.',
-                real: 'Session state in Redis — not in-process. Restarted pod reconnects to existing session. Readiness probe prevents traffic until model is warm. HPA scales out before memory pressure hits.',
+                real: 'Session state in Redis - not in-process. Restarted pod reconnects to existing session. Readiness probe prevents traffic until model is warm. HPA scales out before memory pressure hits.',
                 pattern: 'Redis state + liveness probe + readiness probe + HPA'
               },
               {
@@ -1128,7 +1128,7 @@ export default function AmexHRFit() {
           <div style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 12, padding: '18px 22px', display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
             <div style={{ flex: 1, minWidth: 220 }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>The principle</div>
-              <div style={{ fontSize: 13, color: '#ccc', lineHeight: 1.8 }}>Resilience is not about preventing failures — it is about <strong style={{ color: '#f0f0f0' }}>bounding the blast radius</strong>. Every service has a degradation path: full service → cached fallback → safe default → human escalation. No path ends in silence or a 500.</div>
+              <div style={{ fontSize: 13, color: '#ccc', lineHeight: 1.8 }}>Resilience is not about preventing failures - it is about <strong style={{ color: '#f0f0f0' }}>bounding the blast radius</strong>. Every service has a degradation path: full service → cached fallback → safe default → human escalation. No path ends in silence or a 500.</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
@@ -1151,9 +1151,9 @@ export default function AmexHRFit() {
         {/* FULL STACK */}
         <div className="section">
           <div className="eyebrow">Full-Spectrum Engineer</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>iOS to blockchain, CI/CD to cloud — every layer, bridged to business.</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>iOS to blockchain, CI/CD to cloud - every layer, bridged to business.</div>
           <p className="body-p" style={{ marginBottom: 20 }}>
-            I don&apos;t need a specialist for every layer. I understand the model, the API, the pipeline, the UI, the infra, and the business requirement sitting behind all of it. That is what makes me dangerous as a hire — I close gaps other engineers leave open.
+            I don&apos;t need a specialist for every layer. I understand the model, the API, the pipeline, the UI, the infra, and the business requirement sitting behind all of it. That is what makes me dangerous as a hire - I close gaps other engineers leave open.
           </p>
           <div className="breadth-grid">
             <div className="breadth-row">
@@ -1254,7 +1254,7 @@ export default function AmexHRFit() {
         <div id="sec-biz-tech" className="section">
           <div className="eyebrow">The Bridge · Business Requirement to Production System</div>
           <div className="sh2" style={{ marginBottom: 6 }}>I am the translator between the boardroom and the codebase</div>
-          <p className="body-p" style={{ marginBottom: 24 }}>Most engineers wait for someone to hand them a ticket. I sit in the room where the problem is first articulated, translate it into a spec, build it, ship it, and report back in the language the business understands. Here is that exact loop — shown end-to-end on real projects.</p>
+          <p className="body-p" style={{ marginBottom: 24 }}>Most engineers wait for someone to hand them a ticket. I sit in the room where the problem is first articulated, translate it into a spec, build it, ship it, and report back in the language the business understands. Here is that exact loop - shown end-to-end on real projects.</p>
 
           {[
             {
@@ -1268,7 +1268,7 @@ export default function AmexHRFit() {
               project: 'Lawline.tech', color: '#dc2626', bg: '#fef2f2',
               biz: 'Attorneys want AI research assistance but cannot use any cloud service. Attorney-client privilege means one data leak ends careers. The requirement is "AI that cannot breach privilege."',
               gap: '"Cannot breach privilege" is a legal constraint, not a feature request. Translating it means: zero external HTTP calls, all inference local, encrypted storage with attorney-controlled keys, exportable audit log.',
-              tech: 'GGUF-quantised local model. AES-256 encrypted FAISS index. FastAPI with network firewall rules blocking outbound. Local audit log exportable as PDF. Zero telemetry — not reduced telemetry.',
+              tech: 'GGUF-quantised local model. AES-256 encrypted FAISS index. FastAPI with network firewall rules blocking outbound. Local audit log exportable as PDF. Zero telemetry - not reduced telemetry.',
               outcome: 'Zero compliance incidents. Platform is live. Attorneys demo the "zero outbound packets" screen to their law society contacts. The architecture became the sales pitch.',
             },
             {
@@ -1307,12 +1307,12 @@ export default function AmexHRFit() {
 
         <div className="divider" />
 
-        {/* WATER — ROLE ADAPTABILITY */}
+        {/* WATER - ROLE ADAPTABILITY */}
         <div id="sec-water" className="section">
           <div className="eyebrow">Adaptability · Be Like Water</div>
-          <div className="sh2" style={{ marginBottom: 6 }}>I fit the shape of any role — with depth, not dilution</div>
-          <p className="body-p" style={{ marginBottom: 8 }}>Most engineers are T-shaped: deep in one thing, shallow elsewhere. I am more like water — I take the shape of whatever role the team needs, without losing the depth that makes me useful. Here is the evidence across every role Amex might need.</p>
-          <p className="body-p" style={{ marginBottom: 28 }}>The key: every role below is backed by <strong>production systems, not side projects</strong>. And underpinning all of it is deep ML/AI fluency — which means I understand why the tools work, not just how to use them.</p>
+          <div className="sh2" style={{ marginBottom: 6 }}>I fit the shape of any role - with depth, not dilution</div>
+          <p className="body-p" style={{ marginBottom: 8 }}>Most engineers are T-shaped: deep in one thing, shallow elsewhere. I am more like water - I take the shape of whatever role the team needs, without losing the depth that makes me useful. Here is the evidence across every role Amex might need.</p>
+          <p className="body-p" style={{ marginBottom: 28 }}>The key: every role below is backed by <strong>production systems, not side projects</strong>. And underpinning all of it is deep ML/AI fluency - which means I understand why the tools work, not just how to use them.</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 24 }}>
             {[
@@ -1320,23 +1320,23 @@ export default function AmexHRFit() {
                 role: 'Azure / Cloud Engineer', color: '#0078d4', bg: '#eff6ff',
                 depth: 'Azure OpenAI GPT-4o deployment slots with zero-downtime staging → prod swap. Azure AKS with HPA + liveness/readiness probes. Azure data residency configured for Canadian compliance. AWS certified: EC2, S3, Lambda, SageMaker.',
                 proof: 'Resso.ai runs on Azure in production. 200+ concurrent sessions. Zero unplanned downtime.',
-                ml: 'Understand how Azure OpenAI deployment quotas, TPM limits, and dedicated capacity affect model response latency — not just that they exist.'
+                ml: 'Understand how Azure OpenAI deployment quotas, TPM limits, and dedicated capacity affect model response latency - not just that they exist.'
               },
               {
                 role: 'CI/CD Engineer', color: '#6d28d9', bg: '#f5f3ff',
-                depth: 'GitHub Actions pipelines: build → test → eval → deploy. Automated 500-doc LLM eval on every push — build blocked on accuracy regression. K8s rolling updates. Staging environments wired to production data stores for realistic testing.',
+                depth: 'GitHub Actions pipelines: build → test → eval → deploy. Automated 500-doc LLM eval on every push - build blocked on accuracy regression. K8s rolling updates. Staging environments wired to production data stores for realistic testing.',
                 proof: 'The morning of this interview: restored a broken prod environment in 24 minutes by redirecting DNS to staging. Root cause fixed. PR review enforced.',
-                ml: 'Know that LLM eval pipelines need different CI gates than traditional unit tests — F1, hallucination rate, and context retention are not pass/fail booleans.'
+                ml: 'Know that LLM eval pipelines need different CI gates than traditional unit tests - F1, hallucination rate, and context retention are not pass/fail booleans.'
               },
               {
                 role: 'LLM Security Engineer', color: '#dc2626', bg: '#fef2f2',
-                depth: 'Prompt injection defense in production. AES-256 encrypted vector stores. Zero-egress enforcement at the MCP layer — adapters blocked from making external calls. Local audit logs exportable for court. Zero PII in structured logs.',
+                depth: 'Prompt injection defense in production. AES-256 encrypted vector stores. Zero-egress enforcement at the MCP layer - adapters blocked from making external calls. Local audit logs exportable for court. Zero PII in structured logs.',
                 proof: 'Lawline.tech: zero compliance incidents. Attorneys use the "zero outbound packets" demo as their trust proof.',
                 ml: 'Understand jailbreak vectors, indirect prompt injection via retrieved documents, and why RAG-based systems need output filtering on top of retrieval filtering.'
               },
               {
                 role: 'Prompt Engineer', color: '#b87000', bg: '#fffbeb',
-                depth: 'Prompt engineering is not creative writing — it is systematic. Built constrained re-prompt loops: schema error → structured correction → retry. Persona prompts for 30+ enterprise clients. Chain-of-thought prompts for multi-step legal reasoning. System prompt versioning in git.',
+                depth: 'Prompt engineering is not creative writing - it is systematic. Built constrained re-prompt loops: schema error → structured correction → retry. Persona prompts for 30+ enterprise clients. Chain-of-thought prompts for multi-step legal reasoning. System prompt versioning in git.',
                 proof: 'Context retention 72% → 98%. The difference was prompt architecture, not model upgrade.',
                 ml: 'Know why chain-of-thought works (forces scratchpad reasoning), when few-shot beats zero-shot, and how to measure prompt quality with automated eval.'
               },
@@ -1344,13 +1344,13 @@ export default function AmexHRFit() {
                 role: 'Full-Stack AI Engineer', color: '#0a9280', bg: '#f0fdfb',
                 depth: 'FastAPI backend + Next.js 15 App Router frontend + WebSocket real-time layer + Prisma ORM + PostgreSQL + Redis. Built every layer. No handoff to frontend specialists, no handoff to backend specialists. The entire system is mine.',
                 proof: 'Resso.ai platform end-to-end. Lawline.tech end-to-end. TTC full-stack capstone. Solo on all three.',
-                ml: 'Can wire a PyTorch model prediction directly into a React dashboard with a FastAPI endpoint in between — and understand the latency budget at each hop.'
+                ml: 'Can wire a PyTorch model prediction directly into a React dashboard with a FastAPI endpoint in between - and understand the latency budget at each hop.'
               },
               {
                 role: 'Business Analyst to Tech', color: '#0e7490', bg: '#ecfeff',
-                depth: 'Shadowed TTC staff for a full day before writing a line of code. Interviewed 4 attorneys before speccing Lawline. Sat with enterprise call centre clients for 2–3 days at Resso. Every project started with me in the room with the people who had the problem.',
+                depth: 'Shadowed TTC staff for a full day before writing a line of code. Interviewed 4 attorneys before speccing Lawline. Sat with enterprise call centre clients for 2-3 days at Resso. Every project started with me in the room with the people who had the problem.',
                 proof: 'Every project on this page. None started with a ticket. All started with a conversation.',
-                ml: 'Can translate "our AI is giving wrong answers" into a hallucination rate metric, identify which of the 6 defense layers is failing, and fix it — without needing a BA to mediate.'
+                ml: 'Can translate "our AI is giving wrong answers" into a hallucination rate metric, identify which of the 6 defense layers is failing, and fix it - without needing a BA to mediate.'
               },
             ].map((item, i) => (
               <div key={i} style={{ background: '#fff', border: `1.5px solid ${item.color}20`, borderRadius: 12, overflow: 'hidden' }}>
@@ -1373,7 +1373,7 @@ export default function AmexHRFit() {
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', letterSpacing: '.16em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 12 }}>The ML/AI foundation that makes all of this possible</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
               {[
-                { title: 'Model internals', color: '#0abfa8', text: 'Understand transformer attention, context window limits, temperature effects, and why chain-of-thought forces better reasoning. This is not a user-level understanding — it drives architectural decisions.' },
+                { title: 'Model internals', color: '#0abfa8', text: 'Understand transformer attention, context window limits, temperature effects, and why chain-of-thought forces better reasoning. This is not a user-level understanding - it drives architectural decisions.' },
                 { title: 'Training and eval', color: '#7c3aed', text: 'Built custom eval pipelines. Know F1 vs. accuracy trade-offs. Understand when R² is the wrong metric. Can design a golden dataset, detect distribution shift, and run regression tests on model updates.' },
                 { title: 'Production ML patterns', color: '#b87000', text: 'RAG architecture, vector store trade-offs (HNSW vs flat index), SHAP explainability, model quantization (GGUF), ensemble methods. Deployed all of these. They are not academic references.' },
               ].map((item, i) => (
@@ -1390,7 +1390,7 @@ export default function AmexHRFit() {
 
         <div className="cta">
           <div className="cta-h">The frameworks are built. The proof is above. Make the call.</div>
-          <div className="cta-p" style={{ marginBottom: 20 }}>Production AI. Leadership under pressure. Enterprise-level conversations. Day one contributor — not a six-month ramp.</div>
+          <div className="cta-p" style={{ marginBottom: 20 }}>Production AI. Leadership under pressure. Enterprise-level conversations. Day one contributor - not a six-month ramp.</div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' as const }}>
             <a href="mailto:emailtosolankiom@gmail.com" className="cta-btn">emailtosolankiom@gmail.com →</a>
             <a href="https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/" target="_blank" rel="noopener" className="cta-btn cta-btn-ghost">LinkedIn ↗</a>
@@ -1419,7 +1419,7 @@ export default function AmexHRFit() {
         <div className="hr-tracker-panel">
           <div className="hr-tracker-head">
             <div>
-              <div className="hr-tracker-title">Amex HR — Requirements Checklist</div>
+              <div className="hr-tracker-title">Amex HR - Requirements Checklist</div>
               <div className="hr-tracker-sub">CHECK OFF EACH AS YOU VERIFY IT IN THIS PAGE</div>
             </div>
             <button className="hr-tracker-close" onClick={() => setTrackerOpen(false)}>x</button>
@@ -1467,7 +1467,7 @@ export default function AmexHRFit() {
           <div className="hr-tracker-footer">
             <div className="hr-tracker-footer-text">
               {!timerActive && checked.size === 0 && <>Click each to check it off and jump to the evidence. <strong>Timer starts on first check.</strong></>}
-              {timerActive && checked.size < 10 && <><strong>{10 - checked.size} remaining</strong> — resets in {fmtTime(timeLeft)}.</>}
+              {timerActive && checked.size < 10 && <><strong>{10 - checked.size} remaining</strong> - resets in {fmtTime(timeLeft)}.</>}
               {checked.size === 10 && <><strong>All 10 verified.</strong> Every one maps to a production system.</>}
             </div>
           </div>
@@ -1478,7 +1478,7 @@ export default function AmexHRFit() {
         <div className="overlay" onClick={() => setVideoOpen(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-top">
-              <div className="modal-ttl">{videoOpen === "resso" ? "Resso.ai — Agent Orchestration" : "UHPC — Strength Prediction"}</div>
+              <div className="modal-ttl">{videoOpen === "resso" ? "Resso.ai - Agent Orchestration" : "UHPC - Strength Prediction"}</div>
               <button className="modal-x" onClick={() => setVideoOpen(null)}>x</button>
             </div>
             <div className="modal-body">

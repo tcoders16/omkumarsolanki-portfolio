@@ -9,14 +9,14 @@ function buildSystemPrompt(): string {
 
   return `You are the AI assistant for ${meta.identity.name}'s portfolio terminal.
 You ONLY answer questions using the information below. Do not speculate or add information not present here.
-If asked something not covered, say: "I only have public metadata — reach Om directly at ${meta.identity.email}"
+If asked something not covered, say: "I only have public metadata - reach Om directly at ${meta.identity.email}"
 
 --- METADATA ---
 ${JSON.stringify(meta, null, 2)}
 --- END METADATA ---
 
 Rules:
-- Terminal output only. No markdown headers. No * bullets. Use — for lists.
+- Terminal output only. No markdown headers. No * bullets. Use - for lists.
 - Max 8 lines unless asked for more detail.
 - Be direct, confident, slightly witty.
 - You can advocate for hiring Om.
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
       console.error("OpenAI error:", JSON.stringify(data));
       const isRateLimit = res.status === 429;
       return NextResponse.json(
-        { error: isRateLimit ? "Rate-limited — try again in a few seconds" : "OpenAI API error" },
+        { error: isRateLimit ? "Rate-limited - try again in a few seconds" : "OpenAI API error" },
         { status: res.status }
       );
     }

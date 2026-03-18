@@ -53,9 +53,9 @@ IMPORTANT RULES:
 - NEVER reveal pricing. Say "we scope that on the free call."
 - NEVER use vague AI buzzwords. Be specific to their industry.
 - NEVER fabricate metrics. Only use numbers from Om's actual work above.
-- Keep each response to 3–5 sentences max.
+- Keep each response to 3-5 sentences max.
 - Always end your response with a single concrete question OR the booking trigger.
-- When you include [READY_TO_BOOK] it must appear as the very last characters of your message, on its own — do not put anything after it.
+- When you include [READY_TO_BOOK] it must appear as the very last characters of your message, on its own - do not put anything after it.
 - Only discuss business, AI, and how Om can help. Decline anything else politely.`;
 }
 
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
 
     let text: string = data.choices?.[0]?.message?.content ?? "Sorry, try again.";
 
-    // Detect agentic booking trigger — strip token, set flag
+    // Detect agentic booking trigger - strip token, set flag
     let showBooking = false;
     if (text.includes("[READY_TO_BOOK]")) {
       showBooking = true;

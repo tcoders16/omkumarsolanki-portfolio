@@ -79,12 +79,12 @@ export async function POST(req: NextRequest) {
 
   const dayClash = bookings.find(b => b.date === date);
   if (dayClash) {
-    return NextResponse.json({ error: "That day is already taken — pick another." }, { status: 409 });
+    return NextResponse.json({ error: "That day is already taken - pick another." }, { status: 409 });
   }
 
   const slotClash = bookings.find(b => b.date === date && b.slot === slot);
   if (slotClash) {
-    return NextResponse.json({ error: "That slot was just taken — pick another." }, { status: 409 });
+    return NextResponse.json({ error: "That slot was just taken - pick another." }, { status: 409 });
   }
 
   const booking = {

@@ -147,7 +147,7 @@ export default function BookPage() {
               borderRadius: 10, padding: "12px 16px",
               fontSize: "0.6rem", color: "#3dba7e",
             }}>
-              ✓ Booked: <strong>{done}</strong> — Om will reach out to confirm.
+              ✓ Booked: <strong>{done}</strong> - Om will reach out to confirm.
             </div>
           )}
         </div>
