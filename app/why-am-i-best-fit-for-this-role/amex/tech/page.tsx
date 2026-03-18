@@ -776,30 +776,30 @@ export default function AmexTechFit() {
           </div>
 
           {/* COROL ARCHITECTURE */}
-          <div style={{ background: '#fff', border: '1.5px solid #6d28d930', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
-            <div style={{ background: 'linear-gradient(135deg, #f5f3ff, #fff)', borderBottom: '1px solid #6d28d920', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ background: '#fff', border: '1.5px solid #b8700030', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #fffbeb, #fff)', borderBottom: '1px solid #b8700018', padding: '20px 24px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#6d28d9', marginBottom: 5, fontWeight: 700 }}>Production · Healthcare AI · 2023–2024</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — On-Premise Hospital AI (3 systems)</div>
-                <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Designed RAG pipeline for HariKrushna hospital network. Air-gapped, HIPAA-compliant, zero cloud egress.</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#b87000', marginBottom: 5, fontWeight: 700 }}>Production · Materials ML · 2023–2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — UHPC Strength Prediction Platform</div>
+                <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>ML Engineer. Built AI prediction tool for Ultra-High Performance Concrete research at corol.org.</div>
               </div>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#6d28d9', background: '#f5f3ff', border: '1px solid #6d28d940', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>7 Enterprise Clients</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#b87000', background: '#fffbeb', border: '1px solid #b8700040', borderRadius: 20, padding: '4px 12px', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>12 Engineers · Daily Use</span>
             </div>
             <div style={{ padding: '22px 24px 26px' }}>
-              <div style={{ background: '#f5f3ff', border: '1px solid #6d28d925', borderRadius: 10, padding: '14px 18px', marginBottom: 18 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#6d28d9', fontWeight: 700, marginBottom: 7 }}>The Business Problem</div>
-                <div style={{ fontSize: 14, color: '#333', lineHeight: 1.75 }}>Three hospitals needed AI assistants over internal medical documents — patient records, protocols, drug references. <strong>No data could leave the building.</strong> Cloud LLMs were legally off the table. The system had to run on 16 GB commodity hardware, return sub-second answers, and pass compliance review before any deployment to clinical staff.</div>
+              <div style={{ background: '#fffbeb', border: '1px solid #b8700025', borderRadius: 10, padding: '14px 18px', marginBottom: 18 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#b87000', fontWeight: 700, marginBottom: 7 }}>The Business Problem</div>
+                <div style={{ fontSize: 14, color: '#333', lineHeight: 1.75 }}>UHPC research engineers were running physical lab tests for every experimental concrete mix — a process taking hours per test. With hundreds of mix variables (water-cement ratio, silica fume, fibre content, curing temperature), <strong>the combinatorial space was too large for manual testing.</strong> They needed a model that could predict compressive strength in 2 seconds so they could screen hundreds of mixes before committing to a physical pour.</div>
               </div>
               <div style={{ marginBottom: 18 }}>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: '#555', fontWeight: 700, marginBottom: 12 }}>Architecture Flow</div>
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', rowGap: 8 }}>
                   {[
-                    { label: 'Doc\nIngestion', color: '#6d28d9' },
-                    { label: 'Semantic\nChunking', color: '#7c3aed' },
-                    { label: 'HNSW\nVector Index', color: '#0a9280' },
-                    { label: 'Cross-Encoder\nRerank', color: '#1d4ed8' },
-                    { label: 'GGUF\nInference', color: '#b87000' },
-                    { label: 'Kafka\nEvent Bus', color: '#dc2626' },
+                    { label: 'Mix Feature\nInput', color: '#b87000' },
+                    { label: 'Feature\nEngineering', color: '#0a9280' },
+                    { label: 'Ensemble\nML Model', color: '#7c3aed' },
+                    { label: 'SHAP\nExplainability', color: '#1d4ed8' },
+                    { label: 'FastAPI\nBackend', color: '#b87000' },
+                    { label: 'React\nDashboard', color: '#0a9280' },
                   ].map((node, i, arr) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{ background: '#fafaf8', border: `1.5px solid ${node.color}35`, borderRadius: 8, padding: '8px 12px', textAlign: 'center', minWidth: 82 }}>
@@ -812,25 +812,25 @@ export default function AmexTechFit() {
               </div>
               <div className="spec-grid" style={{ marginBottom: 18 }}>
                 <div className="spec-card">
-                  <div className="spec-title" style={{ color: '#6d28d9' }}>Why GGUF-quantized models, not API?</div>
-                  <div className="spec-text">HIPAA and hospital policy: <strong>no data egress</strong>. GGUF 4-bit quantization let Mistral-7B run on commodity 16 GB hardware at 12–18 tok/s. <code>q4_K_M</code> gave 97% quality at 28% of the FP16 memory footprint — the only way to make on-prem AI viable.</div>
+                  <div className="spec-title" style={{ color: '#b87000' }}>Why ensemble model over single regressor?</div>
+                  <div className="spec-text">UHPC mix data has high feature interaction — silica fume effect depends on w/c ratio. Single linear regression missed these interactions. Ensemble (gradient boosting + RF) captured non-linear dependencies, achieving <code>R² 0.73</code> on 2,200 training samples from 3 years of lab records.</div>
                 </div>
                 <div className="spec-card">
-                  <div className="spec-title" style={{ color: '#0a9280' }}>Why HNSW over flat vector search?</div>
-                  <div className="spec-text">With 40K+ hospital documents, flat cosine search took 280ms per query. HNSW reduced that to <code>sub-18ms</code> with ef=64, m=16. Approximate nearest neighbors at 99.2% recall — medical accuracy without cloud latency or external dependency.</div>
+                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Why SHAP explainability was non-negotiable</div>
+                  <div className="spec-text">Scientists would not trust a black-box model making decisions that affected their research roadmap. SHAP feature rankings matched their domain intuition (w/c ratio most influential). <strong>Seeing their expertise reflected in the model</strong> was the moment they switched from skeptics to daily users.</div>
                 </div>
                 <div className="spec-card">
-                  <div className="spec-title" style={{ color: '#1d4ed8' }}>Why a cross-encoder reranker?</div>
-                  <div className="spec-text">Bi-encoder retrieval gets top-32 candidates fast. Cross-encoder reranks top-32 → top-5 with full attention. In medical context, <strong>rank position matters</strong> — wrong document in top-1 could mean wrong drug dosage. Reranker was non-negotiable for clinical safety.</div>
+                  <div className="spec-title" style={{ color: '#7c3aed' }}>Why FastAPI + React, not a Jupyter notebook?</div>
+                  <div className="spec-text">Notebooks are one-time demos. Scientists needed a tool they could use mid-experiment, on any machine, without running Python. FastAPI served the model as a REST endpoint. React dashboard gave instant results from a clean input form. <strong>2 seconds vs. hours of physical lab testing.</strong></div>
                 </div>
                 <div className="spec-card">
-                  <div className="spec-title" style={{ color: '#dc2626' }}>Why Kafka across 3 hospital systems?</div>
-                  <div className="spec-text">Three separate hospital networks with different EMR systems needed a shared event bus. Kafka: partitioned topics per-hospital, consumer groups per-department, <code>idempotent producers</code> for exactly-once semantics when syncing patient records across sites.</div>
+                  <div className="spec-title" style={{ color: '#0a9280' }}>How I learned concrete science from scratch</div>
+                  <div className="spec-text">Zero materials science background. Read ACI papers alongside the research engineers before touching any data — why does silica fume matter? what does curing temperature do to fibre bonding? Domain understanding drove feature engineering. <strong>The model was only as good as the features.</strong></div>
                 </div>
               </div>
               <div className="chips-row" style={{ marginTop: 0 }}>
-                {[{ n: 'sub-1s', l: 'Retrieval latency' }, { n: '7', l: 'Enterprise clients' }, { n: '16 GB', l: 'Hardware footprint' }, { n: '99.2%', l: 'Recall accuracy' }, { n: 'Air-gapped', l: 'Zero cloud egress' }].map((c, i) => (
-                  <div key={i} className="chip"><div className="chip-n" style={{ color: '#6d28d9', fontSize: 14 }}>{c.n}</div><div className="chip-l">{c.l}</div></div>
+                {[{ n: 'R² 0.73', l: 'Prediction accuracy' }, { n: '2,200', l: 'Training samples' }, { n: '2 sec', l: 'vs. hours of lab testing' }, { n: '12', l: 'Daily engineer users' }, { n: 'SHAP', l: 'Full explainability' }].map((c, i) => (
+                  <div key={i} className="chip"><div className="chip-n" style={{ color: '#b87000', fontSize: 14 }}>{c.n}</div><div className="chip-l">{c.l}</div></div>
                 ))}
               </div>
             </div>

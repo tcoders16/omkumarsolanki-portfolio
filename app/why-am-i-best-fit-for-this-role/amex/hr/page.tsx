@@ -650,31 +650,31 @@ export default function AmexHRFit() {
           </div>
 
           {/* COROL BIZ REQ */}
-          <div style={{ background: '#fff', border: '1.5px solid #6d28d930', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
-            <div style={{ background: 'linear-gradient(135deg, #f5f3ff, #fff)', borderBottom: '1px solid #6d28d920', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ background: '#fff', border: '1.5px solid #b8700030', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ background: 'linear-gradient(135deg, #fffbeb, #fff)', borderBottom: '1px solid #b8700018', padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#6d28d9', marginBottom: 4, fontWeight: 700 }}>Production · Healthcare AI · 2023–2024</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — Hospital AI (3 systems, 7 clients)</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: '#b87000', marginBottom: 4, fontWeight: 700 }}>Production · Materials ML · 2023–2024</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: '#0d0d0d', letterSpacing: '-.02em' }}>Corol — UHPC Strength Prediction Platform</div>
               </div>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#6d28d9', background: '#f5f3ff', border: '1px solid #6d28d940', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>7 Enterprise Clients</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, color: '#b87000', background: '#fffbeb', border: '1px solid #b8700040', borderRadius: 20, padding: '4px 12px', alignSelf: 'flex-start' }}>12 Engineers · Daily Use</span>
             </div>
             <div style={{ padding: '20px 24px 24px' }}>
               <div className="spec-grid">
                 <div className="spec-card">
-                  <div className="spec-title" style={{ color: '#6d28d9' }}>Requirement Discovery</div>
-                  <div className="spec-text">Spent a week embedded with clinical staff at HariKrushna — pharmacists, nurses, admin. Mapped every manual lookup: drug references, patient protocol checks, discharge summaries. Discovered that <strong>the real bottleneck was lookup time during rounds</strong>, not report generation. Pivoted spec accordingly.</div>
+                  <div className="spec-title" style={{ color: '#b87000' }}>Requirement Discovery</div>
+                  <div className="spec-text">Shadowed 12 research engineers for 3 days before touching the data. Watched them run physical lab tests, record results manually, and repeat for every mix variation. <strong>The real bottleneck was not analysis — it was the hours waiting for each physical test result.</strong> That single insight changed the entire problem framing: predict before you pour.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#0a9280' }}>Translation to Engineering Spec</div>
-                  <div className="spec-text">Compliance first: IT and legal sign-off required before any AI deployment. I wrote the data-flow diagram showing zero egress, encrypted-at-rest index, no external calls — in plain English for the compliance team, not just engineers. Got sign-off in week 2. Spec included performance SLAs: sub-1s retrieval, 99%+ uptime, graceful degradation.</div>
+                  <div className="spec-text">Translated domain knowledge into ML acceptance criteria: R² must exceed 0.70 on holdout, feature importance rankings must match the engineers&apos; known influential variables (w/c ratio, silica fume %), prediction latency under 3 seconds. Each criterion was a test. Scientists signed off on what &quot;good enough to trust&quot; meant before I started training.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#1d4ed8' }}>Stakeholder Alignment</div>
-                  <div className="spec-text">Three hospitals had different IT leads with different concerns. Ran separate technical walkthroughs with each. Hospital A cared about HIPAA audit trails. Hospital B wanted EMR integration. Hospital C needed offline-capable fallback. <strong>Each got a customized deployment plan</strong> built on the same core architecture.</div>
+                  <div className="spec-text">Research engineers are skeptical of ML by default — they spent years building intuition about concrete behaviour. Used SHAP to show that the model&apos;s top features matched their expertise exactly. <strong>Seeing the model reflect their domain knowledge</strong> converted them from critics to champions. They demoed the tool to the broader team themselves.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#dc2626' }}>Delivered Business Outcome</div>
-                  <div className="spec-text">Automated eval pipeline: 500-doc benchmark ran on every code push, regression detected before any deployment. All 3 hospitals went live. 7 enterprise clients total by the end of the engagement. The compliance-first approach turned into a sales differentiator — clients referred us to their networks because of the audit trail.</div>
+                  <div className="spec-text">12 research engineers using the platform daily. R² 0.73 on 2,200 training samples. 2-second predictions replaced hours of physical lab testing per mix iteration. The team could screen hundreds of mix combinations in a single afternoon that previously took weeks. <strong>Domain learning completed in weeks, tool trusted on day one of launch.</strong></div>
                 </div>
               </div>
             </div>
