@@ -812,8 +812,8 @@ export default function AmexTechFit() {
               </div>
               <div className="spec-grid" style={{ marginBottom: 18 }}>
                 <div className="spec-card">
-                  <div className="spec-title" style={{ color: '#b87000' }}>Why ensemble model over single regressor?</div>
-                  <div className="spec-text">UHPC mix data has high feature interaction — silica fume effect depends on w/c ratio. Single linear regression missed these interactions. Ensemble (gradient boosting + RF) captured non-linear dependencies, achieving <code>R² 0.73</code> on 2,200 training samples from 3 years of lab records.</div>
+                  <div className="spec-title" style={{ color: '#b87000' }}>Why Random Forest over XGBoost?</div>
+                  <div className="spec-text">UHPC mix data has high feature interaction — silica fume effect depends on w/c ratio. XGBoost overfitted on 2,200 samples (small dataset). Random Forest (150 estimators, max depth 10, 5-fold CV) gave better <strong>variance stability</strong> and achieved <code>R² 0.73</code> without the hyperparameter sensitivity. On a small dataset, simpler ensemble wins.</div>
                 </div>
                 <div className="spec-card">
                   <div className="spec-title" style={{ color: '#1d4ed8' }}>Why SHAP explainability was non-negotiable</div>
