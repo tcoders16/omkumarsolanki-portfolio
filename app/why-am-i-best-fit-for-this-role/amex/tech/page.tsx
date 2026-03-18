@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const jdMap = [
   { req: "LLM-powered agentic features", detail: "Built full multi-agent orchestration at Resso.ai on Azure OpenAI GPT-4o — state machines, barge-in detection, topic switching, silence timeout. Every conversation routed to the right agent in real time.", metric: "sub-800ms · 200+ sessions" },
@@ -28,36 +28,60 @@ export default function AmexTechFit() {
   const [corolOpen, setCorolOpen] = useState(true);
   const [trackerOpen, setTrackerOpen] = useState(false);
   const [activeReq, setActiveReq] = useState(-1);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+  const seenRef = useRef<Set<number>>(new Set());
 
   const jdNav = [
-    { req: 'LLM-Powered Agentic Features', section: 'sec-architecture', icon: '🧠' },
-    { req: 'RAG Over Enterprise Data', section: 'sec-lawline', icon: '🔍' },
-    { req: 'Agent Orchestration + Tool Calling', section: 'sec-mcp', icon: '⚡' },
-    { req: 'Python, Go, TypeScript', section: 'sec-stack', icon: '💻' },
-    { req: 'AWS, Kubernetes, Kafka', section: 'sec-stack', icon: '☁️' },
-    { req: 'Schema Validation + Structured Outputs', section: 'sec-mcp', icon: '🛡️' },
-    { req: 'Evaluation and Monitoring', section: 'sec-architecture', icon: '📊' },
-    { req: 'Fintech + Regulated Environments', section: 'sec-lawline', icon: '🏛️' },
+    { req: 'LLM-Powered Agentic Features', section: 'sec-architecture', proof: 'Multi-agent voice orchestration at Resso.ai', metric: 'sub-800ms · 200+ sessions' },
+    { req: 'RAG Over Enterprise Data', section: 'sec-lawline', proof: 'Lawline.tech — HNSW, semantic chunking, rerankers', metric: 'sub-1s · 7 clients' },
+    { req: 'Agent Orchestration + Tool Calling', section: 'sec-mcp', proof: 'MCP servers in Go — Pydantic → adapter routing', metric: '4 systems · one protocol' },
+    { req: 'Python, Go, TypeScript', section: 'sec-stack', proof: 'Python: FastAPI/PyTorch. Go: goroutines. TS: Next.js', metric: 'All 3 in production' },
+    { req: 'AWS, Kubernetes, Kafka', section: 'sec-stack', proof: 'AWS certified. Kafka exactly-once. K8s HPA + probes', metric: 'Production across all three' },
+    { req: 'Schema Validation + Structured Outputs', section: 'sec-mcp', proof: 'Pydantic BaseModel every output. DLQ after 3 retries', metric: '14% → 3.8% hallucination' },
+    { req: 'Evaluation and Monitoring', section: 'sec-architecture', proof: 'Per-persona dashboards. 500-doc eval pipeline', metric: '72% → 98% retention' },
+    { req: 'Fintech + Regulated Environments', section: 'sec-lawline', proof: '7 enterprise clients. Zero telemetry at Lawline', metric: '7 enterprise clients' },
   ];
+
+  // Section → which requirements it proves
+  const sectionToReqs: Record<string, number[]> = {
+    'sec-architecture': [0, 6],
+    'sec-lawline': [1, 7],
+    'sec-mcp': [2, 5],
+    'sec-stack': [3, 4],
+    'sec-jdmap': [0, 1, 2, 3, 4, 5, 6, 7],
+  };
+
+  useEffect(() => {
+    const sectionIds = Object.keys(sectionToReqs);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const reqIndices = sectionToReqs[id];
+          if (reqIndices) {
+            let changed = false;
+            reqIndices.forEach(idx => {
+              if (!seenRef.current.has(idx)) { seenRef.current.add(idx); changed = true; }
+            });
+            if (changed) setSeen(new Set(seenRef.current));
+          }
+        }
+      });
+    }, { threshold: 0.15 });
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const scrollToReq = (idx: number) => {
     setActiveReq(idx);
+    setTrackerOpen(false);
     const el = document.getElementById(jdNav[idx].section);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const walkAll = () => {
-    let i = 0;
-    setActiveReq(0);
-    const el0 = document.getElementById(jdNav[0].section);
-    if (el0) el0.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const interval = setInterval(() => {
-      i++;
-      if (i >= jdNav.length) { clearInterval(interval); return; }
-      setActiveReq(i);
-      const el = document.getElementById(jdNav[i].section);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 2800);
   };
 
   return (
@@ -314,18 +338,7 @@ export default function AmexTechFit() {
         .jd-tracker-footer-text { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #555; line-height: 1.6; text-align: center; }
         .jd-tracker-footer-text strong { color: #0a9280; }
 
-        /* ACTIVE REQ INDICATOR (floats at top during walkthrough) */
-        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .req-indicator { position: fixed; top: 58px; left: 50%; transform: translateX(-50%); z-index: 400; display: flex; align-items: center; gap: 12px; background: #0d0d0d; color: #fff; padding: 12px 24px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,.5); border: 1px solid #0a928040; animation: slideDown .3s ease; max-width: 600px; }
-        .req-indicator-icon { font-size: 20px; flex-shrink: 0; }
-        .req-indicator-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0a9280; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
-        .req-indicator-text { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #f0f0f0; }
-        .req-indicator-progress { display: flex; gap: 4px; margin-left: auto; flex-shrink: 0; }
-        .req-indicator-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: background .3s; }
-        .req-indicator-dot.active { background: #0a9280; }
-        .req-indicator-dot.done { background: #0a928060; }
-        .req-indicator-close { width: 24px; height: 24px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; color: #888; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; margin-left: 8px; flex-shrink: 0; }
-        .req-indicator-close:hover { background: #222; color: #fff; }
+        /* (req-indicator removed — replaced by checklist) */
 
         @media (max-width: 640px) {
           .shell { padding: 28px 16px 60px; }
@@ -1303,75 +1316,55 @@ export default function AmexTechFit() {
         </div>
       )}
 
-      {/* ACTIVE REQUIREMENT INDICATOR (shown during walkthrough) */}
-      {activeReq >= 0 && activeReq < jdNav.length && (
-        <div className="req-indicator" key={activeReq}>
-          <span className="req-indicator-icon">{jdNav[activeReq].icon}</span>
-          <div>
-            <div className="req-indicator-label">JD Requirement {activeReq + 1} of 8</div>
-            <div className="req-indicator-text">{jdNav[activeReq].req}</div>
-          </div>
-          <div className="req-indicator-progress">
-            {jdNav.map((_, i) => (
-              <div key={i} className={`req-indicator-dot ${i === activeReq ? 'active' : i < activeReq ? 'done' : ''}`} />
-            ))}
-          </div>
-          <button className="req-indicator-close" onClick={() => setActiveReq(-1)}>✕</button>
-        </div>
-      )}
-
-      {/* FLOATING JD TRACKER */}
+      {/* FLOATING JD CHECKLIST */}
       {!trackerOpen ? (
         <div className="jd-tracker-pill" onClick={() => setTrackerOpen(true)}>
           <span className="pill-dot" />
-          <span className="pill-count">8/8</span>
-          <span>Click here — I&apos;ll show you every JD match</span>
+          <span className="pill-count">{seen.size}/8</span>
+          <span>{seen.size < 8 ? 'JD Requirements — scroll to check them off' : 'All 8 JD requirements verified'}</span>
           <span className="pill-arrow">→</span>
         </div>
       ) : (
         <div className="jd-tracker-panel">
           <div className="jd-tracker-head">
             <div>
-              <div className="jd-tracker-title">This Is What You&apos;re Looking For</div>
-              <div className="jd-tracker-sub">AMEX JD 26003145 · 8 of 8 REQUIREMENTS</div>
+              <div className="jd-tracker-title">{seen.size}/8 Requirements Reviewed</div>
+              <div className="jd-tracker-sub">AMEX JD 26003145 · SCROLL OR CLICK TO CHECK OFF</div>
             </div>
-            <button className="jd-tracker-close" onClick={() => setTrackerOpen(false)}>✕</button>
+            <button className="jd-tracker-close" onClick={() => setTrackerOpen(false)}>x</button>
           </div>
 
-          {/* WALK-THROUGH CTA */}
-          <div style={{ padding: '12px 16px 6px' }}>
-            <div onClick={() => { setTrackerOpen(false); walkAll(); }} style={{ cursor: 'pointer', background: 'linear-gradient(135deg, #0a9280, #087a6a)', borderRadius: 10, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12, transition: 'transform .15s, box-shadow .15s' }} onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 6px 20px rgba(10,146,128,.4)'; }} onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = ''; (e.currentTarget as HTMLDivElement).style.boxShadow = ''; }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>▶</div>
-              <div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 800, color: '#fff' }}>Walk me through all 8 requirements</div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: 'rgba(255,255,255,.7)', letterSpacing: '.1em' }}>Auto-scrolls to each section with evidence</div>
-              </div>
+          {/* PROGRESS BAR */}
+          <div style={{ padding: '12px 16px 4px' }}>
+            <div style={{ background: '#1a1a1a', borderRadius: 6, height: 6, overflow: 'hidden' }}>
+              <div style={{ background: 'linear-gradient(90deg, #0a9280, #0abfa8)', height: '100%', width: `${(seen.size / 8) * 100}%`, borderRadius: 6, transition: 'width .5s ease' }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#555' }}>{seen.size < 8 ? 'Scroll down to check off more' : 'All requirements covered'}</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#0a9280', fontWeight: 700 }}>{seen.size}/8</span>
             </div>
           </div>
 
           <div className="jd-tracker-body">
-            {[
-              { req: 'LLM-Powered Agentic Features', proof: 'Multi-agent voice orchestration at Resso.ai — LangGraph, barge-in, topic switching.', metric: 'sub-800ms · 200+ sessions', idx: 0 },
-              { req: 'RAG Over Enterprise Data', proof: 'Lawline.tech — HNSW vector stores, semantic chunking, cross-encoder rerankers.', metric: 'sub-1s retrieval · 7 clients', idx: 1 },
-              { req: 'Agent Orchestration + Tool Calling', proof: 'MCP servers in Go — Pydantic validation → adapter routing. Retry + DLQ.', metric: '4 systems · one protocol', idx: 2 },
-              { req: 'Python, Go, TypeScript', proof: 'Python: FastAPI/PyTorch. Go: MCP goroutines. TS: Next.js 15 + Prisma.', metric: 'All 3 in production', idx: 3 },
-              { req: 'AWS, Kubernetes, Kafka', proof: 'AWS certified. Kafka (exactly-once). K8s: HPA, rolling updates, probes.', metric: 'Production across all three', idx: 4 },
-              { req: 'Schema Validation + Structured Outputs', proof: 'Pydantic BaseModel every output. Re-prompt on failure. DLQ after 3.', metric: '14% → 3.8% hallucination', idx: 5 },
-              { req: 'Evaluation and Monitoring', proof: 'Per-persona dashboards. 500-doc eval pipeline. Regression on push.', metric: '72% → 98% retention', idx: 6 },
-              { req: 'Fintech + Regulated Environments', proof: '7 enterprise clients. Compliance sign-off. Zero telemetry at Lawline.', metric: '7 enterprise clients', idx: 7 },
-            ].map((item) => (
-              <div key={item.idx} className="jd-tracker-item" onClick={() => { setTrackerOpen(false); scrollToReq(item.idx); }} style={{ background: activeReq === item.idx ? '#1a2a25' : undefined }}>
-                <div className="jd-tracker-chk" style={{ background: activeReq === item.idx ? '#0a9280' : '#0a928080' }}>{jdNav[item.idx].icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div className="jd-tracker-req">{item.req}</div>
-                  <div className="jd-tracker-proof">{item.proof}</div>
-                  <div className="jd-tracker-metric">{item.metric}</div>
+            {jdNav.map((item, i) => {
+              const isSeen = seen.has(i);
+              return (
+                <div key={i} className="jd-tracker-item" onClick={() => scrollToReq(i)} style={{ opacity: isSeen ? 1 : 0.55 }}>
+                  <div className="jd-tracker-chk" style={{ background: isSeen ? '#0a9280' : '#333', border: isSeen ? 'none' : '2px solid #555', fontSize: isSeen ? 11 : 10 }}>
+                    {isSeen ? '✓' : (i + 1)}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div className="jd-tracker-req" style={{ textDecoration: isSeen ? 'none' : 'none', color: isSeen ? '#e0e0e0' : '#777' }}>{item.req}</div>
+                    <div className="jd-tracker-proof" style={{ color: isSeen ? '#888' : '#555' }}>{item.proof}</div>
+                    {isSeen && <div className="jd-tracker-metric">{item.metric}</div>}
+                    {!isSeen && <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#555', marginTop: 4 }}>Click to jump to evidence →</div>}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="jd-tracker-footer">
-            <div className="jd-tracker-footer-text"><strong>8 of 8 requirements</strong> mapped to production systems. Click any item or hit ▶ to walk through all.</div>
+            <div className="jd-tracker-footer-text">{seen.size < 8 ? <><strong>{8 - seen.size} remaining</strong> — keep scrolling or click an item to jump there.</> : <><strong>All 8 requirements verified.</strong> Every line maps to a production system.</>}</div>
           </div>
         </div>
       )}
