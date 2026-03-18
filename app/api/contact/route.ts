@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const toEmail = process.env.CONTACT_EMAIL ?? "emailtosolankiom@gmail.com";
 
     if (!process.env.SMTP_PASS || process.env.SMTP_PASS === "your_gmail_app_password_here") {
-      console.log("[Contact Form - dev mode]", { name, email, subject, message });
+      console.log("[Contact Form — dev mode]", { name, email, subject, message });
       return NextResponse.json({ ok: true, dev: true });
     }
 

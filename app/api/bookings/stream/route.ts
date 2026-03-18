@@ -1,5 +1,5 @@
 /**
- * SSE endpoint - every connected browser gets live booking updates.
+ * SSE endpoint — every connected browser gets live booking updates.
  * Uses Server-Sent Events (server → client push), which is the correct
  * tool for real-time broadcast; WebRTC would be needed for P2P media.
  */
