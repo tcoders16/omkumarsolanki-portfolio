@@ -395,12 +395,12 @@ const experience = [
   {
     num: "02",
     title: "Corol.org & NunaFab",
-    subtitle: "ML for Sustainable Chemistry",
+    subtitle: "UHPC Strength Prediction · ML for Structural Engineering",
     role: "ML Engineer",
     description:
-      "Sustainable chemistry meets machine learning. Working with Corol.org and NunaFab, I built compound formulation prediction models for bio-based materials — telling chemists not just what blend maximises performance, but WHY each molecular feature contributes. The dataset was only 200 rows. Transfer learning from related chemical domains, aggressive feature engineering, and an SHAP-explainable gradient-boosting ensemble got R² to 0.89.",
-    extra: "SHAP attribution made the model interpretable: chemists saw exact feature impact values (φᵢ) for each ingredient. Reduced R&D iteration cycles from weeks to days. Extended to NunaFab's bio-composite material formulations.",
-    impact: "3× faster R&D cycles · 40% cost reduction · R² = 0.89 · SHAP-explainable",
+      "Ultra-High Performance Concrete (UHPC) meets machine learning. Working with Corol.org and NunaFab, I built compressive strength prediction models for UHPC mix designs — telling structural engineers not just what mix achieves target strength, but WHY each constituent (water-cement ratio, silica fume, fibre dosage, curing age) drives the outcome. The dataset was only 200 rows. Transfer learning from related concrete domains, aggressive feature engineering, and an SHAP-explainable gradient-boosting ensemble got R² to 0.89.",
+    extra: "SHAP attribution made the model interpretable: engineers saw exact feature impact values (φᵢ) for each mix ingredient — silica fume contribution, fibre reinforcement effect, W/C ratio influence. Reduced physical lab testing cycles from weeks to a single afternoon. Screened hundreds of UHPC formulations computationally before any concrete was poured.",
+    impact: "Lab cycles: weeks → one afternoon · 100s of mixes screened computationally · R² = 0.89 · SHAP-explainable",
     formula: "ŷ = Σ wₖfₖ(X) + ε     SHAP: φᵢ = E[f(X)|Xᵢ] − E[f(X)]",
     tags: ["SHAP", "XGBoost", "Scikit-learn", "Transfer Learning", "Ensemble", "Feature Engineering"],
     url: "https://www.corol.org",
@@ -417,14 +417,14 @@ const personalProjects = [
   {
     num: "01",
     title: "Lawline.tech",
-    subtitle: "AI-Powered Legal Document Intelligence · Live SaaS Product",
+    subtitle: "Legal AI Platform for Rogers · Live SaaS · $1M Investment Conversation",
     role: "AI Engineer",
     saas: true,
     description:
-      "Built the AI core for Lawline.tech — a legal document intelligence platform that parses, understands, and extracts structured data from contracts, agreements, and legal filings. Deployed a fine-tuned LLM pipeline for clause classification, party identification, obligation extraction, and risk flagging. Lawyers get structured JSON from raw PDFs in under 3 seconds.",
+      "Built the AI core for Lawline.tech — a Canadian legal research platform serving attorneys who cannot use any cloud AI due to attorney-client privilege. Built a fully local RAG stack: HNSW vector store over Canadian legal corpora, BGE cross-encoder reranker, GGUF-quantized local LLM — zero data ever leaves the office. Sub-4% hallucination rate on legal eval sets. Now in an active $1M investment conversation with the President of Rogers for enterprise licensing across Rogers' legal and compliance teams.",
     extra:
-      "Designed the full document pipeline: PDF ingestion → layout-aware chunking → fine-tuned clause classifier → HNSW semantic retrieval → LLM extraction → structured output. Built a confidence-scored entity extraction system that flags low-confidence clauses for human review, reducing mislabels by 60%.",
-    impact: "<3s doc processing · 94% clause extraction accuracy · 60% fewer review errors",
+      "Designed the full pipeline: PDF ingestion → semantic chunking (512-token, 128 overlap) → local embeddings → HNSW index → top-K reranked retrieval → GGUF LLM response. Built confidence-gated output: low-confidence answers route to human review instead of surfacing to attorneys. The architecture became the sales pitch — attorneys demo'd the zero-outbound-packets screen to their law society contacts.",
+    impact: "Sub-4% hallucination · Air-gapped · 0 bytes leave the office · $1M Rogers President conversation",
     formula: "E(doc) = LLM(top-k(HNSW(chunk)) + clause_template) → {party, obligation, risk, date}",
     tags: ["Legal AI", "Fine-tuning", "Document Parsing", "HNSW", "FastAPI", "TypeScript", "ONNX"],
     url: "https://lawline.tech",
@@ -468,15 +468,15 @@ const personalProjects = [
   },
   {
     num: "04",
-    title: "TTC Lost & Found",
-    subtitle: "Transit Capstone · Pitching to TTC Director — May 2025",
+    title: "Lost and Found",
+    subtitle: "TTC · Transit Capstone · Pitching to TTC Director — May 2026",
     role: "Full-Stack Engineer",
     saas: false,
     description:
-      "Built a complete digital Lost & Found system for the Toronto Transit Commission — one of North America's largest transit networks. The platform digitizes the entire claim lifecycle: TTC staff report found items via a mobile app, each item gets a unique QR-tagged scan record, and owners submit claims through a mobile-first portal. An AI similarity-matching engine connects found items to incoming claims using description embeddings. Pitching this to the TTC Director in May 2025.",
+      "Built a complete digital Lost & Found system for the Toronto Transit Commission — one of North America's largest transit networks serving 1.7M daily riders. The platform digitizes the entire claim lifecycle: TTC staff report found items via a mobile app, each item gets a unique QR-tagged scan record, and owners submit claims through a mobile-first portal. An AI similarity-matching engine connects found items to incoming claims using description embeddings. Pitching this to the TTC Director in May 2026.",
     extra:
-      "Full pipeline: mobile item reporting → QR generation → owner claim portal → AI description similarity matching → staff approval dashboard. Built for TTC's operational constraints — works on spotty transit WiFi, handles hundreds of daily items, fully auditable claim history.",
-    impact: "Full claim lifecycle · AI item matching · Mobile-first · Pitching to TTC Director May 2025",
+      "Full pipeline: mobile item reporting → QR generation → owner claim portal → AI description similarity matching → staff approval dashboard. Built for TTC's operational constraints — works on spotty transit WiFi, handles hundreds of daily items, fully auditable claim history. Production-ready architecture, not a school demo.",
+    impact: "Full claim lifecycle · AI item matching · 1.7M riders · Mobile-first · Pitching to TTC Director May 2026",
     formula: "match(claim, item) = cosine(E(desc_claim), E(desc_item)) > θ → notify_owner",
     tags: ["Next.js", "TypeScript", "AI Matching", "QR Code", "Mobile-First", "PostgreSQL", "FastAPI"],
     url: null,

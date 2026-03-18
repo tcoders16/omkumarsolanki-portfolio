@@ -23,11 +23,11 @@ const experience = [
   {
     company: "Corol.org & NunaFab",
     url: "https://www.corol.org",
-    role: "ML Engineer — Sustainable Chemistry",
+    role: "ML Engineer — UHPC Strength Prediction",
     period: "2024",
     highlight: false,
     description:
-      "Applied ML to bio-based compound formulation prediction. Built SHAP-explainable XGBoost ensemble models on a 200-row dataset — showing chemists not just what blend works, but which molecular features drive the prediction (φᵢ values per ingredient). Transfer learning from related chemical domains + aggressive feature engineering got R² = 0.89. Extended to NunaFab's bio-composite material formulations. Result: 3× faster R&D cycles, 40% cost reduction.",
+      "Applied ML to Ultra-High Performance Concrete (UHPC) compressive strength prediction. Built SHAP-explainable XGBoost ensemble models on a 200-row dataset — showing structural engineers not just which mix achieves target strength, but which constituents drive the outcome (W/C ratio, silica fume, fibre dosage, curing age — φᵢ values per ingredient). Transfer learning + aggressive feature engineering got R² = 0.89. Extended to NunaFab's structural composite formulations. Result: physical lab testing cycles cut from weeks to one afternoon, hundreds of mixes screened computationally.",
   },
 ];
 
