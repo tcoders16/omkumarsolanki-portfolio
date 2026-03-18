@@ -367,6 +367,100 @@ export default function AmexHRFit() {
           ))}
         </div>
 
+        {/* BUSINESS IMPACT DASHBOARD */}
+        <div className="section">
+          <div className="eyebrow">Business Impact · What Actually Changed</div>
+          <div className="sh2" style={{ marginBottom: 6 }}>4 real problems. 4 systems built. Numbers that moved.</div>
+          <p className="body-p" style={{ marginBottom: 28 }}>Not side projects. Not demos. Production systems used by real people, solving real business problems. Here is the before and after.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 8 }}>
+            {[
+              {
+                company: 'Resso.ai',
+                color: '#0a9280', bg: 'linear-gradient(135deg, #f0fdfb, #fff)',
+                border: '#0a928030',
+                problem: 'Enterprise call centres losing revenue because AI agents forget context mid-conversation and confuse customers.',
+                action: 'Built a stateful multi-agent voice platform from scratch. Owned every layer.',
+                outcomes: [
+                  { before: '72%', after: '98%', label: 'Context retention' },
+                  { before: '14%', after: '3.8%', label: 'Hallucination rate' },
+                  { before: '1 persona', after: '5 personas', label: 'Client expanded in 3 months' },
+                ],
+                status: '● Live in production'
+              },
+              {
+                company: 'Lawline.tech',
+                color: '#dc2626', bg: 'linear-gradient(135deg, #fff5f5, #fff)',
+                border: '#dc262630',
+                problem: 'Attorneys could not use AI for research — any cloud service would breach attorney-client privilege.',
+                action: 'Built a fully air-gapped legal AI platform. Zero external calls. AES-256 encrypted. Court-admissible audit log.',
+                outcomes: [
+                  { before: 'Cloud AI', after: 'Fully local', label: 'Zero telemetry' },
+                  { before: 'Word of mouth', after: '$1M discussion', label: 'Rogers President interest' },
+                  { before: '0', after: '0', label: 'Compliance incidents' },
+                ],
+                status: '● Live · lawline.tech'
+              },
+              {
+                company: 'Corol / UHPC',
+                color: '#b87000', bg: 'linear-gradient(135deg, #fffbeb, #fff)',
+                border: '#b8700030',
+                problem: 'Research engineers spending hours per physical lab test, limiting how many concrete mix experiments they could run per week.',
+                action: 'Built an ML prediction tool. Learned concrete science from scratch in weeks. Shipped a tool scientists trusted on day one.',
+                outcomes: [
+                  { before: 'Hours', after: '2 seconds', label: 'Per prediction' },
+                  { before: '0', after: '12', label: 'Daily engineer users' },
+                  { before: 'Manual tests', after: 'R² 0.73 model', label: 'Prediction accuracy' },
+                ],
+                status: '● 12 engineers · daily'
+              },
+              {
+                company: 'TTC Lost & Found',
+                color: '#1d4ed8', bg: 'linear-gradient(135deg, #eff6ff, #fff)',
+                border: '#1d4ed830',
+                problem: 'TTC handling 1.7M daily riders with a manual paper-based lost item system. Low recovery rates. No matching logic.',
+                action: 'Built AI matching pipeline, staff dashboard, rider portal, and notification system. Pitching to the TTC Director in May 2026.',
+                outcomes: [
+                  { before: 'Manual', after: 'AI-matched', label: 'Item matching' },
+                  { before: 'Paper logs', after: 'Staff dashboard', label: 'Staff workflow' },
+                  { before: 'None', after: 'TTC Director', label: 'Pitch scheduled May 2026' },
+                ],
+                status: '◎ Pitching May 2026'
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: item.bg, border: `1.5px solid ${item.border}`, borderRadius: 16, overflow: 'hidden' }}>
+                {/* Header */}
+                <div style={{ padding: '16px 22px 12px', borderBottom: `1px solid ${item.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#0d0d0d' }}>{item.company}</div>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: item.color, fontWeight: 700 }}>{item.status}</span>
+                </div>
+                {/* Problem + Action */}
+                <div style={{ padding: '14px 22px 0' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#dc2626', letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>The problem</div>
+                  <div style={{ fontSize: 13, color: '#444', lineHeight: 1.65, marginBottom: 12 }}>{item.problem}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: item.color, letterSpacing: '.14em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 5 }}>What I did</div>
+                  <div style={{ fontSize: 13, color: '#555', lineHeight: 1.65, marginBottom: 16 }}>{item.action}</div>
+                </div>
+                {/* Outcome chips — before → after */}
+                <div style={{ padding: '0 22px 18px', display: 'flex', gap: 8, flexWrap: 'wrap' as const }}>
+                  {item.outcomes.map((o, j) => (
+                    <div key={j} style={{ background: '#fff', border: `1px solid ${item.color}20`, borderRadius: 10, padding: '10px 14px', flex: '1 1 100px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                        <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 800, color: '#aaa' }}>{o.before}</span>
+                        <span style={{ color: item.color, fontSize: 14, fontWeight: 700 }}>→</span>
+                        <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 800, color: item.color }}>{o.after}</span>
+                      </div>
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 8, color: '#888', letterSpacing: '.06em' }}>{o.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="divider" />
+
         {/* AUTHORITY */}
         <div className="section">
           <div className="eyebrow">Operating Above the Title</div>
