@@ -512,25 +512,25 @@ export default function Hero() {
               }}>.</span>
             </div>
 
-            {/* Skill tags */}
-            <div className="reveal reveal-d2" style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:28}}>
+            {/* Role tags */}
+            <div className="reveal reveal-d2" style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:24}}>
               {[
-                {label:"Multi-Agent Systems", teal:true},
-                {label:"ML in Production",    teal:false},
-                {label:"Full-Stack",          teal:false},
-                {label:"Cloud Infra",         teal:false},
-                {label:"AI Consulting",       teal:false},
+                {label:"Founding Engineer",   teal:true },
+                {label:"AI / ML Engineer",    teal:false},
+                {label:"AI Consultant",       teal:false},
+                {label:"Solutions Architect", teal:false},
+                {label:"Full-Stack Engineer", teal:false},
               ].map(({label,teal})=>(
                 <span key={label} style={{
                   fontFamily:"var(--font-mono)",
-                  fontSize:"0.58rem",
-                  letterSpacing:"0.08em",
+                  fontSize:"0.52rem",
+                  letterSpacing:"0.07em",
                   textTransform:"uppercase",
-                  padding:"5px 11px",
-                  borderRadius:"3px",
-                  border: teal ? "1px solid rgba(57,217,180,0.5)" : "1px solid rgba(255,255,255,0.1)",
-                  color: teal ? "var(--accent)" : "rgba(255,255,255,0.4)",
-                  background: teal ? "rgba(57,217,180,0.07)" : "rgba(255,255,255,0.03)",
+                  padding:"4px 9px",
+                  borderRadius:"2px",
+                  border: teal ? "1px solid rgba(57,217,180,0.45)" : "1px solid rgba(255,255,255,0.09)",
+                  color: teal ? "var(--accent)" : "rgba(255,255,255,0.35)",
+                  background: teal ? "rgba(57,217,180,0.06)" : "transparent",
                 }}>
                   {label}
                 </span>
