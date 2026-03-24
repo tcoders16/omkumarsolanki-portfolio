@@ -2,778 +2,546 @@
 import { useState } from "react";
 import Nav from "@/components/Nav";
 
-/* ══════════════════════════════════════════════════════
-   TYPES
-══════════════════════════════════════════════════════ */
-const AC = "#39d9b4";
+/* ─── palette ─── */
+const T  = "#39d9b4";
 const AM = "#f59e0b";
 const VI = "#8b5cf6";
-const RD = "#dc2626";
-const BL = "#3b82f6";
 
-/* ══════════════════════════════════════════════════════
-   POC BRIDGES — the actual technical decisions made
-══════════════════════════════════════════════════════ */
-const BRIDGES = [
+/* ═══════════════════════════════════════════════════════════════
+   CASE STUDIES
+═══════════════════════════════════════════════════════════════ */
+const CASES = [
   {
     id: "resso",
     client: "Resso.ai",
-    sector: "Edtech · AI Interview Platform",
-    accent: AC,
-    req: "Client requirement: AI agents must remember everything said earlier in the conversation — or students drop off.",
-    diagnosis: "Root cause: Every LLM call was cold. No session layer. Each API call received zero history. The agent was architecturally amnesiac.",
-    before: `# BEFORE — cold call every turn
+    sector: "EdTech · AI Interview Platform",
+    country: "Canada (Remote)",
+    accent: T,
+    tag: "Session Intelligence",
+    brief: "Students are dropping out of AI mock interviews mid-session. Fix retention.",
+    diagnosis: [
+      "Every LLM call was cold — zero conversation history passed between turns.",
+      "Agent re-asked the student's name on turn 7. Re-asked career goals on turn 12.",
+      "Root cause: stateless architecture, not prompt quality. No session layer existed.",
+      "The platform was architecturally incapable of remembering anything. This was structural.",
+    ],
+    solution: [
+      "Redis sliding-window session memory with token-budget compression (last 3,000 tokens + summarised older turns).",
+      "Event-driven context injection: persona config + live history assembled fresh per request.",
+      "500-document automated eval pipeline tracking retention %, hallucination rate, P(hire) score — agreed with stakeholders before build.",
+      "Deployed across 4 Azure environments with GitHub Actions CI/CD.",
+    ],
+    before: `# BEFORE — cold call every turn (client's original code)
 def get_ai_response(user_message: str) -> str:
-    response = openai.chat.completions.create(
+    return openai.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user",   "content": user_message},  # ← no history
+            {"role": "user",   "content": user_message},  # zero history
         ]
-    )
-    return response.choices[0].message.content
+    ).choices[0].message.content
 # Result: agent asks "what's your name?" on turn 7
-# Context retention: 72%  |  Student drop-off: HIGH`,
-    after: `# AFTER — stateful sliding window with Redis
+# Retention: 72%  |  Dropout: HIGH  |  NPS: -12`,
+    after: `# AFTER — stateful sliding window (shipped)
 def get_ai_response(session_id: str, user_message: str) -> str:
-    history    = redis.get(f"session:{session_id}") or []
-    compressed = compress_turns(history, max_tokens=3_000)
-
-    messages = [
-        {"role": "system", "content": PERSONA_CONFIGS[session_id]},
-        *compressed,                    # ← full history, compressed
-        {"role": "user", "content": user_message},
+    history    = redis.lrange(f"s:{session_id}", 0, -1)
+    compressed = compress_to_budget(history, max_tokens=3_000)
+    messages   = [
+        {"role": "system", "content": load_persona(session_id)},
+        *compressed,                          # full compressed history
+        {"role": "user",   "content": user_message},
     ]
-    response = openai.chat.completions.create(
-        model="gpt-4", messages=messages
-    )
-    redis.set(f"session:{session_id}", append(history, response))
-    return response.choices[0].message.content
-# Context retention: 98%  |  Hallucination: 14% → 3.8%`,
-    outcomes: [
-      { n: "72% → 98%", l: "Context retention" },
-      { n: "14% → 3.8%", l: "Hallucination rate" },
-      { n: "1 → 5", l: "Personas (client expanded)" },
-      { n: "Renewed", l: "Contract + expanded" },
+    resp = openai.chat.completions.create(model="gpt-4o", messages=messages)
+    redis.rpush(f"s:{session_id}", serialise(resp))
+    return resp.choices[0].message.content
+# Retention: 72% -> 98%  |  Dropout: eliminated  |  Contract renewed`,
+    metrics: [
+      { val: "72% → 98%", lbl: "Session retention" },
+      { val: "200+", lbl: "Live sessions, month 1" },
+      { val: "14×", lbl: "Faster context recovery" },
+      { val: "Renewed", lbl: "Contract + scope expanded" },
     ],
+    stack: "Azure OpenAI · GPT-4o · Redis · PostgreSQL · Prisma · Next.js 15 · WebSockets · GitHub Actions",
   },
+
   {
-    id: "lawline",
-    client: "Lawline.tech (Rogers)",
-    sector: "Legal AI · Air-gapped · $1M conversation",
-    accent: RD,
-    req: "Client requirement: AI for legal research — but attorney-client privilege means zero bytes can leave our network. No cloud. No API. No exceptions.",
-    diagnosis: "Root cause: Every AI option assumed cloud egress. This is not a technical constraint — it is an architecture choice. Build the entire stack local.",
-    before: `# BEFORE — cloud dependency (every existing solution)
-response = openai.chat.completions.create(
-    model="gpt-4",
-    messages=[{"role": "user", "content": legal_query}]
-)
-# Problem: your legal query just left your building.
-# Attorney-client privilege: BROKEN.
-# Viable for law firms: NO.
-
-# Every SaaS legal AI tool had this same problem.
-# The constraint ruled out 100% of existing products.`,
-    after: `# AFTER — fully air-gapped local stack
-from llama_cpp import Llama
-from hnswlib   import Index
-
-# Local GGUF model — runs on 16GB RAM, 0 external calls
-llm    = Llama("models/mistral-7b-instruct.Q4_K_M.gguf",
-               n_ctx=4096, n_gpu_layers=35)
-index  = Index(space="cosine", dim=384)
-index.load_index("indexes/canadian_legal_200k.bin")
-
-def query(q: str) -> str:
-    emb     = embed_local(q)               # local model, no API
-    labels, _ = index.knn_query(emb, k=12)
-    chunks  = rerank(q, [docs[i] for i in labels[0]])[:4]
-    context = "\\n---\\n".join(chunks)
-    return llm(f"[INST]{context}\\n\\nQ: {q}[/INST]")["choices"][0]["text"]
-# Network packets during query: 0
-# Hallucination rate: <4%  |  Retrieval latency: <1s`,
-    outcomes: [
-      { n: "0 bytes", l: "Data egress per query" },
-      { n: "<4%", l: "Hallucination rate" },
-      { n: "<1s", l: "Retrieval over 200K docs" },
-      { n: "$1M", l: "Rogers President conversation" },
+    id: "harikrushna",
+    client: "HariKrushna Software Developers",
+    sector: "Regulated Industry · Enterprise AI",
+    country: "Ontario, Canada",
+    accent: AM,
+    tag: "Vendor Risk & Data Sovereignty",
+    brief: "Help our clients adopt AI. They want OpenAI / Gemini but IT keeps blocking it.",
+    diagnosis: [
+      "Discovery interviews with 7 regulated-industry clients (finance, legal, healthcare-adjacent).",
+      "Root cause: every SaaS LLM sends prompts to a foreign cloud. Their data policies prohibit this.",
+      "Entire vendor market — OpenAI, Azure, Google, AWS — was structurally ineligible for all 7.",
+      "Previous consultants kept recommending cloud LLMs; deals died at compliance every time.",
     ],
+    solution: [
+      "Designed on-premise GGUF model stacks running on client hardware — zero data leaves the building.",
+      "HNSW vector search for fast document retrieval; sub-1 s latency on 16 GB consumer hardware.",
+      "LoRA/QLoRA fine-tuning on client-specific corpora reduced hallucination 14% → 3.8%.",
+      "Production MCP integration servers routing agents to Slack, CRM, internal REST/gRPC APIs — integration time cut 4 weeks → 3 days.",
+    ],
+    before: `# BEFORE — every engagement died at procurement
+Consultant recommends: GPT-4 via Azure OpenAI API
+Compliance team: "Data leaves Canada. Rejected."
+Time wasted: 6-10 weeks per client
+Result: 0 of 7 clients deployed anything
+
+# The actual constraint (never mapped):
+for client in regulated_clients:
+    if client.data_policy == "PIPEDA_STRICT":
+        assert vendor.data_residency == "on_prem"
+        # AssertionError — every single time`,
+    after: `# AFTER — air-gapped stack, no cloud dependency
+from llama_cpp import Llama
+import hnswlib
+
+class OnPremRAG:
+    def __init__(self, model_path: str, index_path: str):
+        self.llm   = Llama(model_path, n_gpu_layers=35, n_ctx=8192)
+        self.index = hnswlib.Index(space="cosine", dim=768)
+        self.index.load_index(index_path)   # runs on client hardware
+
+    def query(self, question: str) -> str:
+        ids, _ = self.index.knn_query(embed(question), k=5)
+        context = "\n".join(self.docs[i] for i in ids[0])
+        return self.llm(f"Context:\n{context}\n\nQ: {question}")
+# Latency: sub-1 s  |  Hallucination: 14% -> 3.8%  |  7/7 deployed`,
+    metrics: [
+      { val: "7 / 7", lbl: "Clients deployed (vs 0 before)" },
+      { val: "14% → 3.8%", lbl: "Hallucination rate" },
+      { val: "4 wks → 3 days", lbl: "AI integration time" },
+      { val: "Sub-1 s", lbl: "Query latency, on-prem" },
+    ],
+    stack: "Python · Go · llama.cpp · GGUF · HNSW · LoRA/QLoRA · FastAPI · Docker · MCP · AWS",
   },
+
   {
     id: "corol",
-    client: "Corol / UHPC Research",
-    sector: "Materials Engineering · Structural ML",
-    accent: AM,
-    req: "Client requirement: We need to test hundreds of concrete mix designs but each physical test takes days. We can only run 5-10 per week.",
-    diagnosis: "Root cause: Physical tests are the wrong information source. The relationships between mix constituents and strength are learnable. Build a predictor — not a faster test.",
-    before: `# BEFORE — physical lab testing (the client's workflow)
-# Week 1: mix design → pour → cure 28 days → crush → record
-# Week 5: adjust W/C ratio → repeat
-# Week 9: adjust silica fume → repeat
-# ...
-# Throughput: ~5-10 experiments per week
-# Time to screen 100 mixes: ~20 weeks
-# Cost: materials + lab time + engineer hours
+    client: "Corol.org × NunaFab",
+    sector: "Civil Engineering Research · UHPC",
+    country: "Ontario, Canada",
+    accent: VI,
+    tag: "Physical Process Replaced by ML",
+    brief: "We need compressive strength results for ultra-high-performance concrete. Currently takes 28 days of curing.",
+    diagnosis: [
+      "Every design iteration required 28 days of physical curing before one data point was available.",
+      "Research velocity was gated by chemistry, not insight — teams waited while grants burned.",
+      "Mix ratios could not be optimised without waiting a full month per candidate.",
+      "Root cause: no predictive model existed. The lab was the only oracle.",
+    ],
+    solution: [
+      "Collected 2,200 historical mix samples with 25 features (cement ratio, silica fume, fibre type, w/c ratio, curing conditions).",
+      "Trained 150-estimator Random Forest predicting strength at 3/7/28/90-day horizons simultaneously (R² = 0.73).",
+      "SciPy SLSQP optimiser finds the optimal mix for a target strength in seconds.",
+      "JWT-secured FastAPI + Next.js dashboard on Vercel — 12 research engineers use it daily.",
+    ],
+    before: `# BEFORE — 28-day physical wait per iteration
+for mix_ratio in design_space:       # thousands of candidates
+    pour_specimen(mix_ratio)
+    cure_for_days(28)                # hard physical constraint
+    strength = measure_compressive() # only data point available
+    if strength >= target:
+        record_winning_mix(mix_ratio)
+# Optimisation time: months
+# Research velocity: 1 data point per 28 days`,
+    after: `# AFTER — instant prediction + optimisation
+model = RandomForestRegressor(n_estimators=150)
+model.fit(X_train, y_train)   # R^2 = 0.73
 
-# The bottleneck is NOT slowness — it is the information model.
-# Physical tests are the last resort. They should be confirmations.`,
-    after: `import xgboost as xgb, shap, pandas as pd
+def optimise_mix(target_strength: float, horizon: int = 28):
+    def cost(x):
+        return abs(model.predict([x])[0] - target_strength)
+    result = minimize(cost, x0=baseline_mix, method="SLSQP",
+                      bounds=MATERIAL_BOUNDS)
+    return result.x                  # optimal mix, instant
+# Time to result: 28 days -> < 1 second
+# Velocity: unlimited iterations per day`,
+    metrics: [
+      { val: "28d → <1s", lbl: "Time to prediction" },
+      { val: "R² = 0.73", lbl: "Model accuracy" },
+      { val: "2,200", lbl: "Training samples" },
+      { val: "12", lbl: "Daily active researchers" },
+    ],
+    stack: "Python · scikit-learn · SciPy SLSQP · FastAPI · Next.js · Vercel · JWT · PostgreSQL",
+  },
+] as const;
 
-# Features grounded in structural engineering domain
-FEATURES = ["w_c_ratio","silica_fume_pct","fibre_kg_m3",
-            "curing_days","superplasticiser","fly_ash_pct"]
-
-model = xgb.XGBRegressor(n_estimators=400, max_depth=5,
-                          subsample=0.8, colsample_bytree=0.7)
-model.fit(X_train, y_train)          # R² = 0.89 on 200-row dataset
-
-# SHAP: show engineers WHY, not just WHAT
-explainer = shap.TreeExplainer(model)
-shap_vals = explainer.shap_values(X_test)
-# Output: φ(w_c_ratio)=+12.4 MPa, φ(silica_fume)=+8.7 MPa ...
-
-# Screener: rank 200 candidate mixes in 0.3 seconds
-predictions = model.predict(candidate_mixes_df)
-top_10 = candidate_mixes_df.iloc[predictions.argsort()[-10:]]
-# Lab tests only needed for top 10. Not 200.`,
-    outcomes: [
-      { n: "2 sec", l: "Per strength prediction" },
-      { n: "Weeks → afternoon", l: "To screen 100 mixes" },
-      { n: "R² 0.89", l: "On only 200 training rows" },
-      { n: "12", l: "Engineers using daily" },
+/* ═══════════════════════════════════════════════════════════════
+   SKILLS
+═══════════════════════════════════════════════════════════════ */
+const SKILLS = [
+  {
+    group: "Business Analysis",
+    icon: "◈",
+    color: T,
+    items: [
+      "Stakeholder discovery & requirements scoping",
+      "Root cause diagnosis (5-Why, constraint mapping)",
+      "Success metric definition before any build starts",
+      "Executive reporting & dashboard design",
     ],
   },
   {
-    id: "ttc",
-    client: "Lost and Found (TTC)",
-    sector: "Transit · 1.7M daily riders · Pitch May 2026",
-    accent: BL,
-    req: "Client requirement: TTC staff spend hours matching lost items to claims by hand. 1.7M riders. Paper logs. Phone calls. Recovery rates are low.",
-    diagnosis: "Root cause: Matching is a semantic similarity problem disguised as an admin problem. Descriptions contain all the information needed — they just need a vector space to live in.",
-    before: `# BEFORE — current TTC workflow
-# Staff process:
-# 1. Rider calls in: "I lost a blue Nike bag on Line 1"
-# 2. Staff manually read through paper log of found items
-# 3. Staff call back if they think something matches
-# 4. Rider comes in to check — often wrong item
-#
-# Problems:
-# - No searchability              → staff read every entry by eye
-# - No ranking                    → 1 match attempt, then dropped
-# - No async notification         → rider must follow up manually
-# - No audit trail                → no record of attempts or outcomes
-# Scale: hundreds of items daily, 1.7M riders, 2 staff`,
-    after: `import pgvector, fastapi, sentence_transformers as st
-
-encoder = st.SentenceTransformer("all-MiniLM-L6-v2")
-
-# On item intake: encode and store
-@app.post("/staff/found-item")
-def log_item(item: FoundItem):
-    embedding = encoder.encode(item.description).tolist()
-    db.execute("""
-        INSERT INTO found_items (description, location, found_at, embedding)
-        VALUES (%s,%s,%s,%s::vector)
-    """, [item.description, item.location, item.found_at, embedding])
-
-# On claim: rank all items by cosine similarity
-@app.post("/rider/claim")
-def submit_claim(claim: Claim):
-    q_emb = encoder.encode(claim.description).tolist()
-    matches = db.execute("""
-        SELECT *, 1-(embedding<=>%s::vector) AS score
-        FROM found_items ORDER BY score DESC LIMIT 5
-    """, [q_emb]).fetchall()
-
-    for m in matches:
-        if m.score > 0.82:      # high confidence → auto-notify
-            sms.send(claim.phone, f"We may have your item: {m.description}")
-        elif m.score > 0.60:    # low confidence → staff queue
-            dashboard.add_review(claim, m)
-# Resolution time: days → hours  |  Full audit trail: yes`,
-    outcomes: [
-      { n: "Hours", l: "Resolution (was: days)" },
-      { n: "0.82 threshold", l: "Auto-notify confidence gate" },
-      { n: "Full audit", l: "Every decision logged" },
-      { n: "May 2026", l: "TTC Director pitch" },
-    ],
-  },
-];
-
-/* ══════════════════════════════════════════════════════
-   WHAT BUSINESSES ACTUALLY BUY
-══════════════════════════════════════════════════════ */
-const VALUE_PROPS = [
-  {
-    icon: "01",
-    color: AC,
-    title: "You stop losing customers to AI failures",
-    real: "Resso: edtech clients renewed and expanded from 1 to 5 AI personas. The alternative was churn.",
-    technical: "Stateful session layer + confidence-gated output routing",
-  },
-  {
-    icon: "02",
-    color: RD,
-    title: "You unlock markets that cloud AI cannot touch",
-    real: "Lawline: law firms cannot use any cloud AI. Air-gapped local LLM opened a $1M enterprise conversation with Rogers.",
-    technical: "GGUF quantized LLM + HNSW local vector store — 0 external API calls",
-  },
-  {
-    icon: "03",
+    group: "AI / ML Engineering",
+    icon: "⬡",
     color: AM,
-    title: "You make decisions in hours instead of weeks",
-    real: "Corol: UHPC researchers were running 5 experiments per week. Now they screen 200 mixes in one afternoon before touching the lab.",
-    technical: "XGBoost ensemble + SHAP attribution on 200-row domain dataset",
+    items: [
+      "LLM systems (GPT-4o, Claude, GGUF, fine-tuning)",
+      "RAG architectures (HNSW, vector DB, hybrid search)",
+      "Agentic pipelines & MCP integration servers",
+      "Evaluation frameworks (hallucination, retention, latency)",
+    ],
   },
   {
-    icon: "04",
-    color: BL,
-    title: "You replace manual triage with intelligent routing",
-    real: "TTC: staff read paper logs and called riders back manually. Now high-confidence matches trigger automatic SMS. Staff only see items that genuinely need human judgement.",
-    technical: "pgvector cosine similarity + sigmoid confidence threshold gate",
+    group: "Systems & Delivery",
+    icon: "◎",
+    color: VI,
+    items: [
+      "Full-stack (Next.js, FastAPI, Go) + cloud (Azure, AWS)",
+      "Data infra (PostgreSQL, Redis, Prisma, Kafka)",
+      "CI/CD, Docker, Kubernetes, multi-env deployment",
+      "Regulated industries: PIPEDA, data residency, on-prem",
+    ],
   },
 ];
 
-/* ══════════════════════════════════════════════════════
-   POC CARD
-══════════════════════════════════════════════════════ */
-function PocCard({ b, open, onToggle }: { b: typeof BRIDGES[0]; open: boolean; onToggle: () => void }) {
-  return (
-    <div style={{
-      border: `1px solid ${open ? b.accent + "35" : "rgba(255,255,255,0.07)"}`,
-      borderRadius: 14,
-      overflow: "hidden",
-      background: open ? `${b.accent}04` : "rgba(255,255,255,0.01)",
-      transition: "all 0.25s ease",
-    }}>
-      {/* Header */}
-      <button onClick={onToggle} style={{
-        width: "100%", background: "none", border: "none",
-        cursor: "pointer", padding: "22px 26px",
-        display: "flex", alignItems: "flex-start", gap: 16, textAlign: "left",
-      }}>
-        <div style={{
-          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-          background: `${b.accent}15`, border: `1.5px solid ${b.accent}30`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 800, color: b.accent,
-        }}>
-          {b.client[0]}
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.46rem",
-            color: b.accent, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 3,
-          }}>{b.sector}</div>
-          <div style={{
-            fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(0.95rem,1.8vw,1.2rem)", color: "#f0f0f0",
-            letterSpacing: "-0.02em", marginBottom: 4,
-          }}>{b.client}</div>
-          <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.56rem",
-            color: "#777", lineHeight: 1.55, fontStyle: "italic",
-          }}>&ldquo;{b.req.replace("Client requirement: ", "")}&rdquo;</div>
-        </div>
-        <div style={{
-          fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-          color: open ? b.accent : "#444", flexShrink: 0, marginTop: 4, transition: "color 0.2s",
-        }}>
-          {open ? "▲" : "▼ see the code"}
-        </div>
-      </button>
+const WHY = [
+  {
+    label: "Rare Overlap",
+    title: "Business analyst who can ship production code",
+    body: "I've sat in the discovery interview and written the API that fixed the problem the same week. No handoff loss. No translation gap between strategy and engineering.",
+  },
+  {
+    label: "AI-Native",
+    title: "I don't bolt AI onto existing processes",
+    body: "I start from the business constraint and work backwards to decide if AI solves it — and which architecture. Three clients found that the market consensus was completely wrong for their actual constraint.",
+  },
+  {
+    label: "Regulated Industry",
+    title: "PIPEDA, data sovereignty, on-premise deployments",
+    body: "7 regulated-industry clients where the standard cloud-LLM playbook was ineligible. I know how to scope AI projects that pass procurement in finance, legal, and healthcare-adjacent environments.",
+  },
+  {
+    label: "Delivery Track Record",
+    title: "Shipped production systems as a solo engagement",
+    body: "Not demos. Sub-800ms real-time conversation engine. On-premise RAG with production traffic. ML model used daily by 12 researchers. All of these are live right now.",
+  },
+];
 
-      {open && (
-        <div style={{ padding: "0 26px 28px" }}>
-          <div style={{ height: 1, background: `${b.accent}20`, marginBottom: 24 }} />
-
-          {/* Diagnosis */}
-          <div style={{
-            background: "rgba(255,255,255,0.02)",
-            border: `1px solid ${b.accent}20`,
-            borderLeft: `3px solid ${b.accent}`,
-            borderRadius: "0 8px 8px 0",
-            padding: "12px 16px", marginBottom: 22,
-          }}>
-            <div style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.44rem",
-              color: b.accent, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 6,
-            }}>Root Cause Diagnosis</div>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "#bbb", lineHeight: 1.65 }}>
-              {b.diagnosis}
-            </p>
-          </div>
-
-          {/* Code: Before / After */}
-          <div style={{
-            display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 22,
-          }} className="poc-code-grid">
-            {/* Before */}
-            <div style={{
-              background: "#0d0d0d",
-              border: "1px solid rgba(244,67,54,0.2)",
-              borderRadius: 8, overflow: "hidden",
-            }}>
-              <div style={{
-                padding: "8px 14px",
-                background: "rgba(244,67,54,0.06)",
-                borderBottom: "1px solid rgba(244,67,54,0.15)",
-                display: "flex", alignItems: "center", gap: 8,
-              }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f44336", display: "inline-block" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.46rem", color: "#f44336", letterSpacing: "0.1em" }}>BEFORE</span>
-              </div>
-              <pre style={{
-                padding: "14px 14px",
-                fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-                color: "#888", lineHeight: 1.7, overflowX: "auto",
-                margin: 0, whiteSpace: "pre",
-              }}>{b.before}</pre>
-            </div>
-
-            {/* After */}
-            <div style={{
-              background: "#0a0f0c",
-              border: `1px solid ${b.accent}30`,
-              borderRadius: 8, overflow: "hidden",
-            }}>
-              <div style={{
-                padding: "8px 14px",
-                background: `${b.accent}08`,
-                borderBottom: `1px solid ${b.accent}20`,
-                display: "flex", alignItems: "center", gap: 8,
-              }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: b.accent, display: "inline-block" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.46rem", color: b.accent, letterSpacing: "0.1em" }}>AFTER</span>
-              </div>
-              <pre style={{
-                padding: "14px 14px",
-                fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-                color: "#c8c4bc", lineHeight: 1.7, overflowX: "auto",
-                margin: 0, whiteSpace: "pre",
-              }}>{b.after}</pre>
-            </div>
-          </div>
-
-          {/* Outcomes */}
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8,
-          }} className="poc-outcomes">
-            {b.outcomes.map(o => (
-              <div key={o.l} style={{
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 8, padding: "12px 14px",
-              }}>
-                <div style={{
-                  fontFamily: "var(--font-display)", fontWeight: 800,
-                  fontSize: "clamp(0.9rem,1.4vw,1.2rem)", color: b.accent,
-                  letterSpacing: "-0.03em", marginBottom: 4, lineHeight: 1,
-                }}>{o.n}</div>
-                <div style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.44rem",
-                  color: "#555", letterSpacing: "0.08em", textTransform: "uppercase",
-                }}>{o.l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════════════════════
-   PAGE
-══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   PAGE COMPONENT
+═══════════════════════════════════════════════════════════════ */
 export default function ConsultingPage() {
-  const [openBridge, setOpenBridge] = useState<string | null>("resso");
+  const [open, setOpen] = useState<string | null>(null);
+  const [tabs, setTabs] = useState<Record<string, "before-after" | "metrics">>({});
+
+  function getTab(id: string): "before-after" | "metrics" {
+    return tabs[id] ?? "before-after";
+  }
+  function setTab(id: string, v: "before-after" | "metrics") {
+    setTabs(prev => ({ ...prev, [id]: v }));
+  }
 
   return (
     <>
+      <Nav />
       <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(16px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
-        .cf { animation: fadeUp 0.55s ease forwards; opacity: 0; }
-        .cf1 { animation-delay: 0.08s; }
-        .cf2 { animation-delay: 0.18s; }
-        .cf3 { animation-delay: 0.28s; }
-        .cf4 { animation-delay: 0.38s; }
-        @media (max-width: 760px) {
-          .poc-code-grid  { grid-template-columns: 1fr !important; }
-          .poc-outcomes   { grid-template-columns: 1fr 1fr !important; }
-          .proof-strip    { grid-template-columns: 1fr 1fr !important; }
-          .value-grid     { grid-template-columns: 1fr !important; }
-          .hero-ctas      { flex-direction: column !important; }
-        }
-        @media (max-width: 500px) {
-          .proof-strip    { grid-template-columns: 1fr !important; }
-          .poc-outcomes   { grid-template-columns: 1fr !important; }
-        }
+        .cp { background:#050c0b; color:#e8f0ef; font-family:'Inter',sans-serif; min-height:100vh; }
+        .cp-w { max-width:1080px; margin:0 auto; padding:0 24px; }
+
+        /* hero */
+        .cp-hero { padding:120px 0 72px; border-bottom:1px solid #0d2b25; }
+        .cp-eyebrow { font-size:11px; font-weight:600; letter-spacing:.22em; color:${T}; text-transform:uppercase; margin-bottom:18px; }
+        .cp-h1 { font-size:clamp(30px,4.2vw,52px); font-weight:800; line-height:1.08; letter-spacing:-.02em; margin:0 0 22px; }
+        .cp-h1 em { font-style:normal; color:${T}; }
+        .cp-hero-sub { font-size:16px; line-height:1.68; color:#8cb8b0; max-width:620px; }
+        .cp-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:26px; }
+        .cp-pill { font-size:10.5px; font-weight:500; padding:4px 11px; border-radius:2px; background:#0a1e1b; color:#4d9b90; border:1px solid #1a3a34; letter-spacing:.05em; }
+
+        /* section */
+        .cp-sec { padding:76px 0; border-bottom:1px solid #0d2b25; }
+        .cp-sec-lbl { font-size:10.5px; font-weight:700; letter-spacing:.22em; color:#2e6b62; text-transform:uppercase; margin-bottom:28px; }
+
+        /* method */
+        .cp-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; }
+        @media(max-width:680px){ .cp-steps { grid-template-columns:1fr 1fr; } }
+        .cp-step { padding:26px 20px; background:#04100e; border:1px solid #0d2b25; }
+        .cp-step:hover { border-color:#1a4a3e; }
+        .cp-step-n { font-size:10px; font-weight:700; letter-spacing:.18em; color:#2e6b62; margin-bottom:10px; }
+        .cp-step-t { font-size:13.5px; font-weight:700; color:#d4eceb; margin-bottom:8px; }
+        .cp-step-b { font-size:12px; line-height:1.65; color:#5a9088; }
+
+        /* accordion */
+        .cp-case { border:1px solid #0d2b25; margin-bottom:3px; }
+        .cp-case-hd { display:flex; align-items:center; justify-content:space-between; padding:18px 22px; cursor:pointer; gap:12px; }
+        .cp-case-hd:hover { background:#060f0e; }
+        .cp-case-lft { display:flex; align-items:center; gap:14px; flex:1; }
+        .cp-ctag { font-size:10px; font-weight:700; letter-spacing:.14em; padding:3px 9px; border-radius:2px; white-space:nowrap; border:1px solid; }
+        .cp-cname { font-size:14.5px; font-weight:700; color:#d4eceb; }
+        .cp-csec { font-size:11.5px; color:#3d7a71; margin-top:2px; }
+        .cp-chev { font-size:16px; color:#3d7a71; transition:transform .2s; flex-shrink:0; }
+        .cp-chev.open { transform:rotate(180deg); }
+        .cp-snap { display:flex; gap:20px; flex-shrink:0; }
+        .cp-snap-item { text-align:right; }
+        .cp-snap-val { font-size:13px; font-weight:800; }
+        .cp-snap-lbl { font-size:10px; color:#3d7a71; }
+
+        /* case body */
+        .cp-cbody { border-top:1px solid #0d2b25; padding:28px 22px; }
+        .cp-brief { border-left:3px solid; padding:13px 16px; margin-bottom:24px; font-size:13px; color:#b8d5d1; line-height:1.58; font-style:italic; background:#030a09; }
+        .cp-brief-lbl { font-size:9.5px; font-weight:700; letter-spacing:.16em; display:block; margin-bottom:6px; }
+        .cp-2col { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:20px; }
+        @media(max-width:680px){ .cp-2col { grid-template-columns:1fr; } }
+        .cp-infobox { background:#030a09; border:1px solid #0d2b25; padding:18px; }
+        .cp-infobox-t { font-size:9.5px; font-weight:700; letter-spacing:.18em; color:#3d7a71; text-transform:uppercase; margin-bottom:10px; }
+        .cp-infobox ul { margin:0; padding-left:14px; }
+        .cp-infobox li { font-size:12px; line-height:1.65; color:#7ab5ad; margin-bottom:5px; }
+        .cp-infobox li::marker { color:#1e5c54; }
+
+        /* tabs */
+        .cp-tabs { display:flex; gap:2px; margin-bottom:14px; }
+        .cp-tab { font-size:10.5px; font-weight:700; letter-spacing:.1em; padding:7px 15px; border:1px solid #0d2b25; cursor:pointer; background:#030a09; color:#3d7a71; }
+        .cp-tab.on { background:#0a1e1b; color:${T}; border-color:#1a3a34; }
+
+        /* code */
+        .cp-code2 { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+        @media(max-width:680px){ .cp-code2 { grid-template-columns:1fr; } }
+        .cp-code-wrap { position:relative; }
+        .cp-badge { position:absolute; top:8px; right:10px; font-size:9px; font-weight:700; letter-spacing:.12em; padding:2px 7px; border-radius:2px; }
+        .cp-badge.b4 { background:#3d1a1a; color:#f87171; }
+        .cp-badge.af { background:#0a1e1b; color:${T}; }
+        pre { margin:0; padding:16px; font-size:11px; line-height:1.72; background:#020808; border:1px solid #0d2b25; overflow-x:auto; font-family:'JetBrains Mono','Fira Code',monospace; color:#6bada6; white-space:pre; }
+
+        /* metrics */
+        .cp-mets { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; }
+        @media(max-width:680px){ .cp-mets { grid-template-columns:1fr 1fr; } }
+        .cp-met { background:#030a09; border:1px solid #0d2b25; padding:16px; text-align:center; }
+        .cp-met-v { font-size:15px; font-weight:800; margin-bottom:4px; }
+        .cp-met-l { font-size:10px; color:#3d7a71; }
+        .cp-stack { margin-top:18px; font-size:10.5px; font-family:'JetBrains Mono',monospace; color:#3d7a71; }
+        .cp-stack strong { color:#1e5c54; }
+
+        /* skills */
+        .cp-sk3 { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-top:36px; }
+        @media(max-width:680px){ .cp-sk3 { grid-template-columns:1fr; } }
+        .cp-skcard { background:#04100e; border:1px solid #0d2b25; border-top:2px solid; padding:24px 20px; }
+        .cp-skcard-icon { font-size:20px; margin-bottom:12px; }
+        .cp-skcard-g { font-size:13px; font-weight:700; margin-bottom:12px; }
+        .cp-skcard ul { list-style:none; padding:0; margin:0; }
+        .cp-skcard li { font-size:12px; color:#5a9088; line-height:1.62; padding:5px 0; border-bottom:1px solid #0a1a18; }
+        .cp-skcard li:last-child { border-bottom:none; }
+        .cp-skcard li::before { content:"-> "; color:#1e5c54; }
+
+        /* why */
+        .cp-why4 { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:36px; }
+        @media(max-width:680px){ .cp-why4 { grid-template-columns:1fr; } }
+        .cp-wcard { background:#04100e; border:1px solid #0d2b25; padding:24px 20px; }
+        .cp-wcard-lbl { font-size:9.5px; font-weight:700; letter-spacing:.18em; color:#2e6b62; text-transform:uppercase; margin-bottom:8px; }
+        .cp-wcard-t { font-size:14px; font-weight:700; color:#c8e8e4; margin-bottom:8px; }
+        .cp-wcard-b { font-size:12.5px; color:#5a9088; line-height:1.65; }
+
+        /* cta */
+        .cp-cta { padding:76px 0 96px; text-align:center; }
+        .cp-cta h2 { font-size:clamp(22px,3vw,36px); font-weight:800; letter-spacing:-.02em; margin-bottom:14px; }
+        .cp-cta p { font-size:14px; color:#5a9088; margin-bottom:32px; }
+        .cp-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+        .cp-btn-p { font-size:13px; font-weight:700; padding:12px 26px; background:${T}; color:#030a09; border:none; cursor:pointer; letter-spacing:.04em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; }
+        .cp-btn-p:hover { background:#2fc4a1; }
+        .cp-btn-s { font-size:13px; font-weight:700; padding:12px 26px; background:transparent; color:${T}; border:1px solid #1a3a34; cursor:pointer; letter-spacing:.04em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; }
+        .cp-btn-s:hover { background:#0a1e1b; }
       `}</style>
 
-      {/* ── NAVBAR ── */}
-      <Nav />
+      <div className="cp">
 
-      {/* ══════════════════════════════
-          HERO
-      ══════════════════════════════ */}
-      <section style={{
-        position: "relative",
-        minHeight: "64vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "100px clamp(20px, 5vw, 80px) 72px",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        overflow: "hidden",
-      }}>
-        {/* grid bg */}
-        <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          backgroundImage: "linear-gradient(rgba(57,217,180,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(57,217,180,0.025) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }} />
-        {/* teal glow top-left */}
-        <div style={{
-          position: "absolute", top: -80, left: -80,
-          width: 400, height: 400,
-          background: "radial-gradient(circle, rgba(57,217,180,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 860 }}>
-          <div className="cf cf1" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-            color: AC, letterSpacing: "0.18em", textTransform: "uppercase",
-            border: "1px solid rgba(57,217,180,0.25)", borderRadius: 3,
-            padding: "5px 14px", marginBottom: 28,
-            background: "rgba(57,217,180,0.04)",
-          }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: AC, animation: "pulse 2s ease infinite" }} />
-            AI Consulting · I solve real business problems
-          </div>
-
-          <h1 className="cf cf2" style={{
-            fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(2.6rem, 7vw, 6rem)",
-            letterSpacing: "-0.045em", lineHeight: 0.88,
-            color: "#f0f0f0", marginBottom: 28,
-          }}>
-            I read the business<br />
-            problem.{" "}
-            <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: AC }}>
-              Then I write<br />the code.
-            </span>
-          </h1>
-
-          <p className="cf cf3" style={{
-            fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)",
-            color: "#666", lineHeight: 1.8,
-            maxWidth: 560, marginBottom: 36, fontWeight: 300,
-          }}>
-            Every case study below shows the exact business requirement, the root cause diagnosis,
-            the before-and-after code, and the measured outcome.
-            No abstractions. No claims without proof.
-          </p>
-
-          <div className="cf cf4 hero-ctas" style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-            <a href="#bridge" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.6rem", fontWeight: 700,
-              letterSpacing: "0.08em", padding: "13px 26px", borderRadius: 4,
-              background: AC, color: "#000", textDecoration: "none", transition: "opacity 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-            onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              See the code ↓
-            </a>
-            <a href="/book" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.6rem", fontWeight: 600,
-              letterSpacing: "0.08em", padding: "13px 24px", borderRadius: 4,
-              border: "1px solid rgba(255,255,255,0.12)", color: "#ccc",
-              textDecoration: "none", transition: "all 0.2s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.35)"; e.currentTarget.style.color = "#fff"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#ccc"; }}>
-              Book a free call
-            </a>
-            <a href="/" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.56rem",
-              color: "#444", textDecoration: "none", transition: "color 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.color = "#888"}
-            onMouseLeave={e => e.currentTarget.style.color = "#444"}>
-              ← Back to portfolio
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════
-          PROOF NUMBERS
-      ══════════════════════════════ */}
-      <section style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.01)" }}>
-        <div style={{
-          maxWidth: 1100, margin: "0 auto",
-          padding: "28px clamp(20px,5vw,80px)",
-          display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0,
-        }} className="proof-strip">
-          {[
-            { n: "4",    l: "Production systems shipped",  s: "Resso · Lawline · Corol · TTC" },
-            { n: "$1M",  l: "Investment conversation",     s: "Rogers President · Lawline.tech" },
-            { n: "1.7M", l: "TTC riders impacted",         s: "Director pitch · May 2026" },
-            { n: "98%",  l: "Context retention (Resso)",   s: "Was 72% before the fix" },
-          ].map((s, i) => (
-            <div key={s.n} style={{
-              padding: "22px 26px",
-              borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none",
-            }}>
-              <div style={{
-                fontFamily: "var(--font-display)", fontWeight: 800,
-                fontSize: "clamp(1.5rem,2.8vw,2.2rem)", color: AC,
-                letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 5,
-              }}>{s.n}</div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.56rem", color: "#ccc", marginBottom: 2 }}>{s.l}</div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.46rem", color: "#444", letterSpacing: "0.06em" }}>{s.s}</div>
+        {/* HERO */}
+        <section className="cp-hero">
+          <div className="cp-w">
+            <p className="cp-eyebrow">AI Consulting · Canada</p>
+            <h1 className="cp-h1">
+              I solve the business problem first.<br />
+              <em>Code is the last thing I write.</em>
+            </h1>
+            <p className="cp-hero-sub">
+              Most engineers build what they&apos;re asked. I find out why the business is actually broken —
+              then architect the system that fixes the root cause.
+              Three real clients. Three measurable outcomes. Zero slides without receipts.
+            </p>
+            <div className="cp-tags">
+              {["Root Cause Diagnosis","AI/ML Architecture","LLM Systems","Regulated Industries",
+                "Stakeholder Communication","Data Sovereignty","Agentic Pipelines","PIPEDA Compliance"
+              ].map(t => <span key={t} className="cp-pill">{t}</span>)}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* ══════════════════════════════
-          WHAT BUSINESSES ACTUALLY BUY
-      ══════════════════════════════ */}
-      <section style={{
-        padding: "72px clamp(20px,5vw,80px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-      }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: AC, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>Real Business Value</div>
-          <h2 style={{
-            fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(1.5rem,2.8vw,2.4rem)", letterSpacing: "-0.04em",
-            color: "#f0f0f0", marginBottom: 10, lineHeight: 1.1,
-          }}>
-            What businesses actually get.
-          </h2>
-          <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "#555", lineHeight: 1.7, maxWidth: 480, marginBottom: 40 }}>
-            Not features. Not technology. Outcomes that appear on a P&L.
-          </p>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }} className="value-grid">
-            {VALUE_PROPS.map(v => (
-              <div key={v.icon} style={{
-                background: "rgba(255,255,255,0.01)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 12, padding: "24px 24px",
-                transition: "border-color 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = `${v.color}35`}
-              onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}>
-                <div style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.44rem",
-                  color: v.color, letterSpacing: "0.16em", marginBottom: 10,
-                }}>{v.icon}</div>
-                <div style={{
-                  fontFamily: "var(--font-display)", fontWeight: 800,
-                  fontSize: "clamp(0.95rem,1.6vw,1.15rem)", color: "#f0f0f0",
-                  letterSpacing: "-0.02em", marginBottom: 10, lineHeight: 1.25,
-                }}>{v.title}</div>
-                <p style={{
-                  fontFamily: "var(--font-body)", fontSize: "0.82rem",
-                  color: "#888", lineHeight: 1.75, fontWeight: 300, marginBottom: 14,
-                }}>{v.real}</p>
-                <div style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-                  color: "#444", letterSpacing: "0.08em",
-                  borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 12,
-                }}>
-                  Technical solution: <span style={{ color: v.color }}>{v.technical}</span>
+        {/* THE FRAMEWORK */}
+        <section className="cp-sec">
+          <div className="cp-w">
+            <p className="cp-sec-lbl">The Framework</p>
+            <div className="cp-steps">
+              {[
+                { n:"01", t:"Diagnose Before Building",  b:"Discovery interviews with stakeholders. Map the real constraint. Find what's actually blocking the business — not what they think is blocking it." },
+                { n:"02", t:"Root Cause, Not Symptom",   b:"Apply 5-Why and constraint mapping. Define the structural failure. Agree success metrics before any code is written." },
+                { n:"03", t:"Architect the Fix",         b:"Design the simplest system that addresses the root cause. Select models, infra, and data architecture against the real constraint, not convention." },
+                { n:"04", t:"Measure & Report",          b:"Automated eval pipelines report agreed metrics weekly. Executive dashboards in plain language. Outcome validated against pre-agreed criteria." },
+              ].map(s => (
+                <div key={s.n} className="cp-step">
+                  <p className="cp-step-n">{s.n}</p>
+                  <p className="cp-step-t">{s.t}</p>
+                  <p className="cp-step-b">{s.b}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ══════════════════════════════
-          BUSINESS REQ → TECH BRIDGE (POC)
-      ══════════════════════════════ */}
-      <section id="bridge" style={{
-        padding: "72px clamp(20px,5vw,80px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-      }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: AM, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>
-            Proof of Concept
-          </div>
-          <h2 style={{
-            fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(1.5rem,2.8vw,2.4rem)", letterSpacing: "-0.04em",
-            color: "#f0f0f0", marginBottom: 10, lineHeight: 1.1,
-          }}>
-            Business requirement → root cause → actual code.
-          </h2>
-          <p style={{
-            fontFamily: "var(--font-body)", fontSize: "0.88rem",
-            color: "#555", lineHeight: 1.7, maxWidth: 560, marginBottom: 40,
-          }}>
-            Every card below shows the business requirement verbatim, the technical root cause,
-            the before code (what was wrong), the after code (what was built), and the measured outcome.
-            Open each one and read the diff.
-          </p>
+        {/* CASE STUDIES */}
+        <section className="cp-sec">
+          <div className="cp-w">
+            <p className="cp-sec-lbl">Real Engagements</p>
+            {CASES.map(c => {
+              const isOpen = open === c.id;
+              const tab = getTab(c.id);
+              return (
+                <div key={c.id} className="cp-case">
+                  <div className="cp-case-hd" onClick={() => setOpen(isOpen ? null : c.id)}>
+                    <div className="cp-case-lft">
+                      <span className="cp-ctag" style={{ color:c.accent, borderColor:c.accent+"35", background:c.accent+"12" }}>
+                        {c.tag}
+                      </span>
+                      <div>
+                        <p className="cp-cname">{c.client}</p>
+                        <p className="cp-csec">{c.sector} · {c.country}</p>
+                      </div>
+                    </div>
+                    <div style={{ display:"flex", alignItems:"center", gap:20 }}>
+                      <div className="cp-snap">
+                        {c.metrics.slice(0,2).map(m => (
+                          <div key={m.lbl} className="cp-snap-item">
+                            <div className="cp-snap-val" style={{ color:c.accent }}>{m.val}</div>
+                            <div className="cp-snap-lbl">{m.lbl}</div>
+                          </div>
+                        ))}
+                      </div>
+                      <span className={`cp-chev${isOpen ? " open" : ""}`}>⌄</span>
+                    </div>
+                  </div>
 
-          {/* Legend */}
-          <div style={{
-            display: "flex", gap: 18, flexWrap: "wrap",
-            fontFamily: "var(--font-mono)", fontSize: "0.46rem",
-            color: "#555", letterSpacing: "0.08em", marginBottom: 28,
-          }}>
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f44336", display: "inline-block" }} />
-              BEFORE — the broken state
-            </span>
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: AC, display: "inline-block" }} />
-              AFTER — what was built
-            </span>
-            <span>Click any card to expand</span>
-          </div>
+                  {isOpen && (
+                    <div className="cp-cbody">
+                      <div className="cp-brief" style={{ borderColor:c.accent }}>
+                        <span className="cp-brief-lbl" style={{ color:c.accent }}>CLIENT BRIEF</span>
+                        &ldquo;{c.brief}&rdquo;
+                      </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {BRIDGES.map(b => (
-              <PocCard
-                key={b.id}
-                b={b}
-                open={openBridge === b.id}
-                onToggle={() => setOpenBridge(p => p === b.id ? null : b.id)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+                      <div className="cp-2col">
+                        <div className="cp-infobox">
+                          <p className="cp-infobox-t">Diagnosis — what was actually wrong</p>
+                          <ul>{c.diagnosis.map((d,i) => <li key={i}>{d}</li>)}</ul>
+                        </div>
+                        <div className="cp-infobox">
+                          <p className="cp-infobox-t">Solution — what I built</p>
+                          <ul>{c.solution.map((s,i) => <li key={i}>{s}</li>)}</ul>
+                        </div>
+                      </div>
 
-      {/* ══════════════════════════════
-          HOW I WORK — 5 steps
-      ══════════════════════════════ */}
-      <section style={{
-        padding: "72px clamp(20px,5vw,80px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        background: "rgba(255,255,255,0.005)",
-      }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: AC, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>Process</div>
-          <h2 style={{
-            fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(1.5rem,2.8vw,2.4rem)", letterSpacing: "-0.04em",
-            color: "#f0f0f0", marginBottom: 10, lineHeight: 1.1,
-          }}>Five steps. Every engagement.</h2>
-          <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "#555", lineHeight: 1.7, maxWidth: 480, marginBottom: 44 }}>
-            Most engineers jump to step 4. I start at step 1. That is the difference between a system that demos well and one that works in production.
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {[
-              { n:"01", title:"Discover", color: AC, desc:"1-3 days in your operation before any code. Interviews with users, observation of real workflows, mapping where time and money actually disappear.", proof:"Shadowed TTC staff at Union Station for a full day. Interviewed 4 attorneys. Embedded with edtech clients for 2-3 days." },
-              { n:"02", title:"Diagnose", color: AM, desc:"Translate the business pain into a precise technical root cause. The stated problem is rarely the actual problem. This diagnosis is the most valuable deliverable of the engagement.", proof:"Resso context issue: not a model quality problem — a missing session architecture. Different solution, 10x lower cost." },
-              { n:"03", title:"Architect", color: VI, desc:"Design the system before building it. Stack choice, data flow, failure modes, cost model — documented and agreed before a line of code is written. Decisions made at this stage cost nothing to change.", proof:"Lawline: entire air-gapped architecture designed upfront. The zero-egress proof became the $1M Rogers sales pitch." },
-              { n:"04", title:"Build", color: BL, desc:"Production systems, not prototypes. Every component tested, deployed in real infrastructure, documented for handoff. I own every layer: model, API, infra, dashboard, MLOps.", proof:"Resso: WebRTC ingestion, diarization, NLP pipeline, hire scorer, ONNX export, MLOps dashboard — one engineer, full stack." },
-              { n:"05", title:"Measure", color: AC, desc:"Every engagement ships with before/after baselines. Latency. Accuracy. Retention. Cost per outcome. You know exactly what changed and by how much.", proof:"Resso: context retention 72%→98%. Hallucination 14%→3.8%. Corol: lab cycles weeks→one afternoon." },
-            ].map((s, i) => (
-              <div key={s.n} style={{
-                display: "grid", gridTemplateColumns: "60px 1fr",
-                borderTop: i > 0 ? "1px solid rgba(255,255,255,0.05)" : "none",
-                padding: "22px 0",
-                gap: 24, alignItems: "start",
-              }}>
-                <div style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-                  color: s.color, letterSpacing: "0.12em", paddingTop: 4,
-                }}>{s.n}</div>
-                <div>
-                  <div style={{
-                    fontFamily: "var(--font-display)", fontWeight: 800,
-                    fontSize: "1rem", color: "#f0f0f0", letterSpacing: "-0.02em", marginBottom: 6,
-                  }}>{s.title}</div>
-                  <p style={{ fontSize: "0.82rem", color: "#777", lineHeight: 1.75, fontWeight: 300, marginBottom: 8, maxWidth: 600 }}>{s.desc}</p>
-                  <div style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-                    color: "#444", lineHeight: 1.6, fontStyle: "italic",
-                    borderLeft: `2px solid ${s.color}30`, paddingLeft: 10,
-                  }}>{s.proof}</div>
+                      <div className="cp-tabs">
+                        <button className={`cp-tab${tab==="before-after"?" on":""}`} onClick={() => setTab(c.id,"before-after")}>BEFORE / AFTER CODE</button>
+                        <button className={`cp-tab${tab==="metrics"?" on":""}`}      onClick={() => setTab(c.id,"metrics")}>OUTCOME METRICS</button>
+                      </div>
+
+                      {tab === "before-after" && (
+                        <div className="cp-code2">
+                          <div className="cp-code-wrap">
+                            <span className="cp-badge b4">BEFORE</span>
+                            <pre>{c.before}</pre>
+                          </div>
+                          <div className="cp-code-wrap">
+                            <span className="cp-badge af">AFTER</span>
+                            <pre>{c.after}</pre>
+                          </div>
+                        </div>
+                      )}
+
+                      {tab === "metrics" && (
+                        <div className="cp-mets">
+                          {c.metrics.map(m => (
+                            <div key={m.lbl} className="cp-met">
+                              <div className="cp-met-v" style={{ color:c.accent }}>{m.val}</div>
+                              <div className="cp-met-l">{m.lbl}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <p className="cp-stack"><strong>Stack: </strong>{c.stack}</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ══════════════════════════════
-          CTA
-      ══════════════════════════════ */}
-      <section style={{ padding: "72px clamp(20px,5vw,80px)" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{
-            background: "rgba(57,217,180,0.03)",
-            border: "1px solid rgba(57,217,180,0.14)",
-            borderRadius: 16, padding: "52px 48px",
-            display: "flex", justifyContent: "space-between",
-            alignItems: "center", gap: 32, flexWrap: "wrap",
-          }}>
-            <div style={{ maxWidth: 520 }}>
-              <h2 style={{
-                fontFamily: "var(--font-display)", fontWeight: 800,
-                fontSize: "clamp(1.4rem,2.5vw,2.2rem)", letterSpacing: "-0.03em",
-                color: "#f0f0f0", marginBottom: 12, lineHeight: 1.15,
-              }}>
-                Tell me what is broken.<br />
-                <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: AC }}>
-                  I will tell you how to fix it.
-                </span>
-              </h2>
-              <p style={{ fontSize: "0.86rem", color: "#555", lineHeight: 1.75, fontWeight: 300 }}>
-                Free 30-minute call. I will ask about your operation, identify the root cause, and give you a concrete technical direction — whether or not we work together.
-              </p>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, flexShrink: 0 }}>
-              <a href="/book" style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.65rem", fontWeight: 700,
-                letterSpacing: "0.08em", padding: "16px 32px", borderRadius: 6,
-                background: AC, color: "#000", textDecoration: "none",
-                textAlign: "center", whiteSpace: "nowrap", transition: "opacity 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-                Book a free call ↗
-              </a>
-              <a href="mailto:emailtosolankiom@gmail.com" style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.55rem",
-                color: "#444", textDecoration: "none",
-                textAlign: "center", letterSpacing: "0.06em", transition: "color 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = "#aaa"}
-              onMouseLeave={e => e.currentTarget.style.color = "#444"}>
-                or email directly
-              </a>
+        {/* SKILLS MATRIX */}
+        <section className="cp-sec">
+          <div className="cp-w">
+            <p className="cp-sec-lbl">Overlapping Capabilities</p>
+            <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.02em", margin:"0 0 8px" }}>
+              Where business strategy meets engineering execution
+            </h2>
+            <p style={{ fontSize:13.5, color:"#5a9088", maxWidth:540 }}>
+              Most consultants stop at the slide deck. Most engineers don&apos;t attend the client call.
+              I do both — and that&apos;s where the value is created.
+            </p>
+            <div className="cp-sk3">
+              {SKILLS.map(s => (
+                <div key={s.group} className="cp-skcard" style={{ borderTopColor:s.color }}>
+                  <div className="cp-skcard-icon" style={{ color:s.color }}>{s.icon}</div>
+                  <p className="cp-skcard-g" style={{ color:s.color }}>{s.group}</p>
+                  <ul>{s.items.map(it => <li key={it}>{it}</li>)}</ul>
+                </div>
+              ))}
             </div>
           </div>
+        </section>
 
-          <div style={{ textAlign: "center", marginTop: 40 }}>
-            <a href="/" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-              color: "#333", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.color = "#777"}
-            onMouseLeave={e => e.currentTarget.style.color = "#333"}>
-              ← Back to portfolio
-            </a>
+        {/* WHY A FIRM HIRES ME */}
+        <section className="cp-sec">
+          <div className="cp-w">
+            <p className="cp-sec-lbl">Value to a Consulting Firm</p>
+            <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.02em", margin:"0 0 8px" }}>
+              What I bring to Deloitte, McKinsey, Accenture
+            </h2>
+            <div className="cp-why4">
+              {WHY.map(w => (
+                <div key={w.title} className="cp-wcard">
+                  <p className="cp-wcard-lbl">{w.label}</p>
+                  <p className="cp-wcard-t">{w.title}</p>
+                  <p className="cp-wcard-b">{w.body}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* CTA */}
+        <section className="cp-cta">
+          <div className="cp-w">
+            <h2>Ready to review the consulting resume?</h2>
+            <p>One page, tailored for strategy &amp; technology consulting firms in Canada.</p>
+            <div className="cp-btns">
+              <a href="/resume" className="cp-btn-p">&#8595; View &amp; Download Resume</a>
+              <a href="/#contact" className="cp-btn-s">&#8594; Contact Omkumar</a>
+            </div>
+          </div>
+        </section>
+
+      </div>
     </>
   );
 }
