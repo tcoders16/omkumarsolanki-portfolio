@@ -274,7 +274,7 @@ export default function ConsultingPage() {
         .cp-step:hover { background:#0f0f0f; }
         .cp-step-n { font-size:10px; font-weight:600; letter-spacing:.18em; color:rgba(57,217,180,.4); margin-bottom:12px; font-family:'JetBrains Mono',monospace; }
         .cp-step-t { font-size:14px; font-weight:700; color:#f0f0f0; margin-bottom:8px; font-family:'Syne',sans-serif; letter-spacing:-.01em; }
-        .cp-step-b { font-size:12.5px; line-height:1.65; color:#5a5a5a; font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-step-b { font-size:12.5px; line-height:1.65; color:#888; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
         /* ── accordion keyframes ── */
         @keyframes shimmer {
@@ -288,42 +288,41 @@ export default function ConsultingPage() {
 
         /* ── accordion rows ── */
         .cp-cases-hint {
-          font-size:10px; font-family:'JetBrains Mono',monospace; color:#2e2e2e;
-          letter-spacing:.14em; margin-bottom:16px; display:flex; align-items:center; gap:10px;
+          font-size:10px; font-family:'JetBrains Mono',monospace; color:#484848;
+          letter-spacing:.12em; margin-bottom:16px; display:flex; align-items:center; gap:10px;
         }
-        .cp-cases-hint::before { content:''; display:inline-block; width:20px; height:1px; background:rgba(255,255,255,0.1); }
+        .cp-cases-hint::before { content:''; display:inline-block; width:20px; height:1px; background:rgba(255,255,255,0.12); }
 
-        .cp-case { border:1px solid rgba(255,255,255,0.06); margin-bottom:1px; position:relative; overflow:hidden; transition:border-color .2s; }
+        .cp-case { border:1px solid rgba(255,255,255,0.08); margin-bottom:1px; position:relative; overflow:hidden; transition:border-color .2s, background .15s; }
         .cp-case::after {
           content:''; position:absolute; top:0; left:-80%; width:35%;
-          height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.025),transparent);
+          height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);
           pointer-events:none;
         }
         .cp-case:nth-child(1)::after { animation:shimmer 1s ease .15s forwards; }
         .cp-case:nth-child(2)::after { animation:shimmer 1s ease .35s forwards; }
         .cp-case:nth-child(3)::after { animation:shimmer 1s ease .55s forwards; }
-        .cp-case:hover    { border-color:rgba(255,255,255,0.12); }
-        .cp-case.is-open  { border-color:rgba(255,255,255,0.12); border-left:2px solid; }
+        .cp-case:hover    { border-color:rgba(255,255,255,0.16); background:#080808; }
+        .cp-case.is-open  { border-color:rgba(255,255,255,0.14); background:#080808; border-left:2px solid rgba(255,255,255,0.2); }
 
-        .cp-case-hd { display:flex; align-items:center; justify-content:space-between; padding:26px 28px; cursor:pointer; gap:16px; transition:background .15s; user-select:none; }
-        .cp-case-hd:hover { background:#080808; }
+        .cp-case-hd { display:flex; align-items:center; justify-content:space-between; padding:22px 24px; cursor:pointer; gap:16px; user-select:none; }
 
-        .cp-case-lft { display:flex; align-items:center; gap:16px; flex:1; min-width:0; }
-        .cp-ctag { font-size:9px; font-weight:600; letter-spacing:.16em; padding:3px 10px; white-space:nowrap; border:1px solid rgba(255,255,255,0.08); color:#2e2e2e; background:transparent; font-family:'JetBrains Mono',monospace; flex-shrink:0; text-transform:uppercase; }
-        .cp-cname { font-size:15px; font-weight:700; color:#f0f0f0; font-family:'Syne',sans-serif; letter-spacing:-.01em; }
-        .cp-csec  { font-size:11.5px; color:#5a5a5a; margin-top:3px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-case-lft { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+        .cp-ctag { font-size:9px; font-weight:600; letter-spacing:.18em; color:#606060; font-family:'JetBrains Mono',monospace; text-transform:uppercase; margin-bottom:2px; }
+        .cp-cname { font-size:15px; font-weight:700; color:#f0f0f0; font-family:'Syne',sans-serif; letter-spacing:-.01em; line-height:1.2; }
+        .cp-csec  { font-size:11.5px; color:#606060; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
         /* ── compact metric chips ── */
-        .cp-snap { display:flex; gap:20px; flex-shrink:0; align-items:center; }
-        .cp-snap-item { display:flex; align-items:baseline; gap:5px; }
-        .cp-snap-val  { font-size:12px; font-weight:700; color:#f0f0f0; font-family:'JetBrains Mono',monospace; letter-spacing:-.01em; }
-        .cp-snap-lbl  { font-size:10px; color:#2e2e2e; font-family:'Space Grotesk',sans-serif; }
+        .cp-snap { display:flex; gap:24px; flex-shrink:0; align-items:center; }
+        .cp-snap-item { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+        .cp-snap-val  { font-size:13px; font-weight:700; color:#f0f0f0; font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+        .cp-snap-lbl  { font-size:9.5px; color:#606060; font-family:'Space Grotesk',sans-serif; white-space:nowrap; }
 
         /* ── pill CTA — always visible ── */
-        .cp-cta-pill { display:inline-flex; align-items:center; gap:7px; flex-shrink:0; font-size:10.5px; font-weight:600; letter-spacing:.08em; font-family:'Space Grotesk',sans-serif; white-space:nowrap; padding:8px 18px; border:1px solid rgba(255,255,255,0.1); color:#c8c4bc; background:transparent; cursor:pointer; transition:border-color .15s, color .15s, background .15s; }
-        .cp-cta-pill:hover { border-color:rgba(255,255,255,0.3); color:#f0f0f0; }
-        .cp-cta-pill.open  { border-color:rgba(255,255,255,0.2); color:#f0f0f0; }
-        .cp-cta-pill svg   { transition:transform .28s cubic-bezier(.4,0,.2,1); opacity:.5; }
+        .cp-cta-pill { display:inline-flex; align-items:center; gap:7px; flex-shrink:0; font-size:11px; font-weight:500; letter-spacing:.04em; font-family:'Space Grotesk',sans-serif; white-space:nowrap; padding:8px 18px; border:1px solid rgba(255,255,255,0.14); color:#909090; background:transparent; cursor:pointer; transition:border-color .15s, color .15s; }
+        .cp-cta-pill:hover { border-color:rgba(255,255,255,0.35); color:#f0f0f0; }
+        .cp-cta-pill.open  { border-color:rgba(255,255,255,0.25); color:#f0f0f0; }
+        .cp-cta-pill svg   { transition:transform .28s cubic-bezier(.4,0,.2,1); }
         .cp-cta-pill.open svg { transform:rotate(180deg); }
 
         /* ── case body ── */
@@ -333,14 +332,14 @@ export default function ConsultingPage() {
         .cp-2col { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,0.06); margin-bottom:20px; }
         @media(max-width:680px){ .cp-2col { grid-template-columns:1fr; } }
         .cp-infobox { background:#000; padding:20px; }
-        .cp-infobox-t { font-size:9px; font-weight:700; letter-spacing:.2em; color:#5a5a5a; text-transform:uppercase; margin-bottom:12px; font-family:'JetBrains Mono',monospace; }
+        .cp-infobox-t { font-size:9px; font-weight:700; letter-spacing:.2em; color:#707070; text-transform:uppercase; margin-bottom:12px; font-family:'JetBrains Mono',monospace; }
         .cp-infobox ul { margin:0; padding-left:14px; }
         .cp-infobox li { font-size:12.5px; line-height:1.65; color:#c8c4bc; margin-bottom:6px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-infobox li::marker { color:rgba(255,255,255,0.15); }
 
         /* ── tabs ── */
         .cp-tabs { display:flex; gap:1px; margin-bottom:14px; background:rgba(255,255,255,0.06); }
-        .cp-tab { font-size:10px; font-weight:600; letter-spacing:.1em; padding:8px 16px; cursor:pointer; background:#000; color:#5a5a5a; border:none; transition:color .15s, background .15s; font-family:'JetBrains Mono',monospace; }
+        .cp-tab { font-size:10px; font-weight:600; letter-spacing:.1em; padding:8px 16px; cursor:pointer; background:#000; color:#707070; border:none; transition:color .15s, background .15s; font-family:'JetBrains Mono',monospace; }
         .cp-tab:hover { color:#c8c4bc; background:#0f0f0f; }
         .cp-tab.on { background:#0f0f0f; color:${T}; }
 
@@ -349,9 +348,9 @@ export default function ConsultingPage() {
         @media(max-width:680px){ .cp-code2 { grid-template-columns:1fr; } }
         .cp-code-wrap { position:relative; }
         .cp-badge { position:absolute; top:10px; right:12px; font-size:9px; font-weight:700; letter-spacing:.12em; padding:2px 8px; font-family:'JetBrains Mono',monospace; }
-        .cp-badge.b4 { background:rgba(255,255,255,0.04); color:#5a5a5a; }
+        .cp-badge.b4 { background:rgba(255,255,255,0.06); color:#707070; }
         .cp-badge.af { background:rgba(57,217,180,.08); color:${T}; }
-        pre { margin:0; padding:20px; font-size:11px; line-height:1.75; background:#080808; overflow-x:auto; font-family:'JetBrains Mono','Fira Code',monospace; color:#5a5a5a; white-space:pre; border:none; }
+        pre { margin:0; padding:20px; font-size:11px; line-height:1.75; background:#080808; overflow-x:auto; font-family:'JetBrains Mono','Fira Code',monospace; color:#6e6e6e; white-space:pre; border:none; }
         pre .hi { color:${T}; }
 
         /* ── metrics ── */
@@ -359,9 +358,9 @@ export default function ConsultingPage() {
         @media(max-width:680px){ .cp-mets { grid-template-columns:1fr 1fr; } }
         .cp-met { background:#000; padding:20px; text-align:center; }
         .cp-met-v { font-size:14px; font-weight:700; margin-bottom:5px; font-family:'JetBrains Mono',monospace; color:#f0f0f0; letter-spacing:-.01em; }
-        .cp-met-l { font-size:10px; color:#5a5a5a; font-family:'Space Grotesk',sans-serif; }
-        .cp-stack { margin-top:20px; font-size:10.5px; font-family:'JetBrains Mono',monospace; color:#2e2e2e; padding-top:16px; border-top:1px solid rgba(255,255,255,0.04); }
-        .cp-stack strong { color:#5a5a5a; }
+        .cp-met-l { font-size:10px; color:#707070; font-family:'Space Grotesk',sans-serif; }
+        .cp-stack { margin-top:20px; font-size:10.5px; font-family:'JetBrains Mono',monospace; color:#484848; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); }
+        .cp-stack strong { color:#707070; }
 
         /* ── skills ── */
         .cp-sk3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,0.06); margin-top:40px; }
@@ -370,7 +369,7 @@ export default function ConsultingPage() {
         .cp-skcard-icon { font-size:18px; margin-bottom:14px; opacity:.6; }
         .cp-skcard-g { font-size:13px; font-weight:700; margin-bottom:14px; font-family:'Syne',sans-serif; color:#f0f0f0; letter-spacing:-.01em; }
         .cp-skcard ul { list-style:none; padding:0; margin:0; }
-        .cp-skcard li { font-size:12.5px; color:#5a5a5a; line-height:1.62; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-skcard li { font-size:12.5px; color:#888; line-height:1.62; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-skcard li:last-child { border-bottom:none; }
         .cp-skcard li::before { content:"– "; color:rgba(255,255,255,0.15); }
 
@@ -380,12 +379,12 @@ export default function ConsultingPage() {
         .cp-wcard { background:#000; padding:28px 24px; }
         .cp-wcard-lbl { font-size:9px; font-weight:700; letter-spacing:.2em; color:rgba(57,217,180,.45); text-transform:uppercase; margin-bottom:10px; font-family:'JetBrains Mono',monospace; }
         .cp-wcard-t { font-size:14px; font-weight:700; color:#f0f0f0; margin-bottom:10px; font-family:'Syne',sans-serif; letter-spacing:-.01em; }
-        .cp-wcard-b { font-size:12.5px; color:#5a5a5a; line-height:1.68; font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-wcard-b { font-size:12.5px; color:#888; line-height:1.68; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
         /* ── CTA ── */
         .cp-cta { padding:80px 0 100px; text-align:center; }
         .cp-cta h2 { font-size:clamp(22px,3vw,36px); font-weight:800; letter-spacing:-.03em; margin-bottom:14px; font-family:'Syne',sans-serif; color:#f0f0f0; }
-        .cp-cta p  { font-size:14px; color:#5a5a5a; margin-bottom:36px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-cta p  { font-size:14px; color:#888; margin-bottom:36px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
         .cp-btn-p { font-size:12px; font-weight:700; padding:13px 28px; background:${T}; color:#000; border:none; cursor:pointer; letter-spacing:.06em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; font-family:'Space Grotesk',sans-serif; transition:opacity .15s; }
         .cp-btn-p:hover { opacity:.88; }
@@ -536,7 +535,7 @@ export default function ConsultingPage() {
             <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.03em", margin:"0 0 8px", fontFamily:"'Syne',sans-serif", color:"#f0f0f0" }}>
               Where business strategy meets engineering execution
             </h2>
-            <p style={{ fontSize:13.5, color:"#5a5a5a", maxWidth:540, fontFamily:"'Space Grotesk',sans-serif", fontWeight:300 }}>
+            <p style={{ fontSize:13.5, color:"#888", maxWidth:540, fontFamily:"'Space Grotesk',sans-serif", fontWeight:300 }}>
               Most consultants stop at the slide deck. Most engineers don&apos;t attend the client call.
               I do both — and that&apos;s where the value is created.
             </p>
