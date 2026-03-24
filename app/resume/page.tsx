@@ -11,46 +11,44 @@ const VARIANTS: {
   highlights: { metric: string; label: string }[];
   filename: string;
   accent: string;
-  accentDim: string;
+  accentBg: string;
+  accentBorder: string;
 }[] = [
   {
     id: "tech",
     label: "AI Engineering",
     tag: "Engineering · MLOps · Architecture",
-    subtitle: "Best for technical roles at product companies and AI labs",
+    subtitle: "For technical roles at product companies and AI labs",
     targets: ["Google", "Amex", "BMO", "DeepMind", "OpenAI", "Stripe", "Meta AI", "Shopify"],
     highlights: [
-      { metric: "800ms", label: "Real-time AI latency" },
+      { metric: "800ms", label: "Conversation latency" },
       { metric: "98%",   label: "Context retention" },
       { metric: "3.8%",  label: "Hallucination rate" },
       { metric: "7",     label: "On-prem deployments" },
     ],
     filename: "Omkumar-Solanki-AI-Engineer-Resume",
     accent: "#0a7a6a",
-    accentDim: "#e4faf5",
+    accentBg: "#f0faf8",
+    accentBorder: "#b0d9d2",
   },
   {
     id: "consulting",
     label: "AI Consulting",
     tag: "Strategy · Discovery · Business Translation",
-    subtitle: "Best for consulting firms and strategy roles in Canada",
+    subtitle: "For consulting firms and strategy roles in Canada",
     targets: ["Deloitte", "McKinsey", "Accenture", "KPMG", "BCG", "PwC", "Oliver Wyman", "Capgemini"],
     highlights: [
-      { metric: "$1M",        label: "Investment conversation" },
-      { metric: "4",          label: "Industries consulted" },
-      { metric: "0 bytes",    label: "Data egress (Lawline)" },
-      { metric: "10+",        label: "Startups advised" },
+      { metric: "$1M",     label: "Investment conversation" },
+      { metric: "4",       label: "Industries consulted" },
+      { metric: "0 bytes", label: "Data egress (Lawline)" },
+      { metric: "10+",     label: "Startups advised" },
     ],
     filename: "Omkumar-Solanki-Consulting-Resume",
     accent: "#1d4ed8",
-    accentDim: "#eff6ff",
+    accentBg: "#eff6ff",
+    accentBorder: "#bfdbfe",
   },
 ];
-
-const FILENAMES: Record<ResumeVariant, string> = {
-  tech: "Omkumar-Solanki-AI-Engineer-Resume",
-  consulting: "Omkumar-Solanki-Consulting-Resume",
-};
 
 export default function ResumeSelectorPage() {
   const [selected, setSelected] = useState<ResumeVariant>("tech");
@@ -59,7 +57,7 @@ export default function ResumeSelectorPage() {
   const handleDownload = () => {
     if (typeof window === "undefined") return;
     const prev = document.title;
-    document.title = FILENAMES[selected];
+    document.title = active.filename;
     window.print();
     document.title = prev;
   };
@@ -68,303 +66,409 @@ export default function ResumeSelectorPage() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { background: #e8e5e0; }
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
 
-        /* SELECTOR UI — hidden on print */
-        .sel-ui { padding: 36px 20px 0; max-width: 900px; margin: 0 auto; }
+        /* ── FORCE LIGHT MODE — override dark portfolio globals ── */
+        html { background: #ece9e4 !important; scroll-behavior: smooth; }
+        body {
+          background: #ece9e4 !important;
+          font-family: 'Inter', sans-serif !important;
+          -webkit-font-smoothing: antialiased;
+          color: #111 !important;
+        }
+        body::before { display: none !important; }
+        .grain { display: none !important; }
 
-        /* TOP EYEBROW */
-        .sel-eyebrow {
+        /* ── SELECTOR WRAPPER ── */
+        .rs-wrap {
+          background: #ece9e4;
+          min-height: 100vh;
+        }
+
+        /* ── TOP HEADER BAND ── */
+        .rs-header {
+          background: #fff;
+          border-bottom: 1px solid #e0dcd6;
+          padding: 0 32px;
+          height: 54px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+        }
+        .rs-header-left {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .rs-breadcrumb {
           font-family: 'JetBrains Mono', monospace;
           font-size: 10px;
-          font-weight: 700;
-          letter-spacing: .22em;
+          font-weight: 600;
+          letter-spacing: .14em;
           text-transform: uppercase;
-          color: #999;
-          margin-bottom: 10px;
-          text-align: center;
+          color: #aaa;
         }
-        .sel-heading {
+        .rs-breadcrumb-sep { color: #ddd; margin: 0 8px; }
+        .rs-breadcrumb-cur { color: #555; }
+        .rs-back {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          font-weight: 600;
+          color: #aaa;
+          text-decoration: none;
+          letter-spacing: .1em;
+          text-transform: uppercase;
+          transition: color .15s;
+        }
+        .rs-back:hover { color: #111; }
+
+        /* ── SELECTOR CONTENT ── */
+        .rs-content {
+          max-width: 860px;
+          margin: 0 auto;
+          padding: 48px 24px 0;
+        }
+
+        /* ── PAGE HEADING ── */
+        .rs-heading-row {
+          text-align: center;
+          margin-bottom: 40px;
+        }
+        .rs-eyebrow {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9.5px;
+          font-weight: 700;
+          letter-spacing: .26em;
+          text-transform: uppercase;
+          color: #aaa;
+          margin-bottom: 12px;
+        }
+        .rs-heading {
           font-family: 'Syne', sans-serif;
-          font-size: 28px;
+          font-size: 32px;
           font-weight: 800;
           color: #0d0d0d;
-          text-align: center;
           letter-spacing: -.02em;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
         }
-        .sel-sub {
+        .rs-subhead {
           font-size: 14px;
-          color: #777;
-          text-align: center;
-          margin-bottom: 28px;
+          color: #888;
+          line-height: 1.6;
         }
 
-        /* VARIANT CARDS */
-        .sel-cards {
+        /* ── CARDS ROW ── */
+        .rs-cards {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 14px;
+          gap: 16px;
           margin-bottom: 20px;
         }
-        @media (max-width: 580px) { .sel-cards { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .rs-cards { grid-template-columns: 1fr; } }
 
-        .sel-card {
+        /* ── VARIANT CARD ── */
+        .rs-card {
           background: #fff;
-          border: 2px solid #e0ddd8;
-          border-radius: 12px;
-          padding: 20px 22px;
+          border: 1.5px solid #e0dcd6;
+          border-radius: 14px;
+          padding: 24px 24px 20px;
           cursor: pointer;
-          transition: all .18s;
+          transition: box-shadow .18s, border-color .18s, transform .18s;
           position: relative;
           overflow: hidden;
+          user-select: none;
         }
-        .sel-card:hover {
-          border-color: #aaa;
+        .rs-card:hover {
+          box-shadow: 0 6px 28px rgba(0,0,0,.07);
           transform: translateY(-2px);
-          box-shadow: 0 6px 24px rgba(0,0,0,.08);
         }
-        .sel-card.active {
-          border-color: var(--acc);
-          box-shadow: 0 0 0 3px var(--acc-dim), 0 6px 28px rgba(0,0,0,.09);
+        .rs-card.active {
+          border-color: var(--rs-accent);
+          box-shadow: 0 0 0 3px var(--rs-accent-bg), 0 8px 32px rgba(0,0,0,.08);
         }
-        .sel-card.active::before {
+        .rs-card.active::after {
           content: '';
           position: absolute;
           top: 0; left: 0; right: 0;
           height: 3px;
-          background: var(--acc);
+          background: var(--rs-accent);
+          border-radius: 14px 14px 0 0;
         }
 
-        .sc-top {
+        /* card top row */
+        .rsc-top {
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
-          gap: 12px;
-          margin-bottom: 10px;
+          margin-bottom: 4px;
         }
-        .sc-label {
+        .rsc-label {
           font-family: 'Syne', sans-serif;
-          font-size: 17px;
+          font-size: 18px;
           font-weight: 800;
           color: #0d0d0d;
-          line-height: 1.2;
+          letter-spacing: -.01em;
         }
-        .sc-check {
-          width: 22px;
-          height: 22px;
+        .rsc-radio {
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
-          border: 2px solid #ddd;
+          border: 1.5px solid #d8d4ce;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          margin-top: 2px;
+          margin-top: 3px;
           transition: all .15s;
-          font-size: 12px;
-          color: #fff;
+          background: #fff;
         }
-        .sel-card.active .sc-check {
-          background: var(--acc);
-          border-color: var(--acc);
+        .rs-card.active .rsc-radio {
+          background: var(--rs-accent);
+          border-color: var(--rs-accent);
         }
-        .sc-tag {
+        .rsc-radio-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #fff;
+          opacity: 0;
+          transition: opacity .15s;
+        }
+        .rs-card.active .rsc-radio-dot { opacity: 1; }
+
+        .rsc-tag {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
+          font-size: 8.5px;
           font-weight: 700;
           letter-spacing: .12em;
           text-transform: uppercase;
-          color: var(--acc);
+          color: var(--rs-accent);
           margin-bottom: 8px;
         }
-        .sc-sub {
+        .rsc-sub {
           font-size: 12.5px;
-          color: #777;
+          color: #888;
+          margin-bottom: 14px;
           line-height: 1.5;
-          margin-bottom: 12px;
         }
 
-        /* TARGET ROW */
-        .sc-targets {
+        /* target firm pills */
+        .rsc-firms {
           display: flex;
           flex-wrap: wrap;
           gap: 5px;
-          margin-bottom: 14px;
+          margin-bottom: 18px;
         }
-        .sc-target {
+        .rsc-firm {
           font-family: 'JetBrains Mono', monospace;
           font-size: 9px;
           font-weight: 600;
-          padding: 3px 8px;
-          border-radius: 4px;
-          background: var(--acc-dim);
-          color: var(--acc);
-          border: 1px solid var(--acc)30;
+          padding: 3px 9px;
+          border-radius: 20px;
+          background: var(--rs-accent-bg);
+          color: var(--rs-accent);
+          border: 1px solid var(--rs-accent-border);
+          letter-spacing: .06em;
         }
 
-        /* HIGHLIGHTS */
-        .sc-metrics {
+        /* metrics row */
+        .rsc-metrics {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 6px;
-          border-top: 1px solid #f0ede8;
-          padding-top: 12px;
+          gap: 8px;
+          padding-top: 14px;
+          border-top: 1px solid #f0ece8;
         }
-        .sc-metric { text-align: center; }
-        .sc-metric-n {
+        .rsc-metric { text-align: center; }
+        .rsc-metric-n {
           font-family: 'Syne', sans-serif;
-          font-size: 15px;
+          font-size: 16px;
           font-weight: 800;
-          color: var(--acc);
+          color: var(--rs-accent);
+          line-height: 1;
+          margin-bottom: 3px;
         }
-        .sc-metric-l {
+        .rsc-metric-l {
           font-size: 9px;
-          color: #999;
-          margin-top: 1px;
+          color: #aaa;
           line-height: 1.3;
         }
 
-        /* DOWNLOAD BAR */
-        .dl-bar {
+        /* ── DOWNLOAD ACTION BAR ── */
+        .rs-action {
+          background: #fff;
+          border: 1.5px solid #e0dcd6;
+          border-radius: 12px;
+          padding: 16px 20px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background: #fff;
-          border: 1.5px solid #e0ddd8;
-          border-radius: 10px;
-          padding: 14px 20px;
-          margin-bottom: 24px;
           gap: 16px;
+          margin-bottom: 32px;
           flex-wrap: wrap;
         }
-        .dl-info { }
-        .dl-label {
+        .rs-action-left { display: flex; align-items: center; gap: 14px; }
+        .rs-action-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 9px;
+          background: var(--rs-accent-bg);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          flex-shrink: 0;
+        }
+        .rs-action-label {
           font-family: 'JetBrains Mono', monospace;
           font-size: 9px;
           font-weight: 700;
           letter-spacing: .14em;
           text-transform: uppercase;
-          color: #999;
+          color: #bbb;
           margin-bottom: 3px;
         }
-        .dl-filename {
+        .rs-action-filename {
           font-family: 'JetBrains Mono', monospace;
           font-size: 12px;
           font-weight: 600;
           color: #333;
         }
-        .dl-btn {
-          display: flex;
+        .rs-dl-btn {
+          display: inline-flex;
           align-items: center;
-          gap: 8px;
-          background: var(--acc);
+          gap: 9px;
+          background: var(--rs-accent);
           color: #fff;
           border: none;
-          padding: 11px 22px;
-          border-radius: 7px;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-family: 'Syne', sans-serif;
+          font-size: 13px;
           font-weight: 700;
-          letter-spacing: .14em;
-          text-transform: uppercase;
           cursor: pointer;
-          transition: all .18s;
+          transition: filter .15s, transform .15s, box-shadow .15s;
           white-space: nowrap;
           flex-shrink: 0;
+          letter-spacing: -.01em;
         }
-        .dl-btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
-        .dl-btn:active { transform: translateY(0); }
+        .rs-dl-btn:hover {
+          filter: brightness(1.08);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 20px rgba(0,0,0,.14);
+        }
+        .rs-dl-btn:active { transform: translateY(0); }
 
-        /* RESUME PREVIEW LABEL */
-        .preview-label {
+        /* ── PREVIEW DIVIDER ── */
+        .rs-preview-divider {
           display: flex;
           align-items: center;
-          gap: 10px;
-          margin-bottom: 10px;
+          gap: 14px;
+          margin-bottom: 16px;
         }
-        .preview-rule { flex: 1; height: 1px; background: #d8d5d0; }
-        .preview-text {
+        .rs-pd-rule { flex: 1; height: 1px; background: #dcd8d2; }
+        .rs-pd-label {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
+          font-size: 8.5px;
           font-weight: 700;
-          letter-spacing: .18em;
+          letter-spacing: .2em;
           text-transform: uppercase;
-          color: #bbb;
+          color: #c0bbb4;
         }
 
+        /* ── PRINT ── */
         @media print {
-          .sel-ui { display: none !important; }
+          .rs-wrap > *:not(.rd-shell-outer) { display: none !important; }
+          html, body { background: #fff !important; }
         }
       `}</style>
 
-      {/* ── SELECTOR UI ── */}
-      <div className="sel-ui">
-        <div className="sel-eyebrow">Resume · Select & Download</div>
-        <h1 className="sel-heading">Choose your version</h1>
-        <p className="sel-sub">Both are tailored. Pick the one that matches the role, then download as PDF.</p>
+      <div className="rs-wrap">
 
-        {/* VARIANT CARDS */}
-        <div className="sel-cards">
-          {VARIANTS.map(v => (
-            <div
-              key={v.id}
-              className={`sel-card${selected === v.id ? " active" : ""}`}
-              style={{ "--acc": v.accent, "--acc-dim": v.accentDim } as React.CSSProperties}
-              onClick={() => setSelected(v.id)}
-            >
-              <div className="sc-top">
-                <div className="sc-label">{v.label}</div>
-                <div className="sc-check">{selected === v.id && "✓"}</div>
+        {/* ── STICKY HEADER ── */}
+        <div className="rs-header">
+          <div className="rs-header-left">
+            <a href="/" className="rs-back">← Portfolio</a>
+            <span className="rs-breadcrumb">
+              <span className="rs-breadcrumb-sep">/</span>
+              <span className="rs-breadcrumb-cur">Resume</span>
+            </span>
+          </div>
+        </div>
+
+        {/* ── SELECTOR ── */}
+        <div className="rs-content">
+          <div className="rs-heading-row">
+            <div className="rs-eyebrow">Select & Download</div>
+            <h1 className="rs-heading">Choose your version</h1>
+            <p className="rs-subhead">Two tailored variants. Pick the one that fits the role, preview it live, then download as PDF.</p>
+          </div>
+
+          {/* CARDS */}
+          <div className="rs-cards">
+            {VARIANTS.map(v => (
+              <div
+                key={v.id}
+                className={`rs-card${selected === v.id ? " active" : ""}`}
+                style={{ "--rs-accent": v.accent, "--rs-accent-bg": v.accentBg, "--rs-accent-border": v.accentBorder } as React.CSSProperties}
+                onClick={() => setSelected(v.id)}
+              >
+                <div className="rsc-top">
+                  <div className="rsc-label">{v.label}</div>
+                  <div className="rsc-radio"><div className="rsc-radio-dot" /></div>
+                </div>
+                <div className="rsc-tag">{v.tag}</div>
+                <div className="rsc-sub">{v.subtitle}</div>
+                <div className="rsc-firms">
+                  {v.targets.map(t => <span key={t} className="rsc-firm">{t}</span>)}
+                </div>
+                <div className="rsc-metrics">
+                  {v.highlights.map((h, i) => (
+                    <div key={i} className="rsc-metric">
+                      <div className="rsc-metric-n">{h.metric}</div>
+                      <div className="rsc-metric-l">{h.label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="sc-tag">{v.tag}</div>
-              <div className="sc-sub">{v.subtitle}</div>
-              <div className="sc-targets">
-                {v.targets.map(t => (
-                  <span key={t} className="sc-target">{t}</span>
-                ))}
-              </div>
-              <div className="sc-metrics">
-                {v.highlights.map((h, i) => (
-                  <div key={i} className="sc-metric">
-                    <div className="sc-metric-n">{h.metric}</div>
-                    <div className="sc-metric-l">{h.label}</div>
-                  </div>
-                ))}
+            ))}
+          </div>
+
+          {/* DOWNLOAD ACTION BAR */}
+          <div
+            className="rs-action"
+            style={{ "--rs-accent": active.accent, "--rs-accent-bg": active.accentBg } as React.CSSProperties}
+          >
+            <div className="rs-action-left">
+              <div className="rs-action-icon">📄</div>
+              <div>
+                <div className="rs-action-label">Ready to save</div>
+                <div className="rs-action-filename">{active.filename}.pdf</div>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* DOWNLOAD BAR */}
-        <div
-          className="dl-bar"
-          style={{ "--acc": active.accent, "--acc-dim": active.accentDim } as React.CSSProperties}
-        >
-          <div className="dl-info">
-            <div className="dl-label">Ready to save</div>
-            <div className="dl-filename">{active.filename}.pdf</div>
+            <button className="rs-dl-btn" onClick={handleDownload}>
+              ↓ Download PDF
+            </button>
           </div>
-          <button className="dl-btn" onClick={handleDownload}>
-            ⬇ &nbsp;Download PDF
-          </button>
+
+          {/* PREVIEW LABEL */}
+          <div className="rs-preview-divider">
+            <div className="rs-pd-rule" />
+            <span className="rs-pd-label">Live Preview</span>
+            <div className="rs-pd-rule" />
+          </div>
         </div>
 
-        {/* PREVIEW LABEL */}
-        <div className="preview-label">
-          <div className="preview-rule" />
-          <span className="preview-text">Live Preview ↓</span>
-          <div className="preview-rule" />
-        </div>
+        {/* ── LIVE RESUME PREVIEW ── */}
+        <ResumeDocument
+          variant={selected}
+          pdfFilename={active.filename}
+          hideSaveBtn
+        />
+
       </div>
-
-      {/* ── RESUME (live preview + prints) ── */}
-      <ResumeDocument
-        variant={selected}
-        pdfFilename={active.filename}
-        hideSaveBtn
-      />
     </>
   );
 }
