@@ -309,21 +309,22 @@ export default function ConsultingPage() {
         .cp-case-hd:hover { background:#080808; }
 
         .cp-case-lft { display:flex; align-items:center; gap:16px; flex:1; min-width:0; }
-        .cp-ctag { font-size:9.5px; font-weight:600; letter-spacing:.16em; padding:3px 10px; white-space:nowrap; border:1px solid rgba(255,255,255,0.1); color:#5a5a5a; background:transparent; font-family:'JetBrains Mono',monospace; flex-shrink:0; }
+        .cp-ctag { font-size:9px; font-weight:600; letter-spacing:.16em; padding:3px 10px; white-space:nowrap; border:1px solid rgba(255,255,255,0.08); color:#2e2e2e; background:transparent; font-family:'JetBrains Mono',monospace; flex-shrink:0; text-transform:uppercase; }
         .cp-cname { font-size:15px; font-weight:700; color:#f0f0f0; font-family:'Syne',sans-serif; letter-spacing:-.01em; }
         .cp-csec  { font-size:11.5px; color:#5a5a5a; margin-top:3px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
-        /* ── pill CTA — always visible ── */
-        .cp-cta-pill { display:inline-flex; align-items:center; gap:7px; flex-shrink:0; font-size:11px; font-weight:600; letter-spacing:.1em; font-family:'JetBrains Mono',monospace; white-space:nowrap; padding:8px 16px; border:1px solid rgba(255,255,255,0.1); color:#c8c4bc; background:transparent; cursor:pointer; transition:border-color .15s, color .15s, background .15s; }
-        .cp-cta-pill:hover { border-color:${T}; color:${T}; background:rgba(57,217,180,.04); }
-        .cp-cta-pill.open  { border-color:${T}; color:${T}; background:rgba(57,217,180,.04); }
-        .cp-cta-pill svg   { transition:transform .28s cubic-bezier(.4,0,.2,1); }
-        .cp-cta-pill.open svg { transform:rotate(180deg); }
+        /* ── compact metric chips ── */
+        .cp-snap { display:flex; gap:20px; flex-shrink:0; align-items:center; }
+        .cp-snap-item { display:flex; align-items:baseline; gap:5px; }
+        .cp-snap-val  { font-size:12px; font-weight:700; color:#f0f0f0; font-family:'JetBrains Mono',monospace; letter-spacing:-.01em; }
+        .cp-snap-lbl  { font-size:10px; color:#2e2e2e; font-family:'Space Grotesk',sans-serif; }
 
-        .cp-snap { display:flex; gap:28px; flex-shrink:0; }
-        .cp-snap-item { text-align:right; }
-        .cp-snap-val  { font-size:13px; font-weight:800; font-family:'Syne',sans-serif; }
-        .cp-snap-lbl  { font-size:10px; color:#5a5a5a; font-family:'Space Grotesk',sans-serif; margin-top:2px; }
+        /* ── pill CTA — always visible ── */
+        .cp-cta-pill { display:inline-flex; align-items:center; gap:7px; flex-shrink:0; font-size:10.5px; font-weight:600; letter-spacing:.08em; font-family:'Space Grotesk',sans-serif; white-space:nowrap; padding:8px 18px; border:1px solid rgba(255,255,255,0.1); color:#c8c4bc; background:transparent; cursor:pointer; transition:border-color .15s, color .15s, background .15s; }
+        .cp-cta-pill:hover { border-color:rgba(255,255,255,0.3); color:#f0f0f0; }
+        .cp-cta-pill.open  { border-color:rgba(255,255,255,0.2); color:#f0f0f0; }
+        .cp-cta-pill svg   { transition:transform .28s cubic-bezier(.4,0,.2,1); opacity:.5; }
+        .cp-cta-pill.open svg { transform:rotate(180deg); }
 
         /* ── case body ── */
         .cp-cbody { border-top:1px solid rgba(255,255,255,0.06); padding:32px 28px; animation:fade-up .25s cubic-bezier(.4,0,.2,1); }
@@ -357,7 +358,7 @@ export default function ConsultingPage() {
         .cp-mets { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.06); }
         @media(max-width:680px){ .cp-mets { grid-template-columns:1fr 1fr; } }
         .cp-met { background:#000; padding:20px; text-align:center; }
-        .cp-met-v { font-size:16px; font-weight:800; margin-bottom:5px; font-family:'Syne',sans-serif; }
+        .cp-met-v { font-size:14px; font-weight:700; margin-bottom:5px; font-family:'JetBrains Mono',monospace; color:#f0f0f0; letter-spacing:-.01em; }
         .cp-met-l { font-size:10px; color:#5a5a5a; font-family:'Space Grotesk',sans-serif; }
         .cp-stack { margin-top:20px; font-size:10.5px; font-family:'JetBrains Mono',monospace; color:#2e2e2e; padding-top:16px; border-top:1px solid rgba(255,255,255,0.04); }
         .cp-stack strong { color:#5a5a5a; }
@@ -448,9 +449,7 @@ export default function ConsultingPage() {
                 <div key={c.id} className={`cp-case${isOpen ? " is-open" : ""}`} style={isOpen ? { borderLeftColor: "rgba(57,217,180,.5)" } : undefined}>
                   <div className="cp-case-hd" onClick={() => setOpen(isOpen ? null : c.id)}>
                     <div className="cp-case-lft">
-                      <span className="cp-ctag" style={{ color:c.accent, borderColor:c.accent+"40", background:c.accent+"10" }}>
-                        {c.tag}
-                      </span>
+                      <span className="cp-ctag">{c.tag}</span>
                       <div>
                         <p className="cp-cname">{c.client}</p>
                         <p className="cp-csec">{c.sector} · {c.country}</p>
@@ -460,8 +459,8 @@ export default function ConsultingPage() {
                       <div className="cp-snap">
                         {c.metrics.slice(0,2).map(m => (
                           <div key={m.lbl} className="cp-snap-item">
-                            <div className="cp-snap-val" style={{ color:"#f0f0f0" }}>{m.val}</div>
-                            <div className="cp-snap-lbl">{m.lbl}</div>
+                            <span className="cp-snap-val">{m.val}</span>
+                            <span className="cp-snap-lbl">{m.lbl}</span>
                           </div>
                         ))}
                       </div>
