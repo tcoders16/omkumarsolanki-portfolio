@@ -16,8 +16,8 @@ export default function Home() {
     <>
       <Nav />
       <Hero />
-      <Work />
       <CapabilityStack />
+      <Work />
       <Agentic />
       <MathShowcase />
       <Story />

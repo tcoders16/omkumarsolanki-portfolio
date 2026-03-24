@@ -185,7 +185,7 @@ export default function CapabilityStack() {
     if (!el) return;
     const ob = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { setVisible(true); ob.disconnect(); } },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: "0px 0px -40px 0px" }
     );
     ob.observe(el);
     return () => ob.disconnect();
