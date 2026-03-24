@@ -1,465 +1,381 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import Nav from "@/components/Nav";
 
-/* ─────────────────────────────────────────────
-   CASE STUDIES — real problems, real outcomes
-───────────────────────────────────────────── */
-const CASES = [
+/* ══════════════════════════════════════════════════════
+   TYPES
+══════════════════════════════════════════════════════ */
+const AC = "#39d9b4";
+const AM = "#f59e0b";
+const VI = "#8b5cf6";
+const RD = "#dc2626";
+const BL = "#3b82f6";
+
+/* ══════════════════════════════════════════════════════
+   POC BRIDGES — the actual technical decisions made
+══════════════════════════════════════════════════════ */
+const BRIDGES = [
   {
     id: "resso",
     client: "Resso.ai",
-    sector: "Edtech / HR Tech",
-    accent: "#39d9b4",
-    bg: "rgba(57,217,180,0.04)",
-    border: "rgba(57,217,180,0.15)",
-    icon: "R",
-    status: "Live in production",
-    statusColor: "#39d9b4",
-    problem: {
-      headline: "AI call agents that forgot everything mid-conversation",
-      body: "Edtech clients were running AI interview and coaching calls — but the agent lost context every few turns, kept restarting questions from scratch, and students dropped off. Retention was collapsing. Clients threatened to churn.",
-    },
-    discovery: "Spent 2-3 days embedded with the edtech clients before writing a single line of code. Mapped exact conversation breakpoints. Found the root issue: no stateful context layer between turns — each API call was cold. The agent had no memory of what it already knew.",
-    built: [
-      "Stateful session architecture: conversation history compressed and injected per-turn via sliding context window",
-      "Per-persona model routing: different LLM configurations per interview type (technical, behavioural, coaching)",
-      "Real-time confidence scoring: if agent certainty drops below threshold, it gracefully redirects instead of hallucinating",
-      "MLOps dashboard: accuracy, latency, context retention, completion rate — tracked daily per client",
-    ],
+    sector: "Edtech · AI Interview Platform",
+    accent: AC,
+    req: "Client requirement: AI agents must remember everything said earlier in the conversation — or students drop off.",
+    diagnosis: "Root cause: Every LLM call was cold. No session layer. Each API call received zero history. The agent was architecturally amnesiac.",
+    before: `# BEFORE — cold call every turn
+def get_ai_response(user_message: str) -> str:
+    response = openai.chat.completions.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user",   "content": user_message},  # ← no history
+        ]
+    )
+    return response.choices[0].message.content
+# Result: agent asks "what's your name?" on turn 7
+# Context retention: 72%  |  Student drop-off: HIGH`,
+    after: `# AFTER — stateful sliding window with Redis
+def get_ai_response(session_id: str, user_message: str) -> str:
+    history    = redis.get(f"session:{session_id}") or []
+    compressed = compress_turns(history, max_tokens=3_000)
+
+    messages = [
+        {"role": "system", "content": PERSONA_CONFIGS[session_id]},
+        *compressed,                    # ← full history, compressed
+        {"role": "user", "content": user_message},
+    ]
+    response = openai.chat.completions.create(
+        model="gpt-4", messages=messages
+    )
+    redis.set(f"session:{session_id}", append(history, response))
+    return response.choices[0].message.content
+# Context retention: 98%  |  Hallucination: 14% → 3.8%`,
     outcomes: [
-      { before: "72%", after: "98%", label: "Context retention across turns" },
-      { before: "14%", after: "3.8%", label: "Hallucination rate" },
-      { before: "1", after: "5", label: "AI personas - client expanded" },
-      { before: "Churn risk", after: "Renewed + expanded", label: "Client contract" },
+      { n: "72% → 98%", l: "Context retention" },
+      { n: "14% → 3.8%", l: "Hallucination rate" },
+      { n: "1 → 5", l: "Personas (client expanded)" },
+      { n: "Renewed", l: "Contract + expanded" },
     ],
-    quote: "They renewed the contract and expanded from 1 AI persona to 5 within 3 months of go-live.",
-    tags: ["Stateful AI", "Context Memory", "MLOps", "Real-time Inference", "WebRTC", "PyTorch"],
   },
   {
     id: "lawline",
-    client: "Lawline.tech",
-    sector: "Legal AI / Enterprise · For Rogers",
-    accent: "#dc2626",
-    bg: "rgba(220,38,38,0.04)",
-    border: "rgba(220,38,38,0.15)",
-    icon: "L",
-    status: "Live · $1M Rogers conversation",
-    statusColor: "#dc2626",
-    problem: {
-      headline: "Attorneys needed AI but could not send one byte to the cloud",
-      body: "Attorney-client privilege is not a preference — it is a legal obligation. Any cloud AI model meant one accidental data egress could end careers and disbar firms. Every existing tool was a non-starter. The privacy constraint eliminated all conventional options.",
-    },
-    discovery: "Interviewed 4 attorneys before speccing anything. Understood exactly what they needed: fast legal research, cited sources, case law retrieval — but with a hard guarantee that no data ever leaves the building. The architecture had to be the proof, not a promise.",
-    built: [
-      "Fully air-gapped RAG stack: GGUF-quantized LLM running on 16GB RAM, zero external API calls",
-      "HNSW vector store over Canadian legal corpora — 200K+ documents, sub-1s retrieval",
-      "BGE cross-encoder reranker: top-12 candidates reranked to top-4 before LLM sees them",
-      "Confidence-gated output: low-confidence answers routed to human review, not surfaced to attorneys",
-      "Zero-packet-egress proof: showed attorneys real-time network monitor during a live query",
-    ],
+    client: "Lawline.tech (Rogers)",
+    sector: "Legal AI · Air-gapped · $1M conversation",
+    accent: RD,
+    req: "Client requirement: AI for legal research — but attorney-client privilege means zero bytes can leave our network. No cloud. No API. No exceptions.",
+    diagnosis: "Root cause: Every AI option assumed cloud egress. This is not a technical constraint — it is an architecture choice. Build the entire stack local.",
+    before: `# BEFORE — cloud dependency (every existing solution)
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": legal_query}]
+)
+# Problem: your legal query just left your building.
+# Attorney-client privilege: BROKEN.
+# Viable for law firms: NO.
+
+# Every SaaS legal AI tool had this same problem.
+# The constraint ruled out 100% of existing products.`,
+    after: `# AFTER — fully air-gapped local stack
+from llama_cpp import Llama
+from hnswlib   import Index
+
+# Local GGUF model — runs on 16GB RAM, 0 external calls
+llm    = Llama("models/mistral-7b-instruct.Q4_K_M.gguf",
+               n_ctx=4096, n_gpu_layers=35)
+index  = Index(space="cosine", dim=384)
+index.load_index("indexes/canadian_legal_200k.bin")
+
+def query(q: str) -> str:
+    emb     = embed_local(q)               # local model, no API
+    labels, _ = index.knn_query(emb, k=12)
+    chunks  = rerank(q, [docs[i] for i in labels[0]])[:4]
+    context = "\\n---\\n".join(chunks)
+    return llm(f"[INST]{context}\\n\\nQ: {q}[/INST]")["choices"][0]["text"]
+# Network packets during query: 0
+# Hallucination rate: <4%  |  Retrieval latency: <1s`,
     outcomes: [
-      { before: "Cloud AI", after: "Air-gapped local", label: "Privacy guarantee" },
-      { before: "Impossible", after: "Live daily", label: "AI legal research" },
-      { before: "14%", after: "Sub-4%", label: "Hallucination rate" },
-      { before: "Startup", after: "$1M conversation", label: "Rogers President interest" },
+      { n: "0 bytes", l: "Data egress per query" },
+      { n: "<4%", l: "Hallucination rate" },
+      { n: "<1s", l: "Retrieval over 200K docs" },
+      { n: "$1M", l: "Rogers President conversation" },
     ],
-    quote: "Attorneys started demoing the zero-outbound-packets screen to their law society contacts. The architecture became the sales pitch.",
-    tags: ["Air-gapped RAG", "Local LLM", "GGUF", "HNSW", "Legal AI", "Zero Data Egress"],
   },
   {
     id: "corol",
     client: "Corol / UHPC Research",
-    sector: "Structural Engineering / Materials Science",
-    accent: "#f59e0b",
-    bg: "rgba(245,158,11,0.04)",
-    border: "rgba(245,158,11,0.15)",
-    icon: "C",
-    status: "12 engineers using daily",
-    statusColor: "#f59e0b",
-    problem: {
-      headline: "UHPC testing took weeks — engineers could only try a few mixes",
-      body: "Ultra-High Performance Concrete research required physical lab tests for every mix variation. Each test: hours of preparation, curing time, measurement. The team could run maybe 5-10 experiments per week when the problem space had hundreds of combinations to explore.",
-    },
-    discovery: "Shadowed engineers in the lab for 3 days before touching a dataset. Watched every step of the mix design process — learned what silica fume dosage, W/C ratio, and fibre type mean to a structural engineer. Built domain intuition before building any model.",
-    built: [
-      "SHAP-explainable XGBoost ensemble: R² = 0.89 on 200-row dataset via transfer learning",
-      "Feature engineering: W/C ratio, silica fume %, fibre dosage, curing age — all domain-grounded",
-      "SHAP attribution per mix: engineers see exact phi-values per ingredient, not just a prediction",
-      "Formulation screener: scan 100+ mixes computationally before a single gram of concrete is poured",
-    ],
+    sector: "Materials Engineering · Structural ML",
+    accent: AM,
+    req: "Client requirement: We need to test hundreds of concrete mix designs but each physical test takes days. We can only run 5-10 per week.",
+    diagnosis: "Root cause: Physical tests are the wrong information source. The relationships between mix constituents and strength are learnable. Build a predictor — not a faster test.",
+    before: `# BEFORE — physical lab testing (the client's workflow)
+# Week 1: mix design → pour → cure 28 days → crush → record
+# Week 5: adjust W/C ratio → repeat
+# Week 9: adjust silica fume → repeat
+# ...
+# Throughput: ~5-10 experiments per week
+# Time to screen 100 mixes: ~20 weeks
+# Cost: materials + lab time + engineer hours
+
+# The bottleneck is NOT slowness — it is the information model.
+# Physical tests are the last resort. They should be confirmations.`,
+    after: `import xgboost as xgb, shap, pandas as pd
+
+# Features grounded in structural engineering domain
+FEATURES = ["w_c_ratio","silica_fume_pct","fibre_kg_m3",
+            "curing_days","superplasticiser","fly_ash_pct"]
+
+model = xgb.XGBRegressor(n_estimators=400, max_depth=5,
+                          subsample=0.8, colsample_bytree=0.7)
+model.fit(X_train, y_train)          # R² = 0.89 on 200-row dataset
+
+# SHAP: show engineers WHY, not just WHAT
+explainer = shap.TreeExplainer(model)
+shap_vals = explainer.shap_values(X_test)
+# Output: φ(w_c_ratio)=+12.4 MPa, φ(silica_fume)=+8.7 MPa ...
+
+# Screener: rank 200 candidate mixes in 0.3 seconds
+predictions = model.predict(candidate_mixes_df)
+top_10 = candidate_mixes_df.iloc[predictions.argsort()[-10:]]
+# Lab tests only needed for top 10. Not 200.`,
     outcomes: [
-      { before: "Hours", after: "2 seconds", label: "Per strength prediction" },
-      { before: "5-10/week", after: "100s/afternoon", label: "Mixes screened" },
-      { before: "0", after: "12", label: "Engineers using it daily" },
-      { before: "Skeptical", after: "Demoing to peers", label: "Scientists' reaction" },
+      { n: "2 sec", l: "Per strength prediction" },
+      { n: "Weeks → afternoon", l: "To screen 100 mixes" },
+      { n: "R² 0.89", l: "On only 200 training rows" },
+      { n: "12", l: "Engineers using daily" },
     ],
-    quote: "Scientists who started as skeptics ended up demoing the tool to their own colleagues. They trusted it because it matched what they already knew.",
-    tags: ["SHAP Explainability", "XGBoost", "Transfer Learning", "Feature Engineering", "UHPC", "Materials ML"],
   },
   {
     id: "ttc",
-    client: "Lost and Found",
-    sector: "Transit / Public Infrastructure · TTC",
-    accent: "#3b82f6",
-    bg: "rgba(59,130,246,0.04)",
-    border: "rgba(59,130,246,0.15)",
-    icon: "T",
-    status: "Pitching TTC Director May 2026",
-    statusColor: "#f59e0b",
-    problem: {
-      headline: "1.7 million daily riders. Lost items tracked on paper and phone calls.",
-      body: "Toronto Transit Commission handles 1.7M passengers every day. When riders lose belongings, staff log them manually, match by eye, and call people back on paper trails. Recovery rates are low. Turnaround is slow. No AI, no search, no system.",
-    },
-    discovery: "Shadowed TTC staff at Union Station for a full day before writing a line of code. Watched how found items get logged, how staff search for matches, and where the bottlenecks were. Understood the operational constraints: spotty WiFi, aging hardware, hundreds of items daily.",
-    built: [
-      "AI matching engine: cosine similarity over description embeddings links rider claims to found items",
-      "Staff dashboard: fast, mobile-optimised, works on existing TTC hardware with no new infra",
-      "Rider claim portal: mobile-first, SMS-based status updates, QR-tagged items",
-      "Confidence-gated routing: high-confidence match triggers immediate SMS; low-confidence queues for staff review",
-      "Full audit trail: every item, every decision, every notification — logged and queryable",
-    ],
+    client: "Lost and Found (TTC)",
+    sector: "Transit · 1.7M daily riders · Pitch May 2026",
+    accent: BL,
+    req: "Client requirement: TTC staff spend hours matching lost items to claims by hand. 1.7M riders. Paper logs. Phone calls. Recovery rates are low.",
+    diagnosis: "Root cause: Matching is a semantic similarity problem disguised as an admin problem. Descriptions contain all the information needed — they just need a vector space to live in.",
+    before: `# BEFORE — current TTC workflow
+# Staff process:
+# 1. Rider calls in: "I lost a blue Nike bag on Line 1"
+# 2. Staff manually read through paper log of found items
+# 3. Staff call back if they think something matches
+# 4. Rider comes in to check — often wrong item
+#
+# Problems:
+# - No searchability              → staff read every entry by eye
+# - No ranking                    → 1 match attempt, then dropped
+# - No async notification         → rider must follow up manually
+# - No audit trail                → no record of attempts or outcomes
+# Scale: hundreds of items daily, 1.7M riders, 2 staff`,
+    after: `import pgvector, fastapi, sentence_transformers as st
+
+encoder = st.SentenceTransformer("all-MiniLM-L6-v2")
+
+# On item intake: encode and store
+@app.post("/staff/found-item")
+def log_item(item: FoundItem):
+    embedding = encoder.encode(item.description).tolist()
+    db.execute("""
+        INSERT INTO found_items (description, location, found_at, embedding)
+        VALUES (%s,%s,%s,%s::vector)
+    """, [item.description, item.location, item.found_at, embedding])
+
+# On claim: rank all items by cosine similarity
+@app.post("/rider/claim")
+def submit_claim(claim: Claim):
+    q_emb = encoder.encode(claim.description).tolist()
+    matches = db.execute("""
+        SELECT *, 1-(embedding<=>%s::vector) AS score
+        FROM found_items ORDER BY score DESC LIMIT 5
+    """, [q_emb]).fetchall()
+
+    for m in matches:
+        if m.score > 0.82:      # high confidence → auto-notify
+            sms.send(claim.phone, f"We may have your item: {m.description}")
+        elif m.score > 0.60:    # low confidence → staff queue
+            dashboard.add_review(claim, m)
+# Resolution time: days → hours  |  Full audit trail: yes`,
     outcomes: [
-      { before: "Paper + phone", after: "AI-matched", label: "Item recovery process" },
-      { before: "Days", after: "Hours", label: "Claim resolution time" },
-      { before: "0", after: "Full system", label: "Digital infrastructure" },
-      { before: "Capstone", after: "Director pitch", label: "May 2026 stakeholder" },
+      { n: "Hours", l: "Resolution (was: days)" },
+      { n: "0.82 threshold", l: "Auto-notify confidence gate" },
+      { n: "Full audit", l: "Every decision logged" },
+      { n: "May 2026", l: "TTC Director pitch" },
     ],
-    quote: "This is production-ready architecture built to hand off to TTC engineering. Not a school demo. A deployable proposal.",
-    tags: ["Vector Similarity", "Next.js", "FastAPI", "PostgreSQL", "pgvector", "SMS", "AI Matching"],
   },
 ];
 
-/* ─────────────────────────────────────────────
-   APPROACH STEPS
-───────────────────────────────────────────── */
-const APPROACH = [
+/* ══════════════════════════════════════════════════════
+   WHAT BUSINESSES ACTUALLY BUY
+══════════════════════════════════════════════════════ */
+const VALUE_PROPS = [
   {
-    num: "01",
-    title: "Discover",
-    sub: "Before any code",
-    color: "#39d9b4",
-    desc: "I spend 1-3 days in your operation before speccing anything. Interviews with users, observation of workflows, mapping where time and money actually go. Most projects fail because engineers skip this step.",
-    proof: "Shadowed TTC staff, interviewed 4 attorneys, embedded with edtech clients — before writing a line of code on any of them.",
+    icon: "01",
+    color: AC,
+    title: "You stop losing customers to AI failures",
+    real: "Resso: edtech clients renewed and expanded from 1 to 5 AI personas. The alternative was churn.",
+    technical: "Stateful session layer + confidence-gated output routing",
   },
   {
-    num: "02",
-    title: "Diagnose",
-    sub: "Find the real problem",
-    color: "#f59e0b",
-    desc: "The stated problem is rarely the actual problem. I translate vague business pain ('our AI is bad') into precise technical root causes ('no stateful context layer, cold API calls per turn'). That diagnosis is the most valuable deliverable.",
-    proof: "Resso's context retention problem looked like a model quality issue. It was actually a missing session architecture. Two different solutions with very different costs.",
+    icon: "02",
+    color: RD,
+    title: "You unlock markets that cloud AI cannot touch",
+    real: "Lawline: law firms cannot use any cloud AI. Air-gapped local LLM opened a $1M enterprise conversation with Rogers.",
+    technical: "GGUF quantized LLM + HNSW local vector store — 0 external API calls",
   },
   {
-    num: "03",
-    title: "Architect",
-    sub: "Design before building",
-    color: "#8b5cf6",
-    desc: "Architecture decisions made in day one cost nothing to change. The same decision made at launch costs everything. I produce a concrete technical proposal — stack, data flow, failure modes, cost model — before a single line is written.",
-    proof: "Lawline's air-gapped architecture was designed entirely before implementation. The zero-egress proof became the sales pitch to Rogers.",
+    icon: "03",
+    color: AM,
+    title: "You make decisions in hours instead of weeks",
+    real: "Corol: UHPC researchers were running 5 experiments per week. Now they screen 200 mixes in one afternoon before touching the lab.",
+    technical: "XGBoost ensemble + SHAP attribution on 200-row domain dataset",
   },
   {
-    num: "04",
-    title: "Build",
-    sub: "Production, not prototypes",
-    color: "#3b82f6",
-    desc: "I build systems designed to be handed to engineering teams, not demos designed to impress in a meeting. Every component is tested, documented, and deployed in real infrastructure. I own every layer — model, API, infra, dashboard.",
-    proof: "Resso: WebRTC ingestion, speaker diarization, NLP pipeline, hire scorer, ONNX export, MLOps dashboard — entire stack, one engineer.",
-  },
-  {
-    num: "05",
-    title: "Measure",
-    sub: "Outcomes, not activity",
-    color: "#39d9b4",
-    desc: "Every engagement ships with measurable baselines and target metrics. I track what changed, not what was built. Latency before and after. Accuracy before and after. Retention before and after.",
-    proof: "Resso: context retention 72% to 98%. Hallucination 14% to 3.8%. Corol: lab cycles from weeks to one afternoon.",
+    icon: "04",
+    color: BL,
+    title: "You replace manual triage with intelligent routing",
+    real: "TTC: staff read paper logs and called riders back manually. Now high-confidence matches trigger automatic SMS. Staff only see items that genuinely need human judgement.",
+    technical: "pgvector cosine similarity + sigmoid confidence threshold gate",
   },
 ];
 
-/* ─────────────────────────────────────────────
-   BUSINESS vs TECHNICAL TRANSLATION
-───────────────────────────────────────────── */
-const TRANSLATIONS = [
-  {
-    business: "Our AI keeps giving wrong answers to customers",
-    diagnosis: "No confidence gating — model outputs surfaced regardless of certainty score",
-    technical: "Add sigmoid gate P(action) = sigma(z) > threshold before any output reaches user. Route low-confidence outputs to human review queue.",
-    outcome: "Hallucination rate: 14% to 3.8%",
-  },
-  {
-    business: "Our AI forgets what we told it earlier in the conversation",
-    diagnosis: "Stateless API calls — no session layer, each turn is a cold start",
-    technical: "Sliding context window with conversation compression. Redis session store keyed by conversation ID. Inject compressed history into every system prompt.",
-    outcome: "Context retention: 72% to 98%",
-  },
-  {
-    business: "We can't use any AI because of our data privacy rules",
-    diagnosis: "All AI options require cloud egress — not a technical limit, an architecture choice",
-    technical: "GGUF-quantized local LLM on 16GB RAM. HNSW vector store on-premise. Zero external API calls. Zero data egress by design.",
-    outcome: "Attorney-client privilege maintained. $1M enterprise conversation opened.",
-  },
-  {
-    business: "Our lab testing is too slow — we can't run enough experiments",
-    diagnosis: "Physical bottleneck masking an information problem — predictions, not more tests",
-    technical: "XGBoost ensemble + SHAP attribution on domain-informed features. Transfer learning to compensate for small dataset. Screener UI for rapid formulation comparison.",
-    outcome: "100s of mixes screened in one afternoon vs. weeks in the lab.",
-  },
-];
-
-/* ─────────────────────────────────────────────
-   WHAT I BRING (differentiators)
-───────────────────────────────────────────── */
-const DIFFERENTIATORS = [
-  {
-    icon: "◈",
-    title: "I talk to your users first",
-    body: "Every project I've delivered started with field observation, not a requirements doc. The real problem is always one layer deeper than the stated problem.",
-    color: "#39d9b4",
-  },
-  {
-    icon: "◈",
-    title: "I own every layer",
-    body: "Model, API, infrastructure, dashboard, MLOps. No handoffs between five contractors. One person who understands how all the layers affect each other.",
-    color: "#f59e0b",
-  },
-  {
-    icon: "◈",
-    title: "I measure outcomes, not activity",
-    body: "Every engagement ships with before/after metrics. Latency. Accuracy. Retention. Cost per outcome. You always know exactly what changed and by how much.",
-    color: "#8b5cf6",
-  },
-  {
-    icon: "◈",
-    title: "I explain it so your team understands",
-    body: "SHAP attributions so engineers see why a model is making a prediction. Architecture diagrams for CTO sign-off. Plain English summaries for the boardroom. All three, same engagement.",
-    color: "#3b82f6",
-  },
-  {
-    icon: "◈",
-    title: "I build for handoff",
-    body: "Every system I deliver is documented, tested, and designed so your internal engineering team can take it over. No black boxes. No lock-in.",
-    color: "#39d9b4",
-  },
-  {
-    icon: "◈",
-    title: "I've done this at the President of Rogers level",
-    body: "Active $1M investment conversation with the President of Rogers. TTC Director stakeholder. I operate at the level where business decisions get made.",
-    color: "#dc2626",
-  },
-];
-
-/* ─────────────────────────────────────────────
-   OUTCOME CHIP
-───────────────────────────────────────────── */
-function OutcomeChip({ before, after, label }: { before: string; after: string; label: string }) {
+/* ══════════════════════════════════════════════════════
+   POC CARD
+══════════════════════════════════════════════════════ */
+function PocCard({ b, open, onToggle }: { b: typeof BRIDGES[0]; open: boolean; onToggle: () => void }) {
   return (
     <div style={{
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.07)",
-      borderRadius: 8,
-      padding: "12px 14px",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", color: "#666", textDecoration: "line-through" }}>{before}</span>
-        <span style={{ color: "#444", fontSize: "0.5rem" }}>→</span>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", fontWeight: 700, color: "#39d9b4" }}>{after}</span>
-      </div>
-      <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: "#555", letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   CASE STUDY CARD
-───────────────────────────────────────────── */
-function CaseCard({ c, open, onToggle }: { c: typeof CASES[0]; open: boolean; onToggle: () => void }) {
-  return (
-    <div style={{
-      background: open ? c.bg : "rgba(255,255,255,0.01)",
-      border: `1px solid ${open ? c.border : "rgba(255,255,255,0.07)"}`,
-      borderRadius: 16,
+      border: `1px solid ${open ? b.accent + "35" : "rgba(255,255,255,0.07)"}`,
+      borderRadius: 14,
       overflow: "hidden",
-      transition: "all 0.3s ease",
+      background: open ? `${b.accent}04` : "rgba(255,255,255,0.01)",
+      transition: "all 0.25s ease",
     }}>
-      {/* Header — always visible */}
-      <button
-        onClick={onToggle}
-        style={{
-          width: "100%",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          padding: "24px 28px",
-          display: "flex",
-          alignItems: "flex-start",
-          gap: 20,
-          textAlign: "left",
-        }}
-      >
-        {/* Icon */}
+      {/* Header */}
+      <button onClick={onToggle} style={{
+        width: "100%", background: "none", border: "none",
+        cursor: "pointer", padding: "22px 26px",
+        display: "flex", alignItems: "flex-start", gap: 16, textAlign: "left",
+      }}>
         <div style={{
-          width: 48, height: 48, borderRadius: 12,
-          background: c.accent + "18",
-          border: `1.5px solid ${c.accent}35`,
+          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+          background: `${b.accent}15`, border: `1.5px solid ${b.accent}30`,
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 800,
-          color: c.accent, flexShrink: 0,
+          fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 800, color: b.accent,
         }}>
-          {c.icon}
+          {b.client[0]}
         </div>
-
         <div style={{ flex: 1 }}>
           <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-            color: c.accent, letterSpacing: "0.16em", textTransform: "uppercase",
-            marginBottom: 4,
-          }}>
-            {c.sector}
-          </div>
+            fontFamily: "var(--font-mono)", fontSize: "0.46rem",
+            color: b.accent, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 3,
+          }}>{b.sector}</div>
           <div style={{
             fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(1rem, 2vw, 1.3rem)",
-            color: "#f0f0f0", letterSpacing: "-0.02em", marginBottom: 6,
-          }}>
-            {c.client}
-          </div>
+            fontSize: "clamp(0.95rem,1.8vw,1.2rem)", color: "#f0f0f0",
+            letterSpacing: "-0.02em", marginBottom: 4,
+          }}>{b.client}</div>
           <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.6rem",
-            color: "#888", lineHeight: 1.5,
-          }}>
-            {c.problem.headline}
-          </div>
+            fontFamily: "var(--font-mono)", fontSize: "0.56rem",
+            color: "#777", lineHeight: 1.55, fontStyle: "italic",
+          }}>&ldquo;{b.req.replace("Client requirement: ", "")}&rdquo;</div>
         </div>
-
-        {/* Status badge + toggle */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10, flexShrink: 0 }}>
-          <div style={{
-            display: "flex", alignItems: "center", gap: 6,
-            fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-            fontWeight: 700, color: c.statusColor,
-            background: c.statusColor + "12",
-            border: `1px solid ${c.statusColor}30`,
-            borderRadius: 20, padding: "4px 12px",
-            whiteSpace: "nowrap",
-          }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: c.statusColor, display: "inline-block" }} />
-            {c.status}
-          </div>
-          <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-            color: open ? c.accent : "#444",
-            transition: "color 0.2s",
-          }}>
-            {open ? "▲ collapse" : "▼ read case study"}
-          </div>
+        <div style={{
+          fontFamily: "var(--font-mono)", fontSize: "0.5rem",
+          color: open ? b.accent : "#444", flexShrink: 0, marginTop: 4, transition: "color 0.2s",
+        }}>
+          {open ? "▲" : "▼ see the code"}
         </div>
       </button>
 
-      {/* Expandable body */}
       {open && (
-        <div style={{ padding: "0 28px 32px" }}>
-          <div style={{ height: 1, background: `${c.accent}20`, marginBottom: 28 }} />
+        <div style={{ padding: "0 26px 28px" }}>
+          <div style={{ height: 1, background: `${b.accent}20`, marginBottom: 24 }} />
 
-          {/* The Problem */}
-          <div style={{ marginBottom: 28 }}>
-            <div style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-              color: c.accent, letterSpacing: "0.16em", textTransform: "uppercase",
-              marginBottom: 10,
-            }}>
-              The Problem
-            </div>
-            <p style={{ fontSize: "0.9rem", color: "#aaa", lineHeight: 1.8, fontWeight: 300, marginBottom: 10 }}>
-              {c.problem.body}
-            </p>
-          </div>
-
-          {/* Discovery */}
+          {/* Diagnosis */}
           <div style={{
             background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            borderLeft: `3px solid ${c.accent}`,
+            border: `1px solid ${b.accent}20`,
+            borderLeft: `3px solid ${b.accent}`,
             borderRadius: "0 8px 8px 0",
-            padding: "14px 18px",
-            marginBottom: 28,
+            padding: "12px 16px", marginBottom: 22,
           }}>
             <div style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-              color: c.accent, letterSpacing: "0.16em", textTransform: "uppercase",
-              marginBottom: 8,
-            }}>
-              Discovery (before writing any code)
-            </div>
-            <p style={{ fontSize: "0.84rem", color: "#999", lineHeight: 1.75, fontWeight: 300 }}>
-              {c.discovery}
+              fontFamily: "var(--font-mono)", fontSize: "0.44rem",
+              color: b.accent, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 6,
+            }}>Root Cause Diagnosis</div>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "#bbb", lineHeight: 1.65 }}>
+              {b.diagnosis}
             </p>
           </div>
 
-          {/* What I built */}
-          <div style={{ marginBottom: 28 }}>
+          {/* Code: Before / After */}
+          <div style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 22,
+          }} className="poc-code-grid">
+            {/* Before */}
             <div style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-              color: c.accent, letterSpacing: "0.16em", textTransform: "uppercase",
-              marginBottom: 12,
+              background: "#0d0d0d",
+              border: "1px solid rgba(244,67,54,0.2)",
+              borderRadius: 8, overflow: "hidden",
             }}>
-              What I Built
+              <div style={{
+                padding: "8px 14px",
+                background: "rgba(244,67,54,0.06)",
+                borderBottom: "1px solid rgba(244,67,54,0.15)",
+                display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f44336", display: "inline-block" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.46rem", color: "#f44336", letterSpacing: "0.1em" }}>BEFORE</span>
+              </div>
+              <pre style={{
+                padding: "14px 14px",
+                fontFamily: "var(--font-mono)", fontSize: "0.52rem",
+                color: "#888", lineHeight: 1.7, overflowX: "auto",
+                margin: 0, whiteSpace: "pre",
+              }}>{b.before}</pre>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {c.built.map((item, i) => (
-                <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                  <span style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-                    color: c.accent, marginTop: 4, flexShrink: 0,
-                  }}>+</span>
-                  <span style={{ fontSize: "0.84rem", color: "#bbb", lineHeight: 1.7, fontWeight: 300 }}>{item}</span>
-                </div>
-              ))}
+
+            {/* After */}
+            <div style={{
+              background: "#0a0f0c",
+              border: `1px solid ${b.accent}30`,
+              borderRadius: 8, overflow: "hidden",
+            }}>
+              <div style={{
+                padding: "8px 14px",
+                background: `${b.accent}08`,
+                borderBottom: `1px solid ${b.accent}20`,
+                display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: b.accent, display: "inline-block" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.46rem", color: b.accent, letterSpacing: "0.1em" }}>AFTER</span>
+              </div>
+              <pre style={{
+                padding: "14px 14px",
+                fontFamily: "var(--font-mono)", fontSize: "0.52rem",
+                color: "#c8c4bc", lineHeight: 1.7, overflowX: "auto",
+                margin: 0, whiteSpace: "pre",
+              }}>{b.after}</pre>
             </div>
           </div>
 
           {/* Outcomes */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-              color: c.accent, letterSpacing: "0.16em", textTransform: "uppercase",
-              marginBottom: 12,
-            }}>
-              Outcomes
-            </div>
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-              gap: 10,
-            }}>
-              {c.outcomes.map((o) => (
-                <OutcomeChip key={o.label} {...o} />
-              ))}
-            </div>
-          </div>
-
-          {/* Quote */}
           <div style={{
-            background: `${c.accent}08`,
-            border: `1px solid ${c.accent}20`,
-            borderRadius: 10,
-            padding: "16px 20px",
-            marginBottom: 20,
-          }}>
-            <p style={{
-              fontFamily: "var(--font-serif)", fontStyle: "italic",
-              fontSize: "0.92rem", color: "#ccc", lineHeight: 1.7,
-            }}>
-              &ldquo;{c.quote}&rdquo;
-            </p>
-          </div>
-
-          {/* Tags */}
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {c.tags.map(t => (
-              <span key={t} style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-                color: "#666", border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 3, padding: "3px 9px", letterSpacing: "0.06em",
-              }}>{t}</span>
+            display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8,
+          }} className="poc-outcomes">
+            {b.outcomes.map(o => (
+              <div key={o.l} style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 8, padding: "12px 14px",
+              }}>
+                <div style={{
+                  fontFamily: "var(--font-display)", fontWeight: 800,
+                  fontSize: "clamp(0.9rem,1.4vw,1.2rem)", color: b.accent,
+                  letterSpacing: "-0.03em", marginBottom: 4, lineHeight: 1,
+                }}>{o.n}</div>
+                <div style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.44rem",
+                  color: "#555", letterSpacing: "0.08em", textTransform: "uppercase",
+                }}>{o.l}</div>
+              </div>
             ))}
           </div>
         </div>
@@ -468,112 +384,117 @@ function CaseCard({ c, open, onToggle }: { c: typeof CASES[0]; open: boolean; on
   );
 }
 
-/* ─────────────────────────────────────────────
+/* ══════════════════════════════════════════════════════
    PAGE
-───────────────────────────────────────────── */
+══════════════════════════════════════════════════════ */
 export default function ConsultingPage() {
-  const [openCase, setOpenCase] = useState<string | null>("resso");
-
-  const handleToggle = (id: string) => {
-    setOpenCase(prev => prev === id ? null : id);
-  };
+  const [openBridge, setOpenBridge] = useState<string | null>("resso");
 
   return (
     <>
       <style>{`
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(18px); }
+          from { opacity: 0; transform: translateY(16px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        .c-fade { animation: fadeUp 0.6s ease forwards; opacity: 0; }
-        .c-fade-1 { animation-delay: 0.1s; }
-        .c-fade-2 { animation-delay: 0.22s; }
-        .c-fade-3 { animation-delay: 0.34s; }
-        .c-fade-4 { animation-delay: 0.46s; }
-        @media (max-width: 700px) {
-          .approach-grid { grid-template-columns: 1fr !important; }
-          .diff-grid { grid-template-columns: 1fr !important; }
-          .trans-grid { grid-template-columns: 1fr !important; }
-          .proof-strip { grid-template-columns: 1fr 1fr !important; }
+        @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+        .cf { animation: fadeUp 0.55s ease forwards; opacity: 0; }
+        .cf1 { animation-delay: 0.08s; }
+        .cf2 { animation-delay: 0.18s; }
+        .cf3 { animation-delay: 0.28s; }
+        .cf4 { animation-delay: 0.38s; }
+        @media (max-width: 760px) {
+          .poc-code-grid  { grid-template-columns: 1fr !important; }
+          .poc-outcomes   { grid-template-columns: 1fr 1fr !important; }
+          .proof-strip    { grid-template-columns: 1fr 1fr !important; }
+          .value-grid     { grid-template-columns: 1fr !important; }
+          .hero-ctas      { flex-direction: column !important; }
+        }
+        @media (max-width: 500px) {
+          .proof-strip    { grid-template-columns: 1fr !important; }
+          .poc-outcomes   { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
-      {/* ── NAV spacer ── */}
-      <div style={{ height: 60 }} />
+      {/* ── NAVBAR ── */}
+      <Nav />
 
       {/* ══════════════════════════════
           HERO
       ══════════════════════════════ */}
       <section style={{
         position: "relative",
-        minHeight: "62vh",
+        minHeight: "64vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "80px clamp(20px, 5vw, 80px) 64px",
+        padding: "100px clamp(20px, 5vw, 80px) 72px",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
         overflow: "hidden",
       }}>
-        {/* Subtle grid background */}
+        {/* grid bg */}
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
-          backgroundImage: "linear-gradient(rgba(57,217,180,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(57,217,180,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+          backgroundImage: "linear-gradient(rgba(57,217,180,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(57,217,180,0.025) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }} />
+        {/* teal glow top-left */}
+        <div style={{
+          position: "absolute", top: -80, left: -80,
+          width: 400, height: 400,
+          background: "radial-gradient(circle, rgba(57,217,180,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
         }} />
 
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 900 }}>
-          <div className="c-fade c-fade-1" style={{
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 860 }}>
+          <div className="cf cf1" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            fontFamily: "var(--font-mono)", fontSize: "0.55rem",
-            color: "#39d9b4", letterSpacing: "0.18em", textTransform: "uppercase",
+            fontFamily: "var(--font-mono)", fontSize: "0.52rem",
+            color: AC, letterSpacing: "0.18em", textTransform: "uppercase",
             border: "1px solid rgba(57,217,180,0.25)", borderRadius: 3,
             padding: "5px 14px", marginBottom: 28,
             background: "rgba(57,217,180,0.04)",
           }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#39d9b4", animation: "pulse 2s ease infinite" }} />
-            AI Consulting · Real problems. Real outcomes.
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: AC, animation: "pulse 2s ease infinite" }} />
+            AI Consulting · I solve real business problems
           </div>
 
-          <h1 className="c-fade c-fade-2" style={{
+          <h1 className="cf cf2" style={{
             fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(2.4rem, 6vw, 5.5rem)",
-            letterSpacing: "-0.045em", lineHeight: 0.92,
+            fontSize: "clamp(2.6rem, 7vw, 6rem)",
+            letterSpacing: "-0.045em", lineHeight: 0.88,
             color: "#f0f0f0", marginBottom: 28,
           }}>
-            I solve the business<br />
-            problem first.{" "}
-            <span style={{
-              fontFamily: "var(--font-serif)", fontStyle: "italic",
-              color: "#39d9b4",
-            }}>Then I build.</span>
+            I read the business<br />
+            problem.{" "}
+            <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: AC }}>
+              Then I write<br />the code.
+            </span>
           </h1>
 
-          <p className="c-fade c-fade-3" style={{
-            fontSize: "clamp(1rem, 1.6vw, 1.2rem)",
-            color: "#888", lineHeight: 1.75,
-            maxWidth: 580, marginBottom: 36, fontWeight: 300,
+          <p className="cf cf3" style={{
+            fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)",
+            color: "#666", lineHeight: 1.8,
+            maxWidth: 560, marginBottom: 36, fontWeight: 300,
           }}>
-            Most AI projects fail because engineers start coding before they understand the problem.
-            I spend time in your operation first — talking to users, mapping workflows, finding the real root cause.
-            Then I build a system that actually solves it.
+            Every case study below shows the exact business requirement, the root cause diagnosis,
+            the before-and-after code, and the measured outcome.
+            No abstractions. No claims without proof.
           </p>
 
-          <div className="c-fade c-fade-4" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <a href="#cases" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.62rem",
-              fontWeight: 700, letterSpacing: "0.08em",
-              padding: "13px 26px", borderRadius: 4,
-              background: "#39d9b4", color: "#000",
-              textDecoration: "none", transition: "opacity 0.2s",
+          <div className="cf cf4 hero-ctas" style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+            <a href="#bridge" style={{
+              fontFamily: "var(--font-mono)", fontSize: "0.6rem", fontWeight: 700,
+              letterSpacing: "0.08em", padding: "13px 26px", borderRadius: 4,
+              background: AC, color: "#000", textDecoration: "none", transition: "opacity 0.2s",
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              See Case Studies ↓
+              See the code ↓
             </a>
             <a href="/book" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.62rem",
-              fontWeight: 600, letterSpacing: "0.08em",
-              padding: "13px 26px", borderRadius: 4,
+              fontFamily: "var(--font-mono)", fontSize: "0.6rem", fontWeight: 600,
+              letterSpacing: "0.08em", padding: "13px 24px", borderRadius: 4,
               border: "1px solid rgba(255,255,255,0.12)", color: "#ccc",
               textDecoration: "none", transition: "all 0.2s",
             }}
@@ -582,12 +503,11 @@ export default function ConsultingPage() {
               Book a free call
             </a>
             <a href="/" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.62rem",
-              color: "#555", textDecoration: "none", letterSpacing: "0.06em",
-              padding: "13px 0", transition: "color 0.2s",
+              fontFamily: "var(--font-mono)", fontSize: "0.56rem",
+              color: "#444", textDecoration: "none", transition: "color 0.2s",
             }}
-            onMouseEnter={e => e.currentTarget.style.color = "#aaa"}
-            onMouseLeave={e => e.currentTarget.style.color = "#555"}>
+            onMouseEnter={e => e.currentTarget.style.color = "#888"}
+            onMouseLeave={e => e.currentTarget.style.color = "#444"}>
               ← Back to portfolio
             </a>
           </div>
@@ -595,258 +515,85 @@ export default function ConsultingPage() {
       </section>
 
       {/* ══════════════════════════════
-          PROOF STRIP
+          PROOF NUMBERS
       ══════════════════════════════ */}
-      <section style={{
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        background: "rgba(255,255,255,0.01)",
-      }}>
+      <section style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.01)" }}>
         <div style={{
           maxWidth: 1100, margin: "0 auto",
-          padding: "32px clamp(20px, 5vw, 80px)",
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 0,
+          padding: "28px clamp(20px,5vw,80px)",
+          display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0,
         }} className="proof-strip">
           {[
-            { n: "4", label: "Production systems shipped", sub: "Resso · Lawline · Corol · TTC" },
-            { n: "$1M", label: "Investment conversation", sub: "Rogers President · Lawline.tech" },
-            { n: "1.7M", label: "Riders impacted", sub: "TTC Lost and Found pitch" },
-            { n: "12", label: "Engineers using daily", sub: "Corol UHPC platform" },
+            { n: "4",    l: "Production systems shipped",  s: "Resso · Lawline · Corol · TTC" },
+            { n: "$1M",  l: "Investment conversation",     s: "Rogers President · Lawline.tech" },
+            { n: "1.7M", l: "TTC riders impacted",         s: "Director pitch · May 2026" },
+            { n: "98%",  l: "Context retention (Resso)",   s: "Was 72% before the fix" },
           ].map((s, i) => (
             <div key={s.n} style={{
-              padding: "24px 28px",
+              padding: "22px 26px",
               borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none",
             }}>
               <div style={{
                 fontFamily: "var(--font-display)", fontWeight: 800,
-                fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
-                color: "#39d9b4", letterSpacing: "-0.04em", lineHeight: 1,
-                marginBottom: 6,
+                fontSize: "clamp(1.5rem,2.8vw,2.2rem)", color: AC,
+                letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 5,
               }}>{s.n}</div>
-              <div style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.58rem",
-                color: "#ccc", fontWeight: 500, marginBottom: 3,
-              }}>{s.label}</div>
-              <div style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-                color: "#444", letterSpacing: "0.06em",
-              }}>{s.sub}</div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.56rem", color: "#ccc", marginBottom: 2 }}>{s.l}</div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.46rem", color: "#444", letterSpacing: "0.06em" }}>{s.s}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ══════════════════════════════
-          HOW I WORK
+          WHAT BUSINESSES ACTUALLY BUY
       ══════════════════════════════ */}
       <section style={{
-        padding: "80px clamp(20px, 5vw, 80px)",
+        padding: "72px clamp(20px,5vw,80px)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
-        maxWidth: 1100, margin: "0 auto",
-      }}>
-        <div style={{
-          fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-          color: "#39d9b4", letterSpacing: "0.18em", textTransform: "uppercase",
-          marginBottom: 12,
-        }}>
-          How I Work
-        </div>
-        <h2 style={{
-          fontFamily: "var(--font-display)", fontWeight: 800,
-          fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
-          letterSpacing: "-0.04em", color: "#f0f0f0",
-          marginBottom: 12, lineHeight: 1.1,
-        }}>
-          Five steps. Every project.
-        </h2>
-        <p style={{
-          fontFamily: "var(--font-body)", fontSize: "0.9rem",
-          color: "#666", lineHeight: 1.7, maxWidth: 520, marginBottom: 52,
-        }}>
-          Most engineers start at step 4. I start at step 1. That is the difference between a system that works in a demo and one that works in production.
-        </p>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
-          gap: 12,
-        }} className="approach-grid">
-          {APPROACH.map((step) => (
-            <div key={step.num} style={{
-              background: "rgba(255,255,255,0.01)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderTop: `3px solid ${step.color}`,
-              borderRadius: "0 0 12px 12px",
-              padding: "22px 18px 20px",
-            }}>
-              <div style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.52rem",
-                color: step.color, letterSpacing: "0.12em", marginBottom: 8,
-              }}>{step.num}</div>
-              <div style={{
-                fontFamily: "var(--font-display)", fontWeight: 800,
-                fontSize: "1.05rem", color: "#f0f0f0",
-                letterSpacing: "-0.02em", marginBottom: 2,
-              }}>{step.title}</div>
-              <div style={{
-                fontFamily: "var(--font-mono)", fontSize: "0.48rem",
-                color: "#555", letterSpacing: "0.08em", marginBottom: 12,
-              }}>{step.sub}</div>
-              <p style={{
-                fontSize: "0.78rem", color: "#777",
-                lineHeight: 1.7, fontWeight: 300, marginBottom: 14,
-              }}>{step.desc}</p>
-              <div style={{
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                paddingTop: 12,
-                fontFamily: "var(--font-mono)", fontSize: "0.46rem",
-                color: "#555", lineHeight: 1.6,
-                fontStyle: "italic",
-              }}>
-                {step.proof}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════════════
-          CASE STUDIES
-      ══════════════════════════════ */}
-      <section id="cases" style={{
-        padding: "80px clamp(20px, 5vw, 80px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        maxWidth: 1100, margin: "0 auto",
-      }}>
-        <div style={{
-          fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-          color: "#39d9b4", letterSpacing: "0.18em", textTransform: "uppercase",
-          marginBottom: 12,
-        }}>
-          Case Studies
-        </div>
-        <h2 style={{
-          fontFamily: "var(--font-display)", fontWeight: 800,
-          fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
-          letterSpacing: "-0.04em", color: "#f0f0f0",
-          marginBottom: 12, lineHeight: 1.1,
-        }}>
-          Four real problems.{" "}
-          <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "#39d9b4" }}>
-            Four measured outcomes.
-          </span>
-        </h2>
-        <p style={{
-          fontFamily: "var(--font-body)", fontSize: "0.9rem",
-          color: "#666", lineHeight: 1.7, maxWidth: 520, marginBottom: 48,
-        }}>
-          Click any case to expand the full story — problem, discovery process, what was built, and what changed.
-        </p>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {CASES.map(c => (
-            <CaseCard
-              key={c.id}
-              c={c}
-              open={openCase === c.id}
-              onToggle={() => handleToggle(c.id)}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════════════
-          BUSINESS → TECH TRANSLATION
-      ══════════════════════════════ */}
-      <section style={{
-        padding: "80px clamp(20px, 5vw, 80px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        background: "rgba(255,255,255,0.005)",
       }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-            color: "#f59e0b", letterSpacing: "0.18em", textTransform: "uppercase",
-            marginBottom: 12,
-          }}>
-            Business to Technical Translation
-          </div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: AC, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>Real Business Value</div>
           <h2 style={{
             fontFamily: "var(--font-display)", fontWeight: 800,
-            fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
-            letterSpacing: "-0.04em", color: "#f0f0f0",
-            marginBottom: 12, lineHeight: 1.1,
+            fontSize: "clamp(1.5rem,2.8vw,2.4rem)", letterSpacing: "-0.04em",
+            color: "#f0f0f0", marginBottom: 10, lineHeight: 1.1,
           }}>
-            What you say. What I hear. What gets built.
+            What businesses actually get.
           </h2>
-          <p style={{
-            fontFamily: "var(--font-body)", fontSize: "0.9rem",
-            color: "#666", lineHeight: 1.7, maxWidth: 520, marginBottom: 48,
-          }}>
-            The gap between business pain and technical root cause is where most AI projects fail. I close that gap.
+          <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "#555", lineHeight: 1.7, maxWidth: 480, marginBottom: 40 }}>
+            Not features. Not technology. Outcomes that appear on a P&L.
           </p>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }} className="trans-grid">
-            {TRANSLATIONS.map((t, i) => (
-              <div key={i} style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr auto",
-                gap: 0,
-                background: "rgba(255,255,255,0.02)",
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }} className="value-grid">
+            {VALUE_PROPS.map(v => (
+              <div key={v.icon} style={{
+                background: "rgba(255,255,255,0.01)",
                 border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 10,
-                overflow: "hidden",
-              }}>
-                <div style={{ padding: "18px 20px", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.42rem",
-                    color: "#666", letterSpacing: "0.12em", textTransform: "uppercase",
-                    marginBottom: 8,
-                  }}>What you say</div>
-                  <p style={{
-                    fontFamily: "var(--font-body)", fontSize: "0.82rem",
-                    color: "#ccc", lineHeight: 1.6, fontStyle: "italic",
-                    fontWeight: 300,
-                  }}>&ldquo;{t.business}&rdquo;</p>
-                </div>
-
-                <div style={{ padding: "18px 20px", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.42rem",
-                    color: "#f59e0b", letterSpacing: "0.12em", textTransform: "uppercase",
-                    marginBottom: 8,
-                  }}>Root cause</div>
-                  <p style={{
-                    fontFamily: "var(--font-body)", fontSize: "0.8rem",
-                    color: "#aaa", lineHeight: 1.6, fontWeight: 300,
-                  }}>{t.diagnosis}</p>
-                </div>
-
-                <div style={{ padding: "18px 20px", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.42rem",
-                    color: "#8b5cf6", letterSpacing: "0.12em", textTransform: "uppercase",
-                    marginBottom: 8,
-                  }}>What gets built</div>
-                  <p style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.58rem",
-                    color: "#888", lineHeight: 1.7,
-                  }}>{t.technical}</p>
-                </div>
-
-                <div style={{ padding: "18px 20px", display: "flex", alignItems: "center", minWidth: 140 }}>
-                  <div>
-                    <div style={{
-                      fontFamily: "var(--font-mono)", fontSize: "0.42rem",
-                      color: "#39d9b4", letterSpacing: "0.12em", textTransform: "uppercase",
-                      marginBottom: 6,
-                    }}>Outcome</div>
-                    <div style={{
-                      fontFamily: "var(--font-mono)", fontSize: "0.62rem",
-                      fontWeight: 700, color: "#39d9b4", lineHeight: 1.4,
-                    }}>{t.outcome}</div>
-                  </div>
+                borderRadius: 12, padding: "24px 24px",
+                transition: "border-color 0.2s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = `${v.color}35`}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}>
+                <div style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.44rem",
+                  color: v.color, letterSpacing: "0.16em", marginBottom: 10,
+                }}>{v.icon}</div>
+                <div style={{
+                  fontFamily: "var(--font-display)", fontWeight: 800,
+                  fontSize: "clamp(0.95rem,1.6vw,1.15rem)", color: "#f0f0f0",
+                  letterSpacing: "-0.02em", marginBottom: 10, lineHeight: 1.25,
+                }}>{v.title}</div>
+                <p style={{
+                  fontFamily: "var(--font-body)", fontSize: "0.82rem",
+                  color: "#888", lineHeight: 1.75, fontWeight: 300, marginBottom: 14,
+                }}>{v.real}</p>
+                <div style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.48rem",
+                  color: "#444", letterSpacing: "0.08em",
+                  borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 12,
+                }}>
+                  Technical solution: <span style={{ color: v.color }}>{v.technical}</span>
                 </div>
               </div>
             ))}
@@ -855,143 +602,176 @@ export default function ConsultingPage() {
       </section>
 
       {/* ══════════════════════════════
-          WHAT I BRING
+          BUSINESS REQ → TECH BRIDGE (POC)
+      ══════════════════════════════ */}
+      <section id="bridge" style={{
+        padding: "72px clamp(20px,5vw,80px)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: AM, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>
+            Proof of Concept
+          </div>
+          <h2 style={{
+            fontFamily: "var(--font-display)", fontWeight: 800,
+            fontSize: "clamp(1.5rem,2.8vw,2.4rem)", letterSpacing: "-0.04em",
+            color: "#f0f0f0", marginBottom: 10, lineHeight: 1.1,
+          }}>
+            Business requirement → root cause → actual code.
+          </h2>
+          <p style={{
+            fontFamily: "var(--font-body)", fontSize: "0.88rem",
+            color: "#555", lineHeight: 1.7, maxWidth: 560, marginBottom: 40,
+          }}>
+            Every card below shows the business requirement verbatim, the technical root cause,
+            the before code (what was wrong), the after code (what was built), and the measured outcome.
+            Open each one and read the diff.
+          </p>
+
+          {/* Legend */}
+          <div style={{
+            display: "flex", gap: 18, flexWrap: "wrap",
+            fontFamily: "var(--font-mono)", fontSize: "0.46rem",
+            color: "#555", letterSpacing: "0.08em", marginBottom: 28,
+          }}>
+            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f44336", display: "inline-block" }} />
+              BEFORE — the broken state
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: AC, display: "inline-block" }} />
+              AFTER — what was built
+            </span>
+            <span>Click any card to expand</span>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {BRIDGES.map(b => (
+              <PocCard
+                key={b.id}
+                b={b}
+                open={openBridge === b.id}
+                onToggle={() => setOpenBridge(p => p === b.id ? null : b.id)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════
+          HOW I WORK — 5 steps
       ══════════════════════════════ */}
       <section style={{
-        padding: "80px clamp(20px, 5vw, 80px)",
+        padding: "72px clamp(20px,5vw,80px)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
-        maxWidth: 1100, margin: "0 auto",
+        background: "rgba(255,255,255,0.005)",
       }}>
-        <div style={{
-          fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-          color: "#39d9b4", letterSpacing: "0.18em", textTransform: "uppercase",
-          marginBottom: 12,
-        }}>
-          Why Me
-        </div>
-        <h2 style={{
-          fontFamily: "var(--font-display)", fontWeight: 800,
-          fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
-          letterSpacing: "-0.04em", color: "#f0f0f0",
-          marginBottom: 48, lineHeight: 1.1,
-        }}>
-          What I bring that most engineers{" "}
-          <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic" }}>do not.</span>
-        </h2>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 14,
-        }} className="diff-grid">
-          {DIFFERENTIATORS.map((d) => (
-            <div key={d.title} style={{
-              background: "rgba(255,255,255,0.01)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: 12,
-              padding: "24px 22px",
-              transition: "border-color 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = `${d.color}40`}
-            onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}
-            >
-              <div style={{
-                fontFamily: "var(--font-mono)", fontSize: "1rem",
-                color: d.color, marginBottom: 12,
-              }}>{d.icon}</div>
-              <div style={{
-                fontFamily: "var(--font-display)", fontWeight: 700,
-                fontSize: "0.95rem", color: "#f0f0f0",
-                letterSpacing: "-0.02em", marginBottom: 10, lineHeight: 1.3,
-              }}>{d.title}</div>
-              <p style={{
-                fontSize: "0.8rem", color: "#777",
-                lineHeight: 1.75, fontWeight: 300,
-              }}>{d.body}</p>
-            </div>
-          ))}
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.48rem", color: AC, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>Process</div>
+          <h2 style={{
+            fontFamily: "var(--font-display)", fontWeight: 800,
+            fontSize: "clamp(1.5rem,2.8vw,2.4rem)", letterSpacing: "-0.04em",
+            color: "#f0f0f0", marginBottom: 10, lineHeight: 1.1,
+          }}>Five steps. Every engagement.</h2>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "#555", lineHeight: 1.7, maxWidth: 480, marginBottom: 44 }}>
+            Most engineers jump to step 4. I start at step 1. That is the difference between a system that demos well and one that works in production.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {[
+              { n:"01", title:"Discover", color: AC, desc:"1-3 days in your operation before any code. Interviews with users, observation of real workflows, mapping where time and money actually disappear.", proof:"Shadowed TTC staff at Union Station for a full day. Interviewed 4 attorneys. Embedded with edtech clients for 2-3 days." },
+              { n:"02", title:"Diagnose", color: AM, desc:"Translate the business pain into a precise technical root cause. The stated problem is rarely the actual problem. This diagnosis is the most valuable deliverable of the engagement.", proof:"Resso context issue: not a model quality problem — a missing session architecture. Different solution, 10x lower cost." },
+              { n:"03", title:"Architect", color: VI, desc:"Design the system before building it. Stack choice, data flow, failure modes, cost model — documented and agreed before a line of code is written. Decisions made at this stage cost nothing to change.", proof:"Lawline: entire air-gapped architecture designed upfront. The zero-egress proof became the $1M Rogers sales pitch." },
+              { n:"04", title:"Build", color: BL, desc:"Production systems, not prototypes. Every component tested, deployed in real infrastructure, documented for handoff. I own every layer: model, API, infra, dashboard, MLOps.", proof:"Resso: WebRTC ingestion, diarization, NLP pipeline, hire scorer, ONNX export, MLOps dashboard — one engineer, full stack." },
+              { n:"05", title:"Measure", color: AC, desc:"Every engagement ships with before/after baselines. Latency. Accuracy. Retention. Cost per outcome. You know exactly what changed and by how much.", proof:"Resso: context retention 72%→98%. Hallucination 14%→3.8%. Corol: lab cycles weeks→one afternoon." },
+            ].map((s, i) => (
+              <div key={s.n} style={{
+                display: "grid", gridTemplateColumns: "60px 1fr",
+                borderTop: i > 0 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                padding: "22px 0",
+                gap: 24, alignItems: "start",
+              }}>
+                <div style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.52rem",
+                  color: s.color, letterSpacing: "0.12em", paddingTop: 4,
+                }}>{s.n}</div>
+                <div>
+                  <div style={{
+                    fontFamily: "var(--font-display)", fontWeight: 800,
+                    fontSize: "1rem", color: "#f0f0f0", letterSpacing: "-0.02em", marginBottom: 6,
+                  }}>{s.title}</div>
+                  <p style={{ fontSize: "0.82rem", color: "#777", lineHeight: 1.75, fontWeight: 300, marginBottom: 8, maxWidth: 600 }}>{s.desc}</p>
+                  <div style={{
+                    fontFamily: "var(--font-mono)", fontSize: "0.48rem",
+                    color: "#444", lineHeight: 1.6, fontStyle: "italic",
+                    borderLeft: `2px solid ${s.color}30`, paddingLeft: 10,
+                  }}>{s.proof}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════
           CTA
       ══════════════════════════════ */}
-      <section style={{
-        padding: "80px clamp(20px, 5vw, 80px)",
-        maxWidth: 1100, margin: "0 auto",
-      }}>
-        <div style={{
-          background: "rgba(57,217,180,0.03)",
-          border: "1px solid rgba(57,217,180,0.14)",
-          borderRadius: 16,
-          padding: "52px 48px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 32,
-          flexWrap: "wrap",
-        }}>
-          <div style={{ maxWidth: 520 }}>
-            <div style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-              color: "#39d9b4", letterSpacing: "0.18em", textTransform: "uppercase",
-              marginBottom: 14,
-            }}>
-              Start Here
+      <section style={{ padding: "72px clamp(20px,5vw,80px)" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{
+            background: "rgba(57,217,180,0.03)",
+            border: "1px solid rgba(57,217,180,0.14)",
+            borderRadius: 16, padding: "52px 48px",
+            display: "flex", justifyContent: "space-between",
+            alignItems: "center", gap: 32, flexWrap: "wrap",
+          }}>
+            <div style={{ maxWidth: 520 }}>
+              <h2 style={{
+                fontFamily: "var(--font-display)", fontWeight: 800,
+                fontSize: "clamp(1.4rem,2.5vw,2.2rem)", letterSpacing: "-0.03em",
+                color: "#f0f0f0", marginBottom: 12, lineHeight: 1.15,
+              }}>
+                Tell me what is broken.<br />
+                <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: AC }}>
+                  I will tell you how to fix it.
+                </span>
+              </h2>
+              <p style={{ fontSize: "0.86rem", color: "#555", lineHeight: 1.75, fontWeight: 300 }}>
+                Free 30-minute call. I will ask about your operation, identify the root cause, and give you a concrete technical direction — whether or not we work together.
+              </p>
             </div>
-            <h2 style={{
-              fontFamily: "var(--font-display)", fontWeight: 800,
-              fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)",
-              letterSpacing: "-0.03em", color: "#f0f0f0",
-              marginBottom: 14, lineHeight: 1.15,
-            }}>
-              Tell me what is not working. I will tell you what to build.
-            </h2>
-            <p style={{
-              fontSize: "0.88rem", color: "#666",
-              lineHeight: 1.7, fontWeight: 300,
-            }}>
-              Free 30-minute call. No pitch. I will ask about your operation, identify where AI can actually help, and give you a concrete next step — whether or not we work together.
-            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, flexShrink: 0 }}>
+              <a href="/book" style={{
+                fontFamily: "var(--font-mono)", fontSize: "0.65rem", fontWeight: 700,
+                letterSpacing: "0.08em", padding: "16px 32px", borderRadius: 6,
+                background: AC, color: "#000", textDecoration: "none",
+                textAlign: "center", whiteSpace: "nowrap", transition: "opacity 0.2s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                Book a free call ↗
+              </a>
+              <a href="mailto:emailtosolankiom@gmail.com" style={{
+                fontFamily: "var(--font-mono)", fontSize: "0.55rem",
+                color: "#444", textDecoration: "none",
+                textAlign: "center", letterSpacing: "0.06em", transition: "color 0.2s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = "#aaa"}
+              onMouseLeave={e => e.currentTarget.style.color = "#444"}>
+                or email directly
+              </a>
+            </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, flexShrink: 0 }}>
-            <a href="/book" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.66rem",
-              fontWeight: 700, letterSpacing: "0.08em",
-              padding: "16px 32px", borderRadius: 6,
-              background: "#39d9b4", color: "#000",
-              textDecoration: "none", textAlign: "center",
-              transition: "opacity 0.2s", whiteSpace: "nowrap",
+          <div style={{ textAlign: "center", marginTop: 40 }}>
+            <a href="/" style={{
+              fontFamily: "var(--font-mono)", fontSize: "0.52rem",
+              color: "#333", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s",
             }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-            onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              Book a free call ↗
-            </a>
-            <a href="mailto:emailtosolankiom@gmail.com" style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.58rem",
-              color: "#555", textDecoration: "none",
-              textAlign: "center", letterSpacing: "0.06em",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.color = "#aaa"}
-            onMouseLeave={e => e.currentTarget.style.color = "#555"}>
-              or send an email directly
+            onMouseEnter={e => e.currentTarget.style.color = "#777"}
+            onMouseLeave={e => e.currentTarget.style.color = "#333"}>
+              ← Back to portfolio
             </a>
           </div>
-        </div>
-
-        {/* Back to portfolio */}
-        <div style={{ textAlign: "center", marginTop: 48 }}>
-          <a href="/" style={{
-            fontFamily: "var(--font-mono)", fontSize: "0.55rem",
-            color: "#444", textDecoration: "none", letterSpacing: "0.08em",
-            transition: "color 0.2s",
-          }}
-          onMouseEnter={e => e.currentTarget.style.color = "#888"}
-          onMouseLeave={e => e.currentTarget.style.color = "#444"}>
-            ← Back to portfolio
-          </a>
         </div>
       </section>
     </>
