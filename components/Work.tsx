@@ -526,10 +526,76 @@ export default function Work() {
           Production AI systems.{" "}
           <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--accent)" }}>Real companies.</span>
         </h2>
-        <p className="body-lg reveal reveal-d2" style={{ maxWidth: 520, marginBottom: 64 }}>
+        <p className="body-lg reveal reveal-d2" style={{ maxWidth: 520, marginBottom: 36 }}>
           Every system here runs in the real world — with real users, real data,
           and real consequences when something breaks.
         </p>
+
+        {/* ── Consulting banner ── */}
+        <a href="/consulting" className="reveal reveal-d2" style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 20,
+          padding: "22px 28px",
+          background: "rgba(57,217,180,0.03)",
+          border: "1px solid rgba(57,217,180,0.18)",
+          borderRadius: 10,
+          marginBottom: 52,
+          textDecoration: "none",
+          transition: "background 0.2s, border-color 0.2s",
+          flexWrap: "wrap",
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = "rgba(57,217,180,0.07)";
+          e.currentTarget.style.borderColor = "rgba(57,217,180,0.35)";
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = "rgba(57,217,180,0.03)";
+          e.currentTarget.style.borderColor = "rgba(57,217,180,0.18)";
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: 10,
+              background: "rgba(57,217,180,0.1)",
+              border: "1.5px solid rgba(57,217,180,0.3)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "1.1rem", flexShrink: 0,
+            }}>
+              ◈
+            </div>
+            <div>
+              <div style={{
+                fontFamily: "var(--font-mono)", fontSize: "0.5rem",
+                color: "var(--accent)", letterSpacing: "0.14em",
+                textTransform: "uppercase", marginBottom: 4,
+              }}>
+                AI Consulting
+              </div>
+              <div style={{
+                fontFamily: "var(--font-display)", fontWeight: 700,
+                fontSize: "0.95rem", color: "var(--white)",
+                letterSpacing: "-0.02em",
+              }}>
+                How I solve real business problems with AI
+              </div>
+              <div style={{
+                fontFamily: "var(--font-mono)", fontSize: "0.52rem",
+                color: "var(--muted)", marginTop: 3,
+              }}>
+                Case studies · Discovery process · Business-to-tech translation · Outcomes
+              </div>
+            </div>
+          </div>
+          <div style={{
+            fontFamily: "var(--font-mono)", fontSize: "0.58rem",
+            color: "var(--accent)", letterSpacing: "0.06em",
+            display: "flex", alignItems: "center", gap: 6,
+            flexShrink: 0,
+          }}>
+            View consulting page ↗
+          </div>
+        </a>
 
         {/* ── Experience subsection ── */}
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>

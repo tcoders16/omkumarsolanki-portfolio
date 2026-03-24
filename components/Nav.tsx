@@ -2,14 +2,15 @@
 import { useEffect, useState } from "react";
 
 const links = [
-  { label: "Work",     href: "/#work" },
-  { label: "Agents",   href: "/#agents" },
-  { label: "Math",     href: "/#math" },
-  { label: "Story",    href: "/#story" },
-  { label: "Terminal", href: "/#terminal" },
-  { label: "About",    href: "/#about" },
-  { label: "Services", href: "/#rates" },
-  { label: "Contact",  href: "/#contact" },
+  { label: "Work",        href: "/#work" },
+  { label: "Consulting",  href: "/consulting" },
+  { label: "Agents",      href: "/#agents" },
+  { label: "Math",        href: "/#math" },
+  { label: "Story",       href: "/#story" },
+  { label: "Terminal",    href: "/#terminal" },
+  { label: "About",       href: "/#about" },
+  { label: "Services",    href: "/#rates" },
+  { label: "Contact",     href: "/#contact" },
 ];
 
 const GITHUB_URL = "https://github.com/omkumarsolanki";
