@@ -72,9 +72,38 @@ export default function Nav() {
           overflow: "hidden",
         }}>
           {links.map(l => (
-            <a key={l.label} href={l.href} className="nav-link" style={{ whiteSpace: "nowrap" }}>
-              {l.label}
-            </a>
+            l.label === "Consulting" ? (
+              <a
+                key={l.label}
+                href={l.href}
+                className="nav-link"
+                style={{
+                  whiteSpace: "nowrap",
+                  color: "#ffffff",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  padding: "3px 10px",
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  borderRadius: 3,
+                  background: "rgba(255,255,255,0.06)",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
+                }}
+              >
+                {l.label}
+              </a>
+            ) : (
+              <a key={l.label} href={l.href} className="nav-link" style={{ whiteSpace: "nowrap" }}>
+                {l.label}
+              </a>
+            )
           ))}
         </div>
 
@@ -164,6 +193,7 @@ export default function Nav() {
             key={l.label}
             href={l.href}
             onClick={() => setMenuOpen(false)}
+            style={l.label === "Consulting" ? { color: "#ffffff", fontWeight: 700 } : undefined}
           >
             {l.label}
           </a>
