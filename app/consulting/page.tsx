@@ -275,56 +275,89 @@ export default function ConsultingPage() {
         .cp-step-t { font-size:13.5px; font-weight:700; color:#d4eceb; margin-bottom:8px; font-family:'Syne',sans-serif; }
         .cp-step-b { font-size:12px; line-height:1.65; color:#5a9088; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
-        /* accordion animations */
-        @keyframes bounce-down {
-          0%,100% { transform:translateY(0); }
-          50%      { transform:translateY(5px); }
+        /* accordion animations — one each, nothing competing */
+        @keyframes shimmer {
+          0%   { left:-100%; }
+          100% { left:200%; }
         }
-        @keyframes hint-fade {
-          0%,100% { opacity:.7; }
-          50%      { opacity:.25; }
-        }
-        @keyframes slide-in {
-          from { opacity:0; transform:translateY(-8px); }
+        @keyframes fade-up {
+          from { opacity:0; transform:translateY(10px); }
           to   { opacity:1; transform:translateY(0); }
         }
-        @keyframes border-pulse {
-          0%,100% { border-left-color:rgba(57,217,180,.15); }
-          50%      { border-left-color:rgba(57,217,180,.5); }
+        @keyframes chev-spin {
+          from { transform:rotate(0deg); }
+          to   { transform:rotate(180deg); }
+        }
+        @keyframes chev-spin-rev {
+          from { transform:rotate(180deg); }
+          to   { transform:rotate(0deg); }
         }
 
-        /* accordion */
-        .cp-case { border:1px solid #0d2b25; margin-bottom:3px; position:relative; transition:border-color .2s; }
-        .cp-case:not(.is-open):hover { border-color:#1a4a3e; }
-        .cp-case.is-open { border-color:#1a4a3e; border-left:3px solid; animation:border-pulse 2.4s ease-in-out infinite; }
+        /* accordion — breathable rows */
+        .cp-cases-hint {
+          font-size:10px; font-family:'JetBrains Mono',monospace; color:#2e6b62;
+          letter-spacing:.14em; margin-bottom:18px; display:flex; align-items:center; gap:8px;
+        }
+        .cp-cases-hint::before {
+          content:''; display:inline-block; width:18px; height:1px; background:#2e6b62;
+        }
 
-        .cp-case-hd { display:flex; align-items:center; justify-content:space-between; padding:18px 22px; cursor:pointer; gap:12px; transition:background .15s; user-select:none; }
-        .cp-case-hd:hover { background:#060f0e; }
-        .cp-case-hd:hover .cp-expand-hint { opacity:1; }
-        .cp-case-hd:hover .cp-chev { color:${T}; }
+        .cp-case {
+          border:1px solid #0d2b25; margin-bottom:2px; position:relative;
+          overflow:hidden; transition:border-color .25s;
+        }
+        .cp-case::after {
+          content:''; position:absolute; top:0; left:-100%; width:40%;
+          height:100%; background:linear-gradient(90deg,transparent,rgba(57,217,180,.04),transparent);
+          pointer-events:none;
+        }
+        .cp-case:nth-child(1)::after { animation:shimmer 1.1s ease .2s forwards; }
+        .cp-case:nth-child(2)::after { animation:shimmer 1.1s ease .45s forwards; }
+        .cp-case:nth-child(3)::after { animation:shimmer 1.1s ease .7s forwards; }
 
-        .cp-case-lft { display:flex; align-items:center; gap:14px; flex:1; }
-        .cp-ctag { font-size:10px; font-weight:700; letter-spacing:.14em; padding:3px 9px; border-radius:2px; white-space:nowrap; border:1px solid; font-family:'JetBrains Mono',monospace; }
-        .cp-cname { font-size:14.5px; font-weight:700; color:#d4eceb; font-family:'Syne',sans-serif; }
-        .cp-csec { font-size:11.5px; color:#3d7a71; margin-top:2px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-case:hover  { border-color:#1e4a42; }
+        .cp-case.is-open{ border-color:#1e4a42; border-left:2px solid; }
 
-        /* expand hint label */
-        .cp-expand-hint { font-size:9px; font-weight:700; letter-spacing:.18em; color:${T}; opacity:0; transition:opacity .2s; font-family:'JetBrains Mono',monospace; text-transform:uppercase; white-space:nowrap; }
-        .cp-case:first-child .cp-expand-hint { opacity:.6; animation:hint-fade 2s ease-in-out infinite; }
+        .cp-case-hd {
+          display:flex; align-items:center; justify-content:space-between;
+          padding:26px 28px; cursor:pointer; gap:16px;
+          transition:background .18s; user-select:none;
+        }
+        .cp-case-hd:hover { background:#04100e; }
 
-        /* animated chevron */
-        .cp-chev-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; flex-shrink:0; }
-        .cp-chev { font-size:18px; color:#3d7a71; transition:transform .25s cubic-bezier(.4,0,.2,1), color .15s; line-height:1; }
-        .cp-chev.open { transform:rotate(180deg); color:${T}; }
-        .cp-case:first-child:not(.is-open) .cp-chev { animation:bounce-down 1.6s ease-in-out infinite; }
+        .cp-case-lft { display:flex; align-items:center; gap:16px; flex:1; min-width:0; }
+        .cp-ctag {
+          font-size:10px; font-weight:700; letter-spacing:.14em; padding:4px 10px;
+          border-radius:2px; white-space:nowrap; border:1px solid;
+          font-family:'JetBrains Mono',monospace; flex-shrink:0;
+        }
+        .cp-cname { font-size:15px; font-weight:700; color:#d4eceb; font-family:'Syne',sans-serif; }
+        .cp-csec  { font-size:11.5px; color:#3d7a71; margin-top:3px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
-        .cp-snap { display:flex; gap:20px; flex-shrink:0; }
+        /* always-visible pill CTA */
+        .cp-cta-pill {
+          display:inline-flex; align-items:center; gap:7px; flex-shrink:0;
+          font-size:11px; font-weight:700; letter-spacing:.1em;
+          font-family:'JetBrains Mono',monospace; white-space:nowrap;
+          padding:8px 16px; border:1px solid #1a4a3e; color:#39d9b4;
+          background:transparent; cursor:pointer;
+          transition:background .18s, border-color .18s, color .18s;
+        }
+        .cp-cta-pill:hover { background:#0a1e1b; border-color:#39d9b4; }
+        .cp-cta-pill.open  { background:#0a1e1b; border-color:#39d9b4; }
+        .cp-cta-pill svg   { transition:transform .28s cubic-bezier(.4,0,.2,1); }
+        .cp-cta-pill.open svg { transform:rotate(180deg); }
+
+        .cp-snap { display:flex; gap:24px; flex-shrink:0; }
         .cp-snap-item { text-align:right; }
-        .cp-snap-val { font-size:13px; font-weight:800; }
-        .cp-snap-lbl { font-size:10px; color:#3d7a71; }
+        .cp-snap-val  { font-size:13px; font-weight:800; font-family:'Syne',sans-serif; }
+        .cp-snap-lbl  { font-size:10px; color:#3d7a71; font-family:'Space Grotesk',sans-serif; margin-top:2px; }
 
         /* case body */
-        .cp-cbody { border-top:1px solid #1a4a3e; padding:28px 22px; animation:slide-in .22s ease; }
+        .cp-cbody {
+          border-top:1px solid #1a4a3e; padding:32px 28px;
+          animation:fade-up .28s cubic-bezier(.4,0,.2,1);
+        }
         .cp-brief { border-left:3px solid; padding:13px 16px; margin-bottom:24px; font-size:13px; color:#b8d5d1; line-height:1.58; font-style:italic; background:#030a09; }
         .cp-brief-lbl { font-size:9.5px; font-weight:700; letter-spacing:.16em; display:block; margin-bottom:6px; }
         .cp-2col { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:20px; }
@@ -436,14 +469,15 @@ export default function ConsultingPage() {
         <section className="cp-sec">
           <div className="cp-w">
             <p className="cp-sec-lbl">Real Engagements</p>
+            <p className="cp-cases-hint">3 case studies — click any row to explore the full diagnosis &amp; solution</p>
             {CASES.map(c => {
               const isOpen = open === c.id;
               const tab = getTab(c.id);
               return (
-                <div key={c.id} className={`cp-case${isOpen ? " is-open" : ""}`} style={isOpen ? { borderLeftColor: c.accent } : {}}>
+                <div key={c.id} className={`cp-case${isOpen ? " is-open" : ""}`} style={isOpen ? { borderLeftColor: c.accent } : undefined}>
                   <div className="cp-case-hd" onClick={() => setOpen(isOpen ? null : c.id)}>
                     <div className="cp-case-lft">
-                      <span className="cp-ctag" style={{ color:c.accent, borderColor:c.accent+"35", background:c.accent+"12" }}>
+                      <span className="cp-ctag" style={{ color:c.accent, borderColor:c.accent+"40", background:c.accent+"10" }}>
                         {c.tag}
                       </span>
                       <div>
@@ -451,7 +485,7 @@ export default function ConsultingPage() {
                         <p className="cp-csec">{c.sector} · {c.country}</p>
                       </div>
                     </div>
-                    <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:28 }}>
                       <div className="cp-snap">
                         {c.metrics.slice(0,2).map(m => (
                           <div key={m.lbl} className="cp-snap-item">
@@ -460,10 +494,12 @@ export default function ConsultingPage() {
                           </div>
                         ))}
                       </div>
-                      <span className="cp-expand-hint">{isOpen ? "collapse" : "expand"}</span>
-                      <div className="cp-chev-wrap">
-                        <span className={`cp-chev${isOpen ? " open" : ""}`}>⌄</span>
-                      </div>
+                      <button className={`cp-cta-pill${isOpen ? " open" : ""}`}>
+                        {isOpen ? "Close" : "View case"}
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M2 4.5L6 8l4-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
                     </div>
                   </div>
 
