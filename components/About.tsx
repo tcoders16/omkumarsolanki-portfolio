@@ -143,7 +143,7 @@ export default function About() {
                 ✉ emailtosolankiom@gmail.com
               </a>
               <a
-                href="https://www.linkedin.com/in/omkumar-solanki"
+                href="https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

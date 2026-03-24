@@ -100,7 +100,7 @@ const CMDS: Record<string, CmdFn> = {
     { type:"out",     text:"  LOCATION    Ontario, Canada" },
     { type:"out",     text:"  EMAIL       emailtosolankiom@gmail.com" },
     { type:"out",     text:"  GITHUB      github.com/omkumarsolanki" },
-    { type:"out",     text:"  LINKEDIN    linkedin.com/in/omkumar-solanki" },
+    { type:"out",     text:"  LINKEDIN    linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/" },
     { type:"blank",   text:"" },
     { type:"success", text:"  [OK] Identity verified. Access level: ENGINEER." },
   ],
@@ -323,7 +323,7 @@ const CMDS: Record<string, CmdFn> = {
 
   linkedin: async () => {
     await new Promise(r => setTimeout(r, 900));
-    if (typeof window !== "undefined") window.open("https://www.linkedin.com/in/omkumar-solanki", "_blank");
+    if (typeof window !== "undefined") window.open("https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/", "_blank");
     return [
       { type:"dim",     text:"Establishing TLS 1.3 → linkedin.com..." },
       { type:"dim",     text:"GET /in/omkumar-solanki  HTTP/2" },
@@ -342,7 +342,7 @@ const CMDS: Record<string, CmdFn> = {
       { type:"blank",   text:"" },
       { type:"success", text:"  ✓  Profile fetched  — connection is mutual, recruiter." },
       { type:"blank",   text:"" },
-      { type:"accent",  text:"  ↳ Opening linkedin.com/in/omkumar-solanki..." },
+      { type:"accent",  text:"  ↳ Opening linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/..." },
     ];
   },
 
