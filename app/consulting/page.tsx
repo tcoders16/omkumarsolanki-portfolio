@@ -365,21 +365,21 @@ export default function ConsultingPage() {
         /* ── skills ── */
         .cp-sk3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,0.06); margin-top:40px; }
         @media(max-width:680px){ .cp-sk3 { grid-template-columns:1fr; } }
-        .cp-skcard { background:#000; padding:28px 24px; border-top:1px solid; }
-        .cp-skcard-icon { font-size:18px; margin-bottom:14px; opacity:.6; }
-        .cp-skcard-g { font-size:13px; font-weight:700; margin-bottom:14px; font-family:'Syne',sans-serif; color:#f0f0f0; letter-spacing:-.01em; }
+        .cp-skcard { background:#0a0a0a; padding:32px 28px; }
+        .cp-skcard-num { font-size:9.5px; font-weight:600; letter-spacing:.22em; color:rgba(57,217,180,.45); font-family:'JetBrains Mono',monospace; margin-bottom:14px; }
+        .cp-skcard-g { font-size:15px; font-weight:700; margin-bottom:20px; font-family:'Syne',sans-serif; color:#f0f0f0; letter-spacing:-.02em; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07); }
         .cp-skcard ul { list-style:none; padding:0; margin:0; }
-        .cp-skcard li { font-size:12.5px; color:#888; line-height:1.62; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-family:'Space Grotesk',sans-serif; font-weight:300; }
-        .cp-skcard li:last-child { border-bottom:none; }
-        .cp-skcard li::before { content:"– "; color:rgba(255,255,255,0.15); }
+        .cp-skcard li { font-size:13px; color:#909090; line-height:1.5; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-family:'Space Grotesk',sans-serif; font-weight:400; display:flex; align-items:flex-start; gap:10px; }
+        .cp-skcard li:last-child { border-bottom:none; padding-bottom:0; }
+        .cp-skcard li::before { content:""; display:inline-block; width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,0.25); flex-shrink:0; margin-top:7px; }
 
         /* ── why cards ── */
         .cp-why4 { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,0.06); margin-top:40px; }
         @media(max-width:680px){ .cp-why4 { grid-template-columns:1fr; } }
-        .cp-wcard { background:#000; padding:28px 24px; }
-        .cp-wcard-lbl { font-size:9px; font-weight:700; letter-spacing:.2em; color:rgba(57,217,180,.45); text-transform:uppercase; margin-bottom:10px; font-family:'JetBrains Mono',monospace; }
-        .cp-wcard-t { font-size:14px; font-weight:700; color:#f0f0f0; margin-bottom:10px; font-family:'Syne',sans-serif; letter-spacing:-.01em; }
-        .cp-wcard-b { font-size:12.5px; color:#888; line-height:1.68; font-family:'Space Grotesk',sans-serif; font-weight:300; }
+        .cp-wcard { background:#0a0a0a; padding:32px 28px; }
+        .cp-wcard-lbl { font-size:9.5px; font-weight:600; letter-spacing:.22em; color:rgba(57,217,180,.45); text-transform:uppercase; margin-bottom:12px; font-family:'JetBrains Mono',monospace; }
+        .cp-wcard-t { font-size:15px; font-weight:700; color:#f0f0f0; margin-bottom:10px; font-family:'Syne',sans-serif; letter-spacing:-.02em; line-height:1.3; }
+        .cp-wcard-b { font-size:13px; color:#888; line-height:1.68; font-family:'Space Grotesk',sans-serif; font-weight:400; }
 
         /* ── CTA ── */
         .cp-cta { padding:80px 0 100px; text-align:center; }
@@ -540,9 +540,9 @@ export default function ConsultingPage() {
               I do both — and that&apos;s where the value is created.
             </p>
             <div className="cp-sk3">
-              {SKILLS.map(s => (
-                <div key={s.group} className="cp-skcard" style={{ borderTopColor:"rgba(255,255,255,0.1)" }}>
-                  <div className="cp-skcard-icon" style={{ color:s.color }}>{s.icon}</div>
+              {SKILLS.map((s, i) => (
+                <div key={s.group} className="cp-skcard">
+                  <p className="cp-skcard-num">0{i + 1}</p>
                   <p className="cp-skcard-g">{s.group}</p>
                   <ul>{s.items.map(it => <li key={it}>{it}</li>)}</ul>
                 </div>
