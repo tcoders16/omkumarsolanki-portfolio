@@ -62,7 +62,7 @@ const EXP = {
 
   harikrushna: {
     org: "HariKrushna Software Developers",
-    loc: "Ontario, Canada",
+    loc: "Toronto, Canada",
     role: {
       tech: "Senior AI Consultant",
       consulting: "Senior AI Consultant — Discovery & Architecture",
@@ -87,7 +87,7 @@ const EXP = {
 
   corol: {
     org: "Corol.org and NunaFab",
-    loc: "Ontario, Canada",
+    loc: "Toronto, Canada",
     role: {
       tech: "Machine Learning Engineer",
       consulting: "ML Strategy Consultant & Research Engineer",

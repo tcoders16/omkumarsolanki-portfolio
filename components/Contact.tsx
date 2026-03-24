@@ -92,7 +92,7 @@ export default function Contact() {
           {[
             { label: "Email",    value: "emailtosolankiom@gmail.com",             href: "mailto:emailtosolankiom@gmail.com" },
             { label: "LinkedIn", value: "/in/omkumar-solanki",      href: "https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/" },
-            { label: "Location", value: "Ontario, Canada",          href: null },
+            { label: "Location", value: "Toronto, Canada",          href: null },
           ].map(({ label, value, href }) => (
             <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
               <span className="label">{label}</span>

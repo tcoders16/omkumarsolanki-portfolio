@@ -176,7 +176,7 @@ export default function About() {
                 fontFamily: "var(--font-mono)", fontSize: "0.6rem",
                 color: "var(--dim)", letterSpacing: "0.06em",
               }}>
-                ◎ Ontario, Canada
+                ◎ Toronto, Canada
               </span>
             </div>
           </div>
