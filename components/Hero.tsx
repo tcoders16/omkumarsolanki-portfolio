@@ -512,15 +512,31 @@ export default function Hero() {
               }}>.</span>
             </div>
 
-            {/* Role tags */}
+            {/* Role tags — sequential teal pulse */}
+            <style>{`
+              @keyframes tagPulse {
+                0%,100% {
+                  border-color: rgba(57,217,180,0.18);
+                  color: rgba(57,217,180,0.45);
+                  background: transparent;
+                  box-shadow: none;
+                }
+                50% {
+                  border-color: rgba(57,217,180,0.7);
+                  color: #39d9b4;
+                  background: rgba(57,217,180,0.09);
+                  box-shadow: 0 0 10px rgba(57,217,180,0.18);
+                }
+              }
+            `}</style>
             <div className="reveal reveal-d2" style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:24}}>
               {[
-                {label:"Founding Engineer",   teal:true },
-                {label:"AI / ML Engineer",    teal:false},
-                {label:"AI Consultant",       teal:false},
-                {label:"Solutions Architect", teal:false},
-                {label:"Full-Stack Engineer", teal:false},
-              ].map(({label,teal})=>(
+                "Founding Engineer",
+                "AI / ML Engineer",
+                "AI Consultant",
+                "Solutions Architect",
+                "Full-Stack Engineer",
+              ].map((label, i) => (
                 <span key={label} style={{
                   fontFamily:"var(--font-mono)",
                   fontSize:"0.62rem",
@@ -528,9 +544,10 @@ export default function Hero() {
                   textTransform:"uppercase",
                   padding:"6px 13px",
                   borderRadius:"3px",
-                  border: teal ? "1px solid rgba(57,217,180,0.45)" : "1px solid rgba(255,255,255,0.09)",
-                  color: teal ? "var(--accent)" : "rgba(255,255,255,0.35)",
-                  background: teal ? "rgba(57,217,180,0.06)" : "transparent",
+                  border:"1px solid rgba(57,217,180,0.18)",
+                  color:"rgba(57,217,180,0.45)",
+                  background:"transparent",
+                  animation:`tagPulse 4s ease-in-out ${i * 0.7}s infinite`,
                 }}>
                   {label}
                 </span>
