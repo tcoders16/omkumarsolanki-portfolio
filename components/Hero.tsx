@@ -539,10 +539,10 @@ export default function Hero() {
               ].map((label, i) => (
                 <span key={label} style={{
                   fontFamily:"var(--font-mono)",
-                  fontSize:"0.70rem",
+                  fontSize:"0.67rem",
                   letterSpacing:"0.07em",
                   textTransform:"uppercase",
-                  padding:"7px 15px",
+                  padding:"7px 14px",
                   borderRadius:"4px",
                   border:"1px solid rgba(57,217,180,0.18)",
                   color:"rgba(57,217,180,0.45)",
