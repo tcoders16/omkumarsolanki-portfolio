@@ -501,7 +501,7 @@ export default function Hero() {
                 fontSize:"clamp(2.6rem,7vw,7.5rem)",letterSpacing:"-0.045em",color:"var(--white)",
               }}>Om kumar</span>
             </div>
-            <div className="reveal reveal-d2" style={{lineHeight:0.88,marginBottom:32}}>
+            <div className="reveal reveal-d2" style={{lineHeight:0.88,marginBottom:20}}>
               <span style={{
                 fontFamily:"var(--font-display)",fontWeight:800,
                 fontSize:"clamp(1.8rem,5vw,5.5rem)",letterSpacing:"-0.045em",color:"rgba(255,255,255,0.45)",
@@ -510,6 +510,31 @@ export default function Hero() {
                 fontFamily:"var(--font-display)",fontWeight:800,
                 fontSize:"clamp(1.8rem,5vw,5.5rem)",letterSpacing:"-0.045em",color:"var(--accent)",
               }}>.</span>
+            </div>
+
+            {/* Skill tags */}
+            <div className="reveal reveal-d2" style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:28}}>
+              {[
+                {label:"Multi-Agent Systems", teal:true},
+                {label:"ML in Production",    teal:false},
+                {label:"Full-Stack",          teal:false},
+                {label:"Cloud Infra",         teal:false},
+                {label:"AI Consulting",       teal:false},
+              ].map(({label,teal})=>(
+                <span key={label} style={{
+                  fontFamily:"var(--font-mono)",
+                  fontSize:"0.58rem",
+                  letterSpacing:"0.08em",
+                  textTransform:"uppercase",
+                  padding:"5px 11px",
+                  borderRadius:"3px",
+                  border: teal ? "1px solid rgba(57,217,180,0.5)" : "1px solid rgba(255,255,255,0.1)",
+                  color: teal ? "var(--accent)" : "rgba(255,255,255,0.4)",
+                  background: teal ? "rgba(57,217,180,0.07)" : "rgba(255,255,255,0.03)",
+                }}>
+                  {label}
+                </span>
+              ))}
             </div>
 
             {/* Role */}
