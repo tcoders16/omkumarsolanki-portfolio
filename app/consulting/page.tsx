@@ -319,9 +319,9 @@ export default function ConsultingPage() {
         .cp-snap-lbl  { font-size:9.5px; color:#606060; font-family:'Space Grotesk',sans-serif; white-space:nowrap; }
 
         /* ── pill CTA — always visible ── */
-        .cp-cta-pill { display:inline-flex; align-items:center; gap:7px; flex-shrink:0; font-size:11px; font-weight:500; letter-spacing:.04em; font-family:'Space Grotesk',sans-serif; white-space:nowrap; padding:8px 18px; border:1px solid rgba(255,255,255,0.14); color:#909090; background:transparent; cursor:pointer; transition:border-color .15s, color .15s; }
-        .cp-cta-pill:hover { border-color:rgba(255,255,255,0.35); color:#f0f0f0; }
-        .cp-cta-pill.open  { border-color:rgba(255,255,255,0.25); color:#f0f0f0; }
+        .cp-cta-pill { display:inline-flex; align-items:center; gap:8px; flex-shrink:0; font-size:11px; font-weight:600; letter-spacing:.06em; font-family:'Space Grotesk',sans-serif; white-space:nowrap; padding:9px 20px; border:1px solid rgba(57,217,180,.3); color:${T}; background:rgba(57,217,180,.06); cursor:pointer; transition:border-color .15s, background .15s; }
+        .cp-cta-pill:hover { border-color:rgba(57,217,180,.65); background:rgba(57,217,180,.12); }
+        .cp-cta-pill.open  { border-color:rgba(57,217,180,.45); background:rgba(57,217,180,.08); }
         .cp-cta-pill svg   { transition:transform .28s cubic-bezier(.4,0,.2,1); }
         .cp-cta-pill.open svg { transform:rotate(180deg); }
 
