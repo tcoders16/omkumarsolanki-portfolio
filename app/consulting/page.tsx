@@ -250,39 +250,39 @@ export default function ConsultingPage() {
     <>
       <Nav />
       <style>{`
-        .cp { background:#050c0b; color:#e8f0ef; font-family:'Inter',sans-serif; min-height:100vh; }
+        .cp { background:#050c0b; color:#e8f0ef; font-family:'Space Grotesk',system-ui,sans-serif; min-height:100vh; }
         .cp-w { max-width:1080px; margin:0 auto; padding:0 24px; }
 
         /* hero */
         .cp-hero { padding:120px 0 72px; border-bottom:1px solid #0d2b25; }
-        .cp-eyebrow { font-size:11px; font-weight:600; letter-spacing:.22em; color:${T}; text-transform:uppercase; margin-bottom:18px; }
-        .cp-h1 { font-size:clamp(30px,4.2vw,52px); font-weight:800; line-height:1.08; letter-spacing:-.02em; margin:0 0 22px; }
+        .cp-eyebrow { font-size:11px; font-weight:600; letter-spacing:.22em; color:${T}; text-transform:uppercase; margin-bottom:18px; font-family:'JetBrains Mono',monospace; }
+        .cp-h1 { font-size:clamp(30px,4.2vw,52px); font-weight:800; line-height:1.08; letter-spacing:-.02em; margin:0 0 22px; font-family:'Syne','Space Grotesk',sans-serif; }
         .cp-h1 em { font-style:normal; color:${T}; }
-        .cp-hero-sub { font-size:16px; line-height:1.68; color:#8cb8b0; max-width:620px; }
+        .cp-hero-sub { font-size:16px; line-height:1.68; color:#8cb8b0; max-width:620px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:26px; }
         .cp-pill { font-size:10.5px; font-weight:500; padding:4px 11px; border-radius:2px; background:#0a1e1b; color:#4d9b90; border:1px solid #1a3a34; letter-spacing:.05em; }
 
         /* section */
         .cp-sec { padding:76px 0; border-bottom:1px solid #0d2b25; }
-        .cp-sec-lbl { font-size:10.5px; font-weight:700; letter-spacing:.22em; color:#2e6b62; text-transform:uppercase; margin-bottom:28px; }
+        .cp-sec-lbl { font-size:10.5px; font-weight:700; letter-spacing:.22em; color:#2e6b62; text-transform:uppercase; margin-bottom:28px; font-family:'JetBrains Mono',monospace; }
 
         /* method */
         .cp-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; }
         @media(max-width:680px){ .cp-steps { grid-template-columns:1fr 1fr; } }
         .cp-step { padding:26px 20px; background:#04100e; border:1px solid #0d2b25; }
         .cp-step:hover { border-color:#1a4a3e; }
-        .cp-step-n { font-size:10px; font-weight:700; letter-spacing:.18em; color:#2e6b62; margin-bottom:10px; }
-        .cp-step-t { font-size:13.5px; font-weight:700; color:#d4eceb; margin-bottom:8px; }
-        .cp-step-b { font-size:12px; line-height:1.65; color:#5a9088; }
+        .cp-step-n { font-size:10px; font-weight:700; letter-spacing:.18em; color:#2e6b62; margin-bottom:10px; font-family:'JetBrains Mono',monospace; }
+        .cp-step-t { font-size:13.5px; font-weight:700; color:#d4eceb; margin-bottom:8px; font-family:'Syne',sans-serif; }
+        .cp-step-b { font-size:12px; line-height:1.65; color:#5a9088; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
         /* accordion */
         .cp-case { border:1px solid #0d2b25; margin-bottom:3px; }
         .cp-case-hd { display:flex; align-items:center; justify-content:space-between; padding:18px 22px; cursor:pointer; gap:12px; }
         .cp-case-hd:hover { background:#060f0e; }
         .cp-case-lft { display:flex; align-items:center; gap:14px; flex:1; }
-        .cp-ctag { font-size:10px; font-weight:700; letter-spacing:.14em; padding:3px 9px; border-radius:2px; white-space:nowrap; border:1px solid; }
-        .cp-cname { font-size:14.5px; font-weight:700; color:#d4eceb; }
-        .cp-csec { font-size:11.5px; color:#3d7a71; margin-top:2px; }
+        .cp-ctag { font-size:10px; font-weight:700; letter-spacing:.14em; padding:3px 9px; border-radius:2px; white-space:nowrap; border:1px solid; font-family:'JetBrains Mono',monospace; }
+        .cp-cname { font-size:14.5px; font-weight:700; color:#d4eceb; font-family:'Syne',sans-serif; }
+        .cp-csec { font-size:11.5px; color:#3d7a71; margin-top:2px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-chev { font-size:16px; color:#3d7a71; transition:transform .2s; flex-shrink:0; }
         .cp-chev.open { transform:rotate(180deg); }
         .cp-snap { display:flex; gap:20px; flex-shrink:0; }
@@ -304,7 +304,7 @@ export default function ConsultingPage() {
 
         /* tabs */
         .cp-tabs { display:flex; gap:2px; margin-bottom:14px; }
-        .cp-tab { font-size:10.5px; font-weight:700; letter-spacing:.1em; padding:7px 15px; border:1px solid #0d2b25; cursor:pointer; background:#030a09; color:#3d7a71; }
+        .cp-tab { font-size:10.5px; font-weight:700; letter-spacing:.1em; padding:7px 15px; border:1px solid #0d2b25; cursor:pointer; background:#030a09; color:#3d7a71; font-family:'JetBrains Mono',monospace; }
         .cp-tab.on { background:#0a1e1b; color:${T}; border-color:#1a3a34; }
 
         /* code */
@@ -330,9 +330,9 @@ export default function ConsultingPage() {
         @media(max-width:680px){ .cp-sk3 { grid-template-columns:1fr; } }
         .cp-skcard { background:#04100e; border:1px solid #0d2b25; border-top:2px solid; padding:24px 20px; }
         .cp-skcard-icon { font-size:20px; margin-bottom:12px; }
-        .cp-skcard-g { font-size:13px; font-weight:700; margin-bottom:12px; }
+        .cp-skcard-g { font-size:13px; font-weight:700; margin-bottom:12px; font-family:'Syne',sans-serif; }
         .cp-skcard ul { list-style:none; padding:0; margin:0; }
-        .cp-skcard li { font-size:12px; color:#5a9088; line-height:1.62; padding:5px 0; border-bottom:1px solid #0a1a18; }
+        .cp-skcard li { font-size:12px; color:#5a9088; line-height:1.62; padding:5px 0; border-bottom:1px solid #0a1a18; font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-skcard li:last-child { border-bottom:none; }
         .cp-skcard li::before { content:"-> "; color:#1e5c54; }
 
@@ -340,18 +340,18 @@ export default function ConsultingPage() {
         .cp-why4 { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:36px; }
         @media(max-width:680px){ .cp-why4 { grid-template-columns:1fr; } }
         .cp-wcard { background:#04100e; border:1px solid #0d2b25; padding:24px 20px; }
-        .cp-wcard-lbl { font-size:9.5px; font-weight:700; letter-spacing:.18em; color:#2e6b62; text-transform:uppercase; margin-bottom:8px; }
-        .cp-wcard-t { font-size:14px; font-weight:700; color:#c8e8e4; margin-bottom:8px; }
-        .cp-wcard-b { font-size:12.5px; color:#5a9088; line-height:1.65; }
+        .cp-wcard-lbl { font-size:9.5px; font-weight:700; letter-spacing:.18em; color:#2e6b62; text-transform:uppercase; margin-bottom:8px; font-family:'JetBrains Mono',monospace; }
+        .cp-wcard-t { font-size:14px; font-weight:700; color:#c8e8e4; margin-bottom:8px; font-family:'Syne',sans-serif; }
+        .cp-wcard-b { font-size:12.5px; color:#5a9088; line-height:1.65; font-family:'Space Grotesk',sans-serif; font-weight:300; }
 
         /* cta */
         .cp-cta { padding:76px 0 96px; text-align:center; }
-        .cp-cta h2 { font-size:clamp(22px,3vw,36px); font-weight:800; letter-spacing:-.02em; margin-bottom:14px; }
-        .cp-cta p { font-size:14px; color:#5a9088; margin-bottom:32px; }
+        .cp-cta h2 { font-size:clamp(22px,3vw,36px); font-weight:800; letter-spacing:-.02em; margin-bottom:14px; font-family:'Syne',sans-serif; }
+        .cp-cta p { font-size:14px; color:#5a9088; margin-bottom:32px; font-family:'Space Grotesk',sans-serif; font-weight:300; }
         .cp-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-        .cp-btn-p { font-size:13px; font-weight:700; padding:12px 26px; background:${T}; color:#030a09; border:none; cursor:pointer; letter-spacing:.04em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; }
+        .cp-btn-p { font-size:13px; font-weight:700; padding:12px 26px; background:${T}; color:#030a09; border:none; cursor:pointer; letter-spacing:.04em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; font-family:'Space Grotesk',sans-serif; }
         .cp-btn-p:hover { background:#2fc4a1; }
-        .cp-btn-s { font-size:13px; font-weight:700; padding:12px 26px; background:transparent; color:${T}; border:1px solid #1a3a34; cursor:pointer; letter-spacing:.04em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; }
+        .cp-btn-s { font-size:13px; font-weight:700; padding:12px 26px; background:transparent; color:${T}; border:1px solid #1a3a34; cursor:pointer; letter-spacing:.04em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; font-family:'Space Grotesk',sans-serif; }
         .cp-btn-s:hover { background:#0a1e1b; }
       `}</style>
 
@@ -491,10 +491,10 @@ export default function ConsultingPage() {
         <section className="cp-sec">
           <div className="cp-w">
             <p className="cp-sec-lbl">Overlapping Capabilities</p>
-            <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.02em", margin:"0 0 8px" }}>
+            <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.02em", margin:"0 0 8px", fontFamily:"'Syne',sans-serif" }}>
               Where business strategy meets engineering execution
             </h2>
-            <p style={{ fontSize:13.5, color:"#5a9088", maxWidth:540 }}>
+            <p style={{ fontSize:13.5, color:"#5a9088", maxWidth:540, fontFamily:"'Space Grotesk',sans-serif", fontWeight:300 }}>
               Most consultants stop at the slide deck. Most engineers don&apos;t attend the client call.
               I do both — and that&apos;s where the value is created.
             </p>
@@ -514,7 +514,7 @@ export default function ConsultingPage() {
         <section className="cp-sec">
           <div className="cp-w">
             <p className="cp-sec-lbl">Value to a Consulting Firm</p>
-            <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.02em", margin:"0 0 8px" }}>
+            <h2 style={{ fontSize:"clamp(20px,2.6vw,32px)", fontWeight:800, letterSpacing:"-.02em", margin:"0 0 8px", fontFamily:"'Syne',sans-serif" }}>
               What I bring to Deloitte, McKinsey, Accenture
             </h2>
             <div className="cp-why4">
