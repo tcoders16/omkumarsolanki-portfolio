@@ -523,11 +523,11 @@ export default function Hero() {
               ].map(({label,teal})=>(
                 <span key={label} style={{
                   fontFamily:"var(--font-mono)",
-                  fontSize:"0.52rem",
+                  fontSize:"0.62rem",
                   letterSpacing:"0.07em",
                   textTransform:"uppercase",
-                  padding:"4px 9px",
-                  borderRadius:"2px",
+                  padding:"6px 13px",
+                  borderRadius:"3px",
                   border: teal ? "1px solid rgba(57,217,180,0.45)" : "1px solid rgba(255,255,255,0.09)",
                   color: teal ? "var(--accent)" : "rgba(255,255,255,0.35)",
                   background: teal ? "rgba(57,217,180,0.06)" : "transparent",
