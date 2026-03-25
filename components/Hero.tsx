@@ -535,7 +535,7 @@ export default function Hero() {
                 "AI / ML Engineer",
                 "AI Consultant",
                 "Solutions Architect",
-                "Full-Stack Engineer",
+                "Full-Stack · Cloud · Product Eng",
               ].map((label, i) => (
                 <span key={label} style={{
                   fontFamily:"var(--font-mono)",
