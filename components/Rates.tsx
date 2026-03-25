@@ -154,17 +154,16 @@ export default function Rates() {
         </div>
 
         <h2 className="display-lg reveal reveal-d1" style={{ marginBottom:16 }}>
-          How AI can grow{" "}
+          What I can build{" "}
           <span style={{ fontFamily:"var(--font-serif)", fontStyle:"italic", color:"var(--accent)" }}>
-            your business.
+            for you.
           </span>
         </h2>
 
         <p className="body-lg reveal reveal-d2" style={{ maxWidth:640, marginBottom:52, color:T.dim }}>
-          I build AI systems that run entirely inside your infrastructure —
-          trained on your data, triggered by your business signals,
-          deployed with zero data leaving your building.
-          The AI advisor on the right can show you exactly where to start.
+          AI systems that run inside your infrastructure, trained on your data,
+          and triggered by real business events — not a chatbot wrapper.
+          Your documents, your workflows, your edge. Zero data leaves your building.
         </p>
 
         {/* B2B Value blocks */}
@@ -373,11 +372,11 @@ export default function Rates() {
           <div>
             <div style={{ fontFamily:"var(--font-mono)", fontSize:"0.8rem",
               color:T.white, fontWeight:600, marginBottom:8 }}>
-              Not sure where to start?
+              Ready to talk scope?
             </div>
             <div style={{ fontFamily:"var(--font-mono)", fontSize:"0.56rem", color:T.dim, lineHeight:1.7 }}>
-              Use the AI advisor — it will ask about your business and tell you<br/>
-              exactly where AI can help. Or book a free 30-minute call directly.
+              Every engagement starts with a free 30-minute call where we define<br/>
+              the problem, the deliverable, and the metric that proves it worked.
             </div>
           </div>
           <div style={{ display:"flex", gap:10, flexWrap:"wrap", flexShrink:0 }}>

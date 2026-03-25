@@ -40,12 +40,12 @@ const skills = [
 ];
 
 const capabilities = [
-  "Real-time ML inference pipelines",
-  "Multi-agent orchestration systems",
-  "RAG architectures — cloud & on-premise",
-  "Production cloud infrastructure (AWS)",
-  "Full-stack web applications",
-  "MLOps, CI/CD & drift detection",
+  "Real-time ML inference — <2s end-to-end",
+  "Multi-agent systems that automate business workflows",
+  "Private RAG: your data stays on your servers",
+  "Cloud infra that scales without breaking (AWS/GCP/Azure)",
+  "Full product — backend, frontend, and the AI layer",
+  "MLOps: monitoring, drift detection, auto-retrain pipelines",
 ];
 
 // TODO: Replace with your actual GitHub URL
@@ -82,13 +82,13 @@ export default function About() {
           <span className="label-accent">About</span>
         </div>
         <h2 className="display-lg reveal reveal-d1" style={{ marginBottom: 14 }}>
-          The engineer behind{" "}
-          <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic" }}>the systems.</span>
+          The engineer who ships{" "}
+          <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic" }}>the whole thing.</span>
         </h2>
         <p className="body-lg reveal reveal-d2" style={{ maxWidth: 540, marginBottom: 64 }}>
-          Honours BASc in Artificial Intelligence. AWS Academy Graduate.
-          I ship production AI — not demos. Every role built the instinct
-          to connect systems end-to-end.
+          Honours BASc in AI. AWS-certified. Three years building production ML
+          systems across hiring tech, legal AI, materials science, and enterprise
+          automation — each one deployed, measured, and handed off with documentation.
         </p>
 
         {/* Top row — Photo + Bio */}
@@ -188,9 +188,10 @@ export default function About() {
               lineHeight: 1.85, marginBottom: 28, fontWeight: 300,
             }}>
               I started building AI systems before the current wave made it fashionable.
-              I understand the math — gradient descent, attention mechanisms, RLHF, RAG architectures —
-              and I understand what it takes to make them work at 3 AM when the inference pipeline
-              is down and someone&apos;s live interview is waiting.
+              I understand the math — gradient descent, attention mechanisms, RAG architectures —
+              and I understand what it takes to keep them working at 3 AM when an inference
+              pipeline is down and someone&apos;s live interview is waiting.
+              My standard is simple: if you can&apos;t measure it improving something real, it doesn&apos;t ship.
             </p>
 
             {/* Education */}

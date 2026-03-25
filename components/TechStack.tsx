@@ -128,9 +128,9 @@ export default function TechStack() {
       `}</style>
 
       <div className="ts-inner">
-        <p className="ts-eyebrow ts-fade ts-d1">Tools of the trade</p>
-        <h2 className="ts-h2 ts-fade ts-d2">Full-stack from model weights to browser.</h2>
-        <p className="ts-sub ts-fade ts-d2">Every layer of the stack, owned end-to-end.</p>
+        <p className="ts-eyebrow ts-fade ts-d1">Full Technical Stack</p>
+        <h2 className="ts-h2 ts-fade ts-d2">From model weights to the browser — every layer owned.</h2>
+        <p className="ts-sub ts-fade ts-d2">No hand-offs, no integration gaps. One engineer who understands the full system.</p>
 
         <div className="ts-grid ts-fade ts-d3">
           {CATEGORIES.map(cat => (

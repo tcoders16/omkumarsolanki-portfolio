@@ -484,7 +484,7 @@ export default function Hero() {
           <span style={{width:5,height:5,borderRadius:"50%",background:"var(--accent)",
             boxShadow:"0 0 8px var(--accent)",animation:"pulse 2.5s ease infinite"}}/>
           <span className="label" style={{color:"var(--muted)"}}>
-            Open to founding roles &amp; AI consulting
+            Available · Founding Engineer roles &amp; AI consulting
           </span>
         </div>
 
@@ -499,7 +499,7 @@ export default function Hero() {
               <span style={{
                 fontFamily:"var(--font-display)",fontWeight:800,
                 fontSize:"clamp(2.6rem,7vw,7.5rem)",letterSpacing:"-0.045em",color:"var(--white)",
-              }}>Om kumar</span>
+              }}>Om Kumar</span>
             </div>
             <div className="reveal reveal-d2" style={{lineHeight:0.88,marginBottom:20}}>
               <span style={{
@@ -531,11 +531,10 @@ export default function Hero() {
             `}</style>
             <div className="reveal reveal-d2" style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:24}}>
               {[
-                "Founding Engineer",
                 "AI / ML Engineer",
+                "Founding Engineer",
                 "AI Consultant",
-                "Solutions Architect",
-                "Full-Stack · Cloud · Product Eng",
+                "Full-Stack · Cloud · MLOps",
               ].map((label, i) => (
                 <span key={label} style={{
                   fontFamily:"var(--font-mono)",
@@ -580,22 +579,22 @@ export default function Hero() {
 
             {/* Tagline */}
             <p className="reveal reveal-d4 body-lg" style={{maxWidth:440,marginBottom:36}}>
-              I build AI systems that run in production — real-time ML pipelines,
-              agentic architectures with context memory, and cloud infrastructure
-              engineered to handle real-world load.
+              I take a business problem, build the AI system that solves it, and
+              hand it off running in production. Real-time ML pipelines, autonomous
+              agent networks, on-premise RAG — end-to-end, every layer owned.
             </p>
 
             {/* CTAs */}
             <div className="reveal reveal-d5" style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:48}}>
               <a href="#contact" className="btn btn-primary">
-                Start a project
+                Hire me
                 <svg width={13} height={13} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
                 </svg>
               </a>
               <a href="#work"     className="btn btn-ghost">See my work</a>
-              <a href="#terminal" className="btn btn-ghost" style={{fontFamily:"var(--font-mono)",fontSize:"0.63rem"}}>
-                Run terminal →
+              <a href="/resume" target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{fontFamily:"var(--font-mono)",fontSize:"0.63rem"}}>
+                Download CV ↓
               </a>
             </div>
 

@@ -187,9 +187,9 @@ export default function Process() {
       `}</style>
 
       <div className="pr-inner">
-        <p className="pr-eyebrow pr-fade pr-d1">How I Work</p>
-        <h2 className="pr-h2 pr-fade pr-d2">Problem to production, no slide decks.</h2>
-        <p className="pr-sub pr-fade pr-d2">A repeatable five-step engagement that ships real software and transfers ownership cleanly.</p>
+        <p className="pr-eyebrow pr-fade pr-d1">My Engagement Process</p>
+        <h2 className="pr-h2 pr-fade pr-d2">From your problem to working software. No slide decks.</h2>
+        <p className="pr-sub pr-fade pr-d2">Five steps that any client or hiring manager can hold me to. Every phase ends with a clear deliverable, not a status update.</p>
 
         <div className="pr-layout pr-fade pr-d3">
           {/* Left: step list */}
