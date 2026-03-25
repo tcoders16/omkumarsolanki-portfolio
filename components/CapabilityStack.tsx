@@ -19,11 +19,11 @@ const PIPELINE_STEPS = [
 const WHY = [
   {
     problem: "Single LLM forgets",
-    solution: "Memory Agent keeps session context short-term and retrieves long-term facts from a vector store — agents never lose the thread.",
+    solution: "Memory Agent keeps session context short-term and retrieves long-term facts from a vector store. Agents never lose the thread.",
   },
   {
     problem: "One model can't specialise",
-    solution: "Each agent is tuned for its job — an ML agent runs a fine-tuned risk model, a tool agent handles API calls. No jack-of-all-trades hallucinations.",
+    solution: "Each agent is tuned for its job. An ML agent runs a fine-tuned risk model, a tool agent handles API calls. No jack-of-all-trades hallucinations.",
   },
   {
     problem: "Long tasks time out or drift",
@@ -31,16 +31,43 @@ const WHY = [
   },
   {
     problem: "No fault tolerance",
-    solution: "A validator agent checks every agent's output before it passes downstream. Bad outputs are caught and rerouted — not silently swallowed.",
+    solution: "A validator agent checks every agent's output before it passes downstream. Bad outputs are caught and rerouted, not silently swallowed.",
   },
 ];
 
 const HOW = [
-  { num: "01", title: "Define agent contracts", body: "Each agent gets a strict input/output schema. The orchestrator enforces types — no agent can accept or emit arbitrary blobs." },
-  { num: "02", title: "Build the orchestrator", body: "LangGraph or a custom state machine. It holds the DAG of agent dependencies, handles branching logic, and owns retry / fallback policy." },
+  { num: "01", title: "Define agent contracts", body: "Each agent gets a strict input/output schema. The orchestrator enforces types so no agent can accept or emit arbitrary blobs." },
+  { num: "02", title: "Build the orchestrator", body: "LangGraph or a custom state machine. It holds the DAG of agent dependencies, handles branching logic, and owns retry and fallback policy." },
   { num: "03", title: "Wire the memory layer", body: "Session memory lives in Redis (fast, ephemeral). Permanent memory indexes into pgvector or Pinecone. Agents query both on every turn." },
   { num: "04", title: "Instrument every node", body: "Each agent emits spans to an observability backend (Langfuse / OTLP). I can see exactly where latency or hallucinations enter the pipeline." },
-  { num: "05", title: "Harden with a validator", body: "A lightweight LLM-as-judge agent scores coherence and confidence before results leave the pipeline. Below threshold → re-route or flag for human review." },
+  { num: "05", title: "Harden with a validator", body: "A lightweight LLM-as-judge agent scores coherence and confidence before results leave the pipeline. Below threshold, re-route or flag for human review." },
+];
+
+const ENTERPRISE = [
+  {
+    firm: "Deloitte",
+    label: "Human-in-the-Loop (HITL)",
+    body: "Regulated industries require agents to pause and route high-risk decisions to human reviewers before action. Mandatory in Deloitte AI deployments for finance and healthcare.",
+    tags: ["Azure AI Studio", "Semantic Kernel", "Approval Workflows"],
+  },
+  {
+    firm: "Accenture",
+    label: "Guardrails + PII Redaction",
+    body: "Constitutional AI filters, hallucination detection, and automatic PII scrubbing on every agent output. Accenture AI Hub mandates these before any client data touches an LLM.",
+    tags: ["NeMo Guardrails", "Presidio", "Azure Content Safety"],
+  },
+  {
+    firm: "McKinsey / Big 4",
+    label: "Audit Trails + Compliance",
+    body: "Every agent action, tool call, and decision is logged with full trace context. SOC2, ISO 27001, and GDPR-ready architecture required across all enterprise AI platforms.",
+    tags: ["Langfuse", "OpenTelemetry", "Immutable Logs"],
+  },
+  {
+    firm: "IBM / SAP",
+    label: "Enterprise Orchestration Platforms",
+    body: "Large firms standardise on IBM Watson Orchestrate, AWS Bedrock Agents, or Google Vertex AI Agents for governance, cost control, and multi-model routing across business units.",
+    tags: ["Watson Orchestrate", "Bedrock Agents", "Vertex AI"],
+  },
 ];
 
 /* ── Animated pipeline ───────────────────────────────────────────── */
@@ -315,11 +342,12 @@ export default function CapabilityStack() {
         {/* Header */}
         <p className="ma-eyebrow ma-fade ma-d1">Multi-Agent Orchestration</p>
         <h2 className="ma-h1 ma-fade ma-d2">
-          Why one LLM isn&apos;t enough —<br />and how I architect the alternative.
+          Why one LLM isn&apos;t enough.<br />How I architect the alternative.
         </h2>
         <p className="ma-sub ma-fade ma-d3">
           I build pipelines where specialised agents plan, remember, predict, and validate
-          in concert — shipping reliable AI products instead of fragile demos.
+          in concert. Reliable AI products, not fragile demos. Industry-standard architecture
+          used at Deloitte, Accenture, and McKinsey.
         </p>
 
         {/* Animated pipeline */}
@@ -358,11 +386,74 @@ export default function CapabilityStack() {
 
         </div>
 
+        {/* Enterprise section */}
+        <div className="ma-fade ma-d5" style={{ marginBottom: 48 }}>
+          <p className="ma-section-label" style={{ marginBottom: 28 }}>
+            Industry-standard patterns used at top-tier firms
+          </p>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: 16,
+          }}>
+            {ENTERPRISE.map(e => (
+              <div key={e.firm} style={{
+                padding: "20px 20px 16px",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 8,
+                background: "rgba(255,255,255,0.015)",
+              }}>
+                <div style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "9px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "rgba(57,217,180,0.45)",
+                  marginBottom: 8,
+                }}>{e.firm}</div>
+                <div style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: "0.88rem",
+                  fontWeight: 700,
+                  color: "#e8e8e8",
+                  marginBottom: 10,
+                  lineHeight: 1.3,
+                }}>{e.label}</div>
+                <p style={{
+                  fontSize: "0.76rem",
+                  color: "#5a5a5a",
+                  lineHeight: 1.65,
+                  margin: "0 0 12px",
+                }}>{e.body}</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                  {e.tags.map(t => (
+                    <span key={t} style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: "9px",
+                      letterSpacing: "0.05em",
+                      padding: "3px 8px",
+                      borderRadius: 3,
+                      border: "1px solid rgba(57,217,180,0.18)",
+                      color: "rgba(57,217,180,0.5)",
+                      background: "rgba(57,217,180,0.04)",
+                    }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Tech stack */}
         <div className="ma-stack-bar ma-fade ma-d5">
-          <span className="ma-stack-label">Stack</span>
-          {["LangGraph", "CrewAI", "LangChain", "OpenAI API", "Anthropic API",
-            "Redis", "pgvector", "Pinecone", "Langfuse", "FastAPI", "Docker", "AWS"].map(t => (
+          <span className="ma-stack-label">Full Stack</span>
+          {[
+            "LangGraph", "AutoGen", "Semantic Kernel", "CrewAI",
+            "Azure AI Studio", "AWS Bedrock", "Vertex AI",
+            "Redis", "pgvector", "Pinecone",
+            "Langfuse", "OpenTelemetry",
+            "NeMo Guardrails", "FastAPI", "Docker", "Kubernetes",
+          ].map(t => (
             <span key={t} className="ma-stack-tag">{t}</span>
           ))}
         </div>
