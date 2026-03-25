@@ -408,7 +408,7 @@ export default function Agentic() {
   const firedCount = signals.filter(s => getState(s) === "fired").length;
 
   return (
-    <section id="agents" ref={sectionRef} className="section" style={{ borderTop:"1px solid var(--border)" }}>
+    <section id="agentic" ref={sectionRef} className="section" style={{ borderTop:"1px solid var(--border)" }}>
       <div className="container">
 
         {/* Section rule */}
