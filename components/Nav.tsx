@@ -107,13 +107,44 @@ export default function Nav() {
           ))}
         </div>
 
-        {/* Desktop right — Book a Call + Resume */}
+        {/* Desktop right — Ask AI + Book a Call + Resume */}
         <div className="hide-mobile" style={{
           display: "flex",
           alignItems: "center",
           gap: 10,
           flexShrink: 0,
         }}>
+          <button
+            onClick={() => (window as unknown as Record<string, () => void>).openBusinessChat?.()}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.58rem",
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              color: "#39d9b4",
+              textTransform: "uppercase",
+              padding: "6px 13px",
+              border: "1px solid rgba(57,217,180,0.4)",
+              borderRadius: 3,
+              background: "rgba(57,217,180,0.06)",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              transition: "all 0.2s",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "rgba(57,217,180,0.14)";
+              e.currentTarget.style.borderColor = "rgba(57,217,180,0.7)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "rgba(57,217,180,0.06)";
+              e.currentTarget.style.borderColor = "rgba(57,217,180,0.4)";
+            }}
+          >
+            <span style={{ fontSize: 10 }}>✦</span> Ask AI
+          </button>
           <a
             href="/book"
             style={{
@@ -211,6 +242,26 @@ export default function Nav() {
           padding: "0 24px",
           flexWrap: "wrap",
         }}>
+          <button
+            onClick={() => { setMenuOpen(false); (window as unknown as Record<string, () => void>).openBusinessChat?.(); }}
+            style={{
+              flex: 1,
+              minWidth: 120,
+              textAlign: "center",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.65rem",
+              fontWeight: 700,
+              color: "#39d9b4",
+              letterSpacing: "0.08em",
+              padding: "11px 16px",
+              border: "1px solid rgba(57,217,180,0.4)",
+              borderRadius: 6,
+              background: "rgba(57,217,180,0.07)",
+              cursor: "pointer",
+            }}
+          >
+            ✦ ASK AI
+          </button>
           <a
             href="/book"
             onClick={() => setMenuOpen(false)}

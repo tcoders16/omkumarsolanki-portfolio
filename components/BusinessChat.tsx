@@ -29,6 +29,12 @@ export default function BusinessChat() {
     if (open) { setTimeout(() => inputRef.current?.focus(), 80); setHasNew(false); }
   }, [open]);
 
+  // Global opener — nav "Ask AI" button calls this
+  useEffect(() => {
+    (window as unknown as Record<string, unknown>).openBusinessChat = () => setOpen(true);
+    return () => { delete (window as unknown as Record<string, unknown>).openBusinessChat; };
+  }, []);
+
   async function send() {
     const text = input.trim();
     if (!text || loading || count >= CLIENT_LIMIT) return;
