@@ -2,6 +2,8 @@ import Nav              from "@/components/Nav";
 import Hero             from "@/components/Hero";
 import Work             from "@/components/Work";
 import CapabilityStack  from "@/components/CapabilityStack";
+import TechStack        from "@/components/TechStack";
+import Process          from "@/components/Process";
 import Agentic          from "@/components/Agentic";
 import MathShowcase     from "@/components/MathShowcase";
 import Story            from "@/components/Story";
@@ -17,7 +19,9 @@ export default function Home() {
       <Nav />
       <Hero />
       <CapabilityStack />
+      <TechStack />
       <Work />
+      <Process />
       <Agentic />
       <MathShowcase />
       <Story />
