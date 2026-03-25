@@ -166,7 +166,7 @@ export default function CapabilityStack() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={`ma-wrap${visible ? " visible" : ""}`}>
+    <section ref={sectionRef} id="agents" className={`ma-wrap${visible ? " visible" : ""}`}>
       <style>{`
         .ma-wrap {
           background: #000;
