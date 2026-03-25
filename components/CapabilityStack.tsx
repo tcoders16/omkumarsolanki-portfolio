@@ -2,176 +2,150 @@
 import { useEffect, useRef, useState } from "react";
 
 /* ════════════════════════════════════════════════════════════════════
-   CAPABILITY STACK — what I build as an engineer + consultant
+   MULTI-AGENT ORCHESTRATION — why I build them + how
 ════════════════════════════════════════════════════════════════════ */
 
-const AGENTS = [
+/* ── Pipeline animation data ──────────────────────────────────────── */
+const PIPELINE_STEPS = [
+  { id: "input",   label: "User Task",        sub: "\"analyse this contract\"",      icon: "▸", col: 0 },
+  { id: "orch",    label: "Orchestrator",     sub: "plans · routes · retries",       icon: "⬡", col: 1 },
+  { id: "mem",     label: "Memory Agent",     sub: "reads session + vector store",   icon: "⟳", col: 2 },
+  { id: "ml",      label: "ML Agent",         sub: "risk scoring · classification",  icon: "∿", col: 2 },
+  { id: "api",     label: "Tool Agent",       sub: "fetches docs · calls APIs",      icon: "⇌", col: 2 },
+  { id: "valid",   label: "Validator",        sub: "checks coherence · confidence",  icon: "✓", col: 3 },
+  { id: "output",  label: "Structured Output",sub: "JSON · report · action",         icon: "◈", col: 4 },
+];
+
+const WHY = [
   {
-    id: "memory",
-    label: "Memory\nAgent",
-    sub: "Session + Persistent",
-    angle: -120,
-    color: "#39d9b4",
-    icon: "⟳",
+    problem: "Single LLM forgets",
+    solution: "Memory Agent keeps session context short-term and retrieves long-term facts from a vector store — agents never lose the thread.",
   },
   {
-    id: "ml",
-    label: "ML / Pred\nAgent",
-    sub: "Model Inference",
-    angle: -60,
-    color: "#39d9b4",
-    icon: "∿",
+    problem: "One model can't specialise",
+    solution: "Each agent is tuned for its job — an ML agent runs a fine-tuned risk model, a tool agent handles API calls. No jack-of-all-trades hallucinations.",
   },
   {
-    id: "api",
-    label: "API\nAgent",
-    sub: "Tool + Function Calls",
-    angle: 60,
-    color: "#39d9b4",
-    icon: "⇌",
+    problem: "Long tasks time out or drift",
+    solution: "The orchestrator breaks work into atomic sub-tasks, runs them in parallel where possible, and retries failed nodes without re-running the whole chain.",
   },
   {
-    id: "ui",
-    label: "UI\nAgent",
-    sub: "Frontend Delivery",
-    angle: 120,
-    color: "#39d9b4",
-    icon: "◫",
+    problem: "No fault tolerance",
+    solution: "A validator agent checks every agent's output before it passes downstream. Bad outputs are caught and rerouted — not silently swallowed.",
   },
 ];
 
-const CAPS = [
-  {
-    num: "01",
-    title: "Multi-Agent Orchestration",
-    body: "Design and ship pipelines where specialized agents hand off tasks — planner → executor → validator — with retry logic, fallback routing, and observable traces.",
-    tags: ["LangGraph", "CrewAI", "OpenAI Swarm"],
-  },
-  {
-    num: "02",
-    title: "Session & Persistent Memory",
-    body: "Give agents short-term working memory (in-session context windows) and long-term recall (vector + KV stores) so they remember past decisions across runs.",
-    tags: ["Pinecone", "Redis", "Chroma", "pgvector"],
-  },
-  {
-    num: "03",
-    title: "ML Model Prediction",
-    body: "Train, fine-tune, and serve classification, regression, and generative models. Build evaluation pipelines with drift detection and retraining triggers.",
-    tags: ["PyTorch", "scikit-learn", "HuggingFace", "MLflow"],
-  },
-  {
-    num: "04",
-    title: "Full-Stack Engineering",
-    body: "Ship production web apps from Postgres schema to React UI — REST & GraphQL APIs, auth flows, real-time sockets, and CI pipelines included.",
-    tags: ["Next.js", "FastAPI", "Node", "PostgreSQL"],
-  },
-  {
-    num: "05",
-    title: "Cloud & Infrastructure",
-    body: "Containerise workloads, automate deployments, and architect scalable cloud infra with cost controls, observability dashboards, and zero-downtime releases.",
-    tags: ["AWS", "GCP", "Docker", "Terraform", "k8s"],
-  },
-  {
-    num: "06",
-    title: "Business Analysis & Consulting",
-    body: "Translate board-level problems into scoped technical solutions. Deliver ROI-clear recommendations with working prototypes — not slide decks.",
-    tags: ["Root Cause", "SoW Design", "Stakeholder Mgmt"],
-  },
+const HOW = [
+  { num: "01", title: "Define agent contracts", body: "Each agent gets a strict input/output schema. The orchestrator enforces types — no agent can accept or emit arbitrary blobs." },
+  { num: "02", title: "Build the orchestrator", body: "LangGraph or a custom state machine. It holds the DAG of agent dependencies, handles branching logic, and owns retry / fallback policy." },
+  { num: "03", title: "Wire the memory layer", body: "Session memory lives in Redis (fast, ephemeral). Permanent memory indexes into pgvector or Pinecone. Agents query both on every turn." },
+  { num: "04", title: "Instrument every node", body: "Each agent emits spans to an observability backend (Langfuse / OTLP). I can see exactly where latency or hallucinations enter the pipeline." },
+  { num: "05", title: "Harden with a validator", body: "A lightweight LLM-as-judge agent scores coherence and confidence before results leave the pipeline. Below threshold → re-route or flag for human review." },
 ];
 
-/* ── Animated SVG orbit diagram ─────────────────────────────────── */
-function OrbitDiagram() {
-  const [pulse, setPulse] = useState(0);
+/* ── Animated pipeline ───────────────────────────────────────────── */
+function Pipeline() {
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setPulse(p => (p + 1) % 4), 900);
+    const id = setInterval(() => setActive(p => (p + 1) % PIPELINE_STEPS.length), 1100);
     return () => clearInterval(id);
   }, []);
 
-  const cx = 200, cy = 200, R = 120, r = 42;
+  // group by column
+  const cols: Record<number, typeof PIPELINE_STEPS> = {};
+  PIPELINE_STEPS.forEach(s => { cols[s.col] = cols[s.col] || []; cols[s.col].push(s); });
+  const colKeys = [0, 1, 2, 3, 4];
 
   return (
-    <svg
-      viewBox="0 0 400 400"
-      style={{ width: "100%", maxWidth: 420, margin: "0 auto", display: "block", overflow: "visible" }}
-    >
-      {/* orbit ring */}
-      <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(57,217,180,0.10)" strokeWidth="1" strokeDasharray="4 6" />
+    <div style={{ overflowX: "auto", paddingBottom: 8 }}>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 0,
+        minWidth: 640,
+        padding: "28px 0",
+      }}>
+        {colKeys.map((col, ci) => (
+          <div key={col} style={{ display: "flex", alignItems: "center", flex: col === 2 ? 1.4 : 1 }}>
+            {/* nodes in this column */}
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              flex: 1,
+              alignItems: "center",
+            }}>
+              {cols[col]?.map(step => {
+                const isActive = PIPELINE_STEPS[active].id === step.id;
+                const isDone = PIPELINE_STEPS.findIndex(s => s.id === step.id) < active;
+                return (
+                  <div key={step.id} style={{
+                    padding: "12px 14px",
+                    borderRadius: 6,
+                    border: isActive
+                      ? "1px solid rgba(57,217,180,0.7)"
+                      : isDone
+                        ? "1px solid rgba(57,217,180,0.25)"
+                        : "1px solid rgba(255,255,255,0.07)",
+                    background: isActive
+                      ? "rgba(57,217,180,0.08)"
+                      : isDone
+                        ? "rgba(57,217,180,0.03)"
+                        : "rgba(255,255,255,0.02)",
+                    width: "100%",
+                    transition: "all 0.35s ease",
+                    boxShadow: isActive ? "0 0 18px rgba(57,217,180,0.12)" : "none",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                      <span style={{
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: 13,
+                        color: isActive ? "#39d9b4" : isDone ? "rgba(57,217,180,0.4)" : "rgba(255,255,255,0.2)",
+                        transition: "color 0.35s",
+                      }}>{step.icon}</span>
+                      <span style={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        color: isActive ? "#f0f0f0" : isDone ? "rgba(240,240,240,0.55)" : "rgba(240,240,240,0.3)",
+                        transition: "color 0.35s",
+                      }}>{step.label}</span>
+                    </div>
+                    <div style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: "0.6rem",
+                      color: isActive ? "rgba(57,217,180,0.75)" : "rgba(255,255,255,0.2)",
+                      letterSpacing: "0.03em",
+                      transition: "color 0.35s",
+                    }}>{step.sub}</div>
+                  </div>
+                );
+              })}
+            </div>
 
-      {/* connection lines — pulse sequentially */}
-      {AGENTS.map((ag, i) => {
-        const rad = (ag.angle * Math.PI) / 180;
-        const ax = cx + R * Math.cos(rad);
-        const ay = cy + R * Math.sin(rad);
-        const active = pulse === i;
-        return (
-          <line
-            key={ag.id}
-            x1={cx} y1={cy} x2={ax} y2={ay}
-            stroke={active ? "rgba(57,217,180,0.7)" : "rgba(57,217,180,0.13)"}
-            strokeWidth={active ? 1.5 : 1}
-            style={{ transition: "stroke 0.3s, stroke-width 0.3s" }}
-          />
-        );
-      })}
-
-      {/* center node — orchestrator */}
-      <circle cx={cx} cy={cy} r={38} fill="#000" stroke="rgba(57,217,180,0.4)" strokeWidth="1.5" />
-      <circle cx={cx} cy={cy} r={33} fill="rgba(57,217,180,0.06)" />
-      <text x={cx} y={cy - 8} textAnchor="middle" fill="#39d9b4"
-        fontSize="11" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.08em">
-        ORCH
-      </text>
-      <text x={cx} y={cy + 6} textAnchor="middle" fill="rgba(240,240,240,0.8)"
-        fontSize="8.5" fontFamily="'Space Grotesk', sans-serif">
-        ESTRATOR
-      </text>
-      <text x={cx} y={cy + 19} textAnchor="middle" fill="rgba(240,240,240,0.4)"
-        fontSize="7" fontFamily="'JetBrains Mono', monospace">
-        ─ plans · routes · retries ─
-      </text>
-
-      {/* agent nodes */}
-      {AGENTS.map((ag, i) => {
-        const rad = (ag.angle * Math.PI) / 180;
-        const ax = cx + R * Math.cos(rad);
-        const ay = cy + R * Math.sin(rad);
-        const active = pulse === i;
-        const lines = ag.label.split("\n");
-        return (
-          <g key={ag.id}>
-            <circle cx={ax} cy={ay} r={r}
-              fill={active ? "rgba(57,217,180,0.10)" : "#000"}
-              stroke={active ? "rgba(57,217,180,0.6)" : "rgba(57,217,180,0.18)"}
-              strokeWidth={active ? 1.5 : 1}
-              style={{ transition: "all 0.3s" }}
-            />
-            {/* icon */}
-            <text x={ax} y={ay - 11} textAnchor="middle" fill="rgba(57,217,180,0.7)"
-              fontSize="13" fontFamily="monospace">{ag.icon}</text>
-            {lines.map((ln, li) => (
-              <text key={li} x={ax} y={ay + 3 + li * 11} textAnchor="middle"
-                fill={active ? "#f0f0f0" : "rgba(240,240,240,0.75)"}
-                fontSize="8.5" fontFamily="'Space Grotesk', sans-serif"
-                style={{ transition: "fill 0.3s" }}>
-                {ln}
-              </text>
-            ))}
-            <text x={ax} y={ay + r + 13} textAnchor="middle"
-              fill="rgba(57,217,180,0.55)" fontSize="7"
-              fontFamily="'JetBrains Mono', monospace">
-              {ag.sub}
-            </text>
-          </g>
-        );
-      })}
-
-      {/* data flow arrow hint */}
-      <text x={cx} y={395} textAnchor="middle" fill="rgba(240,240,240,0.2)"
-        fontSize="8" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.1em">
-        every node can call tools · read memory · emit results
-      </text>
-    </svg>
+            {/* arrow between columns */}
+            {ci < colKeys.length - 1 && (
+              <div style={{
+                width: 32,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+                  <path d="M0 6h22M22 6l-5-4M22 6l-5 4"
+                    stroke={active > ci ? "rgba(57,217,180,0.6)" : "rgba(255,255,255,0.1)"}
+                    strokeWidth="1.5" strokeLinecap="round"
+                    style={{ transition: "stroke 0.35s" }}
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -192,310 +166,205 @@ export default function CapabilityStack() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={`cs-wrap${visible ? " visible" : ""}`}>
+    <section ref={sectionRef} className={`ma-wrap${visible ? " visible" : ""}`}>
       <style>{`
-        /* ── tokens ── */
-        .cs-wrap {
+        .ma-wrap {
           background: #000;
           color: #f0f0f0;
           padding: 120px 24px 100px;
           font-family: 'Space Grotesk', sans-serif;
           position: relative;
-          overflow: hidden;
         }
-        .cs-inner {
-          max-width: 1180px;
-          margin: 0 auto;
-        }
+        .ma-inner { max-width: 1100px; margin: 0 auto; }
 
-        /* ── header ── */
-        .cs-eyebrow {
+        /* ── entrance animations ── */
+        .ma-fade {
+          opacity: 0; transform: translateY(20px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .ma-wrap.visible .ma-fade { opacity: 1; transform: none; }
+        .ma-wrap.visible .ma-d1 { transition-delay: 0.05s; }
+        .ma-wrap.visible .ma-d2 { transition-delay: 0.12s; }
+        .ma-wrap.visible .ma-d3 { transition-delay: 0.20s; }
+        .ma-wrap.visible .ma-d4 { transition-delay: 0.28s; }
+        .ma-wrap.visible .ma-d5 { transition-delay: 0.36s; }
+
+        /* ── eyebrow ── */
+        .ma-eyebrow {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 10.5px;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: #39d9b4;
-          margin-bottom: 18px;
-          opacity: 0;
-          transform: translateY(12px);
-          transition: opacity 0.5s ease, transform 0.5s ease;
+          font-size: 10.5px; letter-spacing: 0.22em;
+          text-transform: uppercase; color: #39d9b4;
+          margin-bottom: 16px;
         }
-        .cs-wrap.visible .cs-eyebrow { opacity: 1; transform: none; }
-
-        .cs-h1 {
+        .ma-h1 {
           font-family: 'Syne', sans-serif;
-          font-size: clamp(2.1rem, 5vw, 3.6rem);
-          font-weight: 800;
-          line-height: 1.08;
-          margin: 0 0 18px;
-          color: #f0f0f0;
-          opacity: 0;
-          transform: translateY(18px);
-          transition: opacity 0.55s ease 0.08s, transform 0.55s ease 0.08s;
+          font-size: clamp(2rem, 4.5vw, 3.4rem);
+          font-weight: 800; line-height: 1.08;
+          margin: 0 0 14px; color: #f0f0f0;
         }
-        .cs-wrap.visible .cs-h1 { opacity: 1; transform: none; }
-
-        .cs-sub {
-          font-size: 1.05rem;
-          color: #888;
-          max-width: 540px;
-          line-height: 1.7;
-          margin: 0 0 72px;
-          opacity: 0;
-          transform: translateY(14px);
-          transition: opacity 0.55s ease 0.16s, transform 0.55s ease 0.16s;
+        .ma-sub {
+          font-size: 1rem; color: #707070; max-width: 560px;
+          line-height: 1.7; margin: 0 0 60px;
         }
-        .cs-wrap.visible .cs-sub { opacity: 1; transform: none; }
 
-        /* ── two-col layout ── */
-        .cs-body {
+        /* ── pipeline box ── */
+        .ma-pipeline-box {
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 10px;
+          padding: 28px 24px 20px;
+          background: rgba(255,255,255,0.015);
+          margin-bottom: 72px;
+        }
+        .ma-pipeline-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px; letter-spacing: 0.2em;
+          text-transform: uppercase; color: rgba(57,217,180,0.4);
+          margin-bottom: 18px;
+        }
+
+        /* ── two-col: why + how ── */
+        .ma-cols {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 64px 80px;
-          align-items: start;
+          gap: 60px 80px;
+          margin-bottom: 72px;
         }
-        @media (max-width: 860px) {
-          .cs-body { grid-template-columns: 1fr; gap: 48px; }
-        }
+        @media (max-width: 820px) { .ma-cols { grid-template-columns: 1fr; gap: 48px; } }
 
-        /* ── orbit side ── */
-        .cs-orbit-wrap {
-          opacity: 0;
-          transform: scale(0.95);
-          transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
-        }
-        .cs-wrap.visible .cs-orbit-wrap { opacity: 1; transform: scale(1); }
-
-        .cs-orbit-label {
+        .ma-section-label {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9.5px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: rgba(57,217,180,0.5);
-          text-align: center;
-          margin-bottom: 24px;
-        }
-
-        /* ── capability cards ── */
-        .cs-caps {
-          display: flex;
-          flex-direction: column;
-          gap: 0;
-        }
-
-        .cs-cap {
-          padding: 20px 0;
+          font-size: 9.5px; letter-spacing: 0.2em;
+          text-transform: uppercase; color: rgba(57,217,180,0.5);
+          margin-bottom: 28px;
+          padding-bottom: 12px;
           border-bottom: 1px solid rgba(255,255,255,0.06);
-          opacity: 0;
-          transform: translateX(16px);
-          transition: opacity 0.45s ease, transform 0.45s ease;
         }
-        .cs-wrap.visible .cs-cap { opacity: 1; transform: none; }
-        .cs-wrap.visible .cs-cap:nth-child(1) { transition-delay: 0.15s; }
-        .cs-wrap.visible .cs-cap:nth-child(2) { transition-delay: 0.22s; }
-        .cs-wrap.visible .cs-cap:nth-child(3) { transition-delay: 0.29s; }
-        .cs-wrap.visible .cs-cap:nth-child(4) { transition-delay: 0.36s; }
-        .cs-wrap.visible .cs-cap:nth-child(5) { transition-delay: 0.43s; }
-        .cs-wrap.visible .cs-cap:nth-child(6) { transition-delay: 0.50s; }
 
-        .cs-cap-row {
-          display: flex;
-          gap: 14px;
-          align-items: baseline;
-          margin-bottom: 5px;
+        /* WHY rows */
+        .ma-why-row {
+          padding: 18px 0;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .cs-cap-num {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.18em;
-          color: rgba(57,217,180,0.4);
-          flex-shrink: 0;
-          padding-top: 2px;
-        }
-        .cs-cap-title {
+        .ma-why-row:last-child { border-bottom: none; }
+        .ma-problem {
           font-family: 'Syne', sans-serif;
-          font-size: 0.97rem;
-          font-weight: 700;
-          color: #f0f0f0;
+          font-size: 0.88rem; font-weight: 700;
+          color: rgba(240,240,240,0.9); margin-bottom: 6px;
+          display: flex; align-items: center; gap: 10px;
         }
-        .cs-cap-body {
-          font-size: 0.82rem;
-          color: #707070;
-          line-height: 1.65;
-          margin: 0 0 10px 0;
-          padding-left: 27px;
-        }
-        .cs-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          padding-left: 27px;
-        }
-        .cs-tag {
+        .ma-problem::before {
+          content: "✕";
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9.5px;
-          letter-spacing: 0.06em;
-          color: #505050;
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 3px;
-          padding: 2px 7px;
+          font-size: 9px; color: rgba(255,80,80,0.6);
+          flex-shrink: 0;
+        }
+        .ma-solution {
+          font-size: 0.8rem; color: #606060; line-height: 1.65;
+          padding-left: 18px;
+        }
+
+        /* HOW steps */
+        .ma-how-step {
+          display: flex; gap: 18px;
+          padding: 16px 0;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .ma-how-step:last-child { border-bottom: none; }
+        .ma-how-num {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px; letter-spacing: 0.18em;
+          color: rgba(57,217,180,0.4); flex-shrink: 0;
+          padding-top: 3px; width: 22px;
+        }
+        .ma-how-title {
+          font-family: 'Syne', sans-serif;
+          font-size: 0.88rem; font-weight: 700;
+          color: rgba(240,240,240,0.9); margin-bottom: 5px;
+        }
+        .ma-how-body {
+          font-size: 0.79rem; color: #606060; line-height: 1.65; margin: 0;
+        }
+
+        /* ── tech stack bar ── */
+        .ma-stack-bar {
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 8px;
+          padding: 24px 28px;
+          background: rgba(255,255,255,0.012);
+          display: flex; align-items: center;
+          gap: 12px; flex-wrap: wrap;
+        }
+        .ma-stack-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px; letter-spacing: 0.18em;
+          text-transform: uppercase; color: rgba(57,217,180,0.45);
+          margin-right: 8px; flex-shrink: 0;
+        }
+        .ma-stack-tag {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.65rem; letter-spacing: 0.05em;
+          padding: 4px 10px; border-radius: 3px;
+          border: 1px solid rgba(255,255,255,0.08);
+          color: rgba(255,255,255,0.35);
           background: rgba(255,255,255,0.02);
-        }
-
-        /* ── bottom call-to-action bar ── */
-        .cs-cta-bar {
-          margin-top: 80px;
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 12px;
-          padding: 36px 40px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 24px;
-          background: rgba(255,255,255,0.015);
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s;
-        }
-        .cs-wrap.visible .cs-cta-bar { opacity: 1; transform: none; }
-
-        .cs-cta-text {
-          font-family: 'Syne', sans-serif;
-          font-size: 1.2rem;
-          font-weight: 700;
-          color: #f0f0f0;
-          line-height: 1.4;
-        }
-        .cs-cta-sub {
-          font-size: 0.82rem;
-          color: #606060;
-          margin-top: 6px;
-          font-family: 'Space Grotesk', sans-serif;
-        }
-        .cs-cta-links {
-          display: flex;
-          gap: 14px;
-          flex-shrink: 0;
-          flex-wrap: wrap;
-        }
-        .cs-cta-btn {
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 0.82rem;
-          font-weight: 600;
-          letter-spacing: 0.04em;
-          padding: 11px 24px;
-          border-radius: 6px;
-          cursor: pointer;
-          text-decoration: none;
-          display: inline-block;
-          transition: opacity 0.2s;
-        }
-        .cs-cta-btn:hover { opacity: 0.8; }
-        .cs-cta-btn.primary {
-          background: #39d9b4;
-          color: #000;
-          border: 1px solid #39d9b4;
-        }
-        .cs-cta-btn.ghost {
-          background: transparent;
-          color: #f0f0f0;
-          border: 1px solid rgba(255,255,255,0.15);
-        }
-
-        @media (max-width: 640px) {
-          .cs-cta-bar { flex-direction: column; align-items: flex-start; padding: 28px 24px; }
-          .cs-cta-links { width: 100%; }
-          .cs-cta-btn { flex: 1; text-align: center; }
         }
       `}</style>
 
-      <div className="cs-inner">
+      <div className="ma-inner">
 
         {/* Header */}
-        <p className="cs-eyebrow">Engineering Capability Stack</p>
-        <h2 className="cs-h1">
-          I build systems<br />that think, learn &amp; ship.
+        <p className="ma-eyebrow ma-fade ma-d1">Multi-Agent Orchestration</p>
+        <h2 className="ma-h1 ma-fade ma-d2">
+          Why one LLM isn&apos;t enough —<br />and how I architect the alternative.
         </h2>
-        <p className="cs-sub">
-          From multi-agent pipelines with memory to ML inference in production —
-          every layer built end-to-end, with consulting clarity on why it matters.
+        <p className="ma-sub ma-fade ma-d3">
+          I build pipelines where specialised agents plan, remember, predict, and validate
+          in concert — shipping reliable AI products instead of fragile demos.
         </p>
 
-        {/* Body grid */}
-        <div className="cs-body">
+        {/* Animated pipeline */}
+        <div className="ma-pipeline-box ma-fade ma-d3">
+          <p className="ma-pipeline-label">▸ Live pipeline trace — task execution flow</p>
+          <Pipeline />
+        </div>
 
-          {/* LEFT — orbit diagram */}
-          <div className="cs-orbit-wrap">
-            <p className="cs-orbit-label">Multi-Agent Orchestration System</p>
-            <OrbitDiagram />
+        {/* Why + How */}
+        <div className="ma-cols">
 
-            {/* layer legend below diagram */}
-            <div style={{
-              marginTop: 32,
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 10,
-            }}>
-              {[
-                { icon: "☁", label: "Cloud Infra", sub: "AWS · GCP · k8s" },
-                { icon: "⬡", label: "Full-Stack", sub: "Next.js · FastAPI" },
-                { icon: "∿", label: "ML Models", sub: "PyTorch · HuggingFace" },
-                { icon: "⟳", label: "Memory Layer", sub: "Vector + KV stores" },
-              ].map(item => (
-                <div key={item.label} style={{
-                  padding: "12px 14px",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  borderRadius: 8,
-                  background: "rgba(255,255,255,0.015)",
-                }}>
-                  <div style={{ fontSize: 14, marginBottom: 4, color: "rgba(57,217,180,0.6)" }}>{item.icon}</div>
-                  <div style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: "#e0e0e0",
-                    marginBottom: 2,
-                  }}>{item.label}</div>
-                  <div style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: 9,
-                    color: "#505050",
-                    letterSpacing: "0.06em",
-                  }}>{item.sub}</div>
-                </div>
-              ))}
-            </div>
+          {/* WHY */}
+          <div className="ma-fade ma-d4">
+            <p className="ma-section-label">Why multi-agent?</p>
+            {WHY.map(w => (
+              <div key={w.problem} className="ma-why-row">
+                <div className="ma-problem">{w.problem}</div>
+                <div className="ma-solution">{w.solution}</div>
+              </div>
+            ))}
           </div>
 
-          {/* RIGHT — capability cards */}
-          <div className="cs-caps">
-            {CAPS.map(cap => (
-              <div key={cap.num} className="cs-cap">
-                <div className="cs-cap-row">
-                  <span className="cs-cap-num">{cap.num}</span>
-                  <span className="cs-cap-title">{cap.title}</span>
-                </div>
-                <p className="cs-cap-body">{cap.body}</p>
-                <div className="cs-tags">
-                  {cap.tags.map(t => <span key={t} className="cs-tag">{t}</span>)}
+          {/* HOW */}
+          <div className="ma-fade ma-d5">
+            <p className="ma-section-label">How I build them</p>
+            {HOW.map(h => (
+              <div key={h.num} className="ma-how-step">
+                <span className="ma-how-num">{h.num}</span>
+                <div>
+                  <div className="ma-how-title">{h.title}</div>
+                  <p className="ma-how-body">{h.body}</p>
                 </div>
               </div>
             ))}
           </div>
+
         </div>
 
-        {/* CTA bar */}
-        <div className="cs-cta-bar">
-          <div>
-            <div className="cs-cta-text">Need this for your business or firm?</div>
-            <div className="cs-cta-sub">
-              I take on consulting engagements and full-time roles — Deloitte, McKinsey, or early-stage startups.
-            </div>
-          </div>
-          <div className="cs-cta-links">
-            <a href="/consulting" className="cs-cta-btn primary">View Consulting Work</a>
-            <a href="#contact" className="cs-cta-btn ghost">Get in Touch</a>
-          </div>
+        {/* Tech stack */}
+        <div className="ma-stack-bar ma-fade ma-d5">
+          <span className="ma-stack-label">Stack</span>
+          {["LangGraph", "CrewAI", "LangChain", "OpenAI API", "Anthropic API",
+            "Redis", "pgvector", "Pinecone", "Langfuse", "FastAPI", "Docker", "AWS"].map(t => (
+            <span key={t} className="ma-stack-tag">{t}</span>
+          ))}
         </div>
 
       </div>
