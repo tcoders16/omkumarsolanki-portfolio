@@ -11,8 +11,6 @@ import Terminal         from "@/components/Terminal";
 import About            from "@/components/About";
 import Rates            from "@/components/Rates";
 import Contact          from "@/components/Contact";
-import BusinessChat     from "@/components/BusinessChat";
-
 export default function Home() {
   return (
     <>
@@ -29,7 +27,6 @@ export default function Home() {
       <About />
       <Rates />
       <Contact />
-      <BusinessChat />
     </>
   );
 }

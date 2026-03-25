@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import FloatingNumbers from "@/components/FloatingNumbers";
+import BusinessChat from "@/components/BusinessChat";
 
 export const metadata: Metadata = {
   title: "Omkumar Solanki - AI & ML Engineer",
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="grain" />
         <FloatingNumbers />
         <main style={{ position: "relative", zIndex: 1 }}>{children}</main>
+        <BusinessChat />
       </body>
     </html>
   );

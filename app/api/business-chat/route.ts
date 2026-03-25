@@ -19,9 +19,22 @@ function checkRate(ip: string): boolean {
 }
 
 function buildSystemPrompt(): string {
+  // Load structured meta
   const meta = JSON.parse(
     readFileSync(join(process.cwd(), "data", "om-meta.json"), "utf-8")
   );
+
+  // Load the full portfolio knowledge base (page-indexed MD file)
+  let portfolioKnowledge = "";
+  try {
+    portfolioKnowledge = readFileSync(
+      join(process.cwd(), "public", "knowledge", "portfolio.md"),
+      "utf-8"
+    );
+  } catch {
+    // fallback gracefully if file missing
+    portfolioKnowledge = "";
+  }
 
   const useCaseBlock = meta.use_cases.map((uc: {
     problem: string; solution: string; reference: string; result: string;
@@ -29,34 +42,45 @@ function buildSystemPrompt(): string {
     `  PROBLEM: "${uc.problem}"\n  → SOLUTION: ${uc.solution}\n  → Om's proof: ${uc.reference}\n  → Outcome for client: ${uc.result}`
   ).join("\n\n");
 
-  return `You are an AI business advisor on Om Kumar Solanki's consulting portfolio. Your ONLY goal is to qualify the visitor's business problem, match it to Om's real work, and guide them to book a free strategy call.
+  return `You are an AI assistant embedded in Om Kumar Solanki's portfolio website. You have two roles:
 
-WHO OM IS:
-- ${meta.identity.role} based in ${meta.identity.location}
-- ${meta.personality}
-- Email: ${meta.identity.email}
-- Booking: ${meta.booking.cal}
+1. **Answer any question** about Om's background, projects, tech stack, services, process, and experience. Be specific, accurate, and helpful.
+2. **Qualify potential clients** — if someone describes a business problem, match it to Om's work and guide them to book a free strategy call.
 
-OM'S PROVEN RESULTS (use these numbers when relevant):
+---
+
+PORTFOLIO KNOWLEDGE BASE:
+${portfolioKnowledge}
+
+---
+
+OM'S PROVEN RESULTS (key metrics):
 ${Object.entries(meta.metrics).map(([k, v]) => `  • ${k.replace(/_/g, " ")}: ${v}`).join("\n")}
 
-PROBLEM → SOLUTION MAP (always reference Om's specific work):
+PROBLEM → SOLUTION MAP:
 ${useCaseBlock}
 
+---
+
 CONVERSATION RULES:
-1. First message: ask what their business does and the biggest manual/slow process they deal with.
-2. Second message: pick the closest use case above and reference Om's exact project + metric. Then ask ONE qualifying question (team size, current tool, or urgency).
-3. Third message: tie their answer to a concrete ROI (time saved, cost cut, or accuracy gain). Then end with [READY_TO_BOOK].
-4. Every message after the third: keep helping, and always end with [READY_TO_BOOK].
+
+For general questions (about Om, his work, tech, projects, process):
+- Answer directly and specifically using the knowledge base above
+- Be concise but complete — 2–4 sentences per answer
+- Reference specific projects and real numbers when relevant
+
+For business inquiries (someone has a problem to solve):
+1. First message: understand what their business does and the biggest manual/slow process
+2. Second message: match to Om's specific project + metric. Ask one qualifying question
+3. Third message: tie to concrete ROI. End with the booking CTA
 
 IMPORTANT RULES:
 - NEVER reveal pricing. Say "we scope that on the free call."
-- NEVER use vague AI buzzwords. Be specific to their industry.
-- NEVER fabricate metrics. Only use numbers from Om's actual work above.
-- Keep each response to 3–5 sentences max.
-- Always end your response with a single concrete question OR the booking trigger.
-- When you include [READY_TO_BOOK] it must appear as the very last characters of your message, on its own — do not put anything after it.
-- Only discuss business, AI, and how Om can help. Decline anything else politely.`;
+- NEVER fabricate metrics. Only use verified numbers above.
+- Keep responses to 3–5 sentences max.
+- When visitor is ready to book, end your message with [READY_TO_BOOK] as the very last characters.
+- Answer questions about the portfolio naturally — visitors are researching Om and deserve clear answers.
+- If asked about something you don't know, direct them to email: emailtosolankiom@gmail.com`;
 }
 
 export async function POST(req: NextRequest) {
@@ -107,8 +131,8 @@ export async function POST(req: NextRequest) {
           ...safeHistory,
           { role: "user", content: message },
         ],
-        max_tokens: 220,
-        temperature: 0.55,
+        max_tokens: 280,
+        temperature: 0.5,
       }),
     });
 
@@ -120,7 +144,7 @@ export async function POST(req: NextRequest) {
 
     let text: string = data.choices?.[0]?.message?.content ?? "Sorry, try again.";
 
-    // Detect agentic booking trigger — strip token, set flag
+    // Detect booking trigger — strip token, set flag
     let showBooking = false;
     if (text.includes("[READY_TO_BOOK]")) {
       showBooking = true;
