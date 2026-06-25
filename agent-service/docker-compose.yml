@@ -1,0 +1,17 @@
+services:
+  agent-service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
+      SERVICE_API_KEY: ${SERVICE_API_KEY:-}
+      RAG_MODE: ${RAG_MODE:-hybrid}
+      GUARDRAILS_ENABLED: ${GUARDRAILS_ENABLED:-true}
+    volumes:
+      # Persist the Chroma index across restarts in local dev.
+      - chroma:/srv/.chroma
+
+volumes:
+  chroma:

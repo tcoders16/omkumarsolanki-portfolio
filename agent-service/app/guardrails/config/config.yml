@@ -1,0 +1,32 @@
+models:
+  - type: main
+    engine: openai
+    model: gpt-4o-mini
+
+# Programmable rails applied around the multi-agent generation.
+rails:
+  input:
+    flows:
+      - self check input        # jailbreak + topic control (PII note below)
+  output:
+    flows:
+      - self check output       # toxicity / pricing-leak / fabricated-metric scrub
+
+  dialog:
+    single_call:
+      enabled: False
+
+# We generate answers from our own LangGraph (registered as the `generate_answer`
+# action) rather than letting NeMo's LLM answer directly.
+instructions:
+  - type: general
+    content: |
+      You are the safety layer for Om Kumar Solanki's AI consulting assistant.
+      The assistant only discusses Om, his work, and AI consulting for a visiting
+      company's business problem. Everything else is out of scope.
+
+sample_conversation: |
+  user "we want to automate our hiring screening"
+    express business problem
+  bot respond with consulting answer
+    "Here's how Om would approach that..."

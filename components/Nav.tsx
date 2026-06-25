@@ -201,6 +201,18 @@ export default function Nav() {
           background: rgba(57,217,180,0.14);
           border-color: rgba(57,217,180,0.7);
         }
+        .nav-btn-consult {
+          font-family: var(--font-mono);
+          font-size: 0.58rem; font-weight: 700;
+          letter-spacing: 0.08em; text-transform: uppercase;
+          color: #001512; padding: 6px 13px;
+          border: 1px solid #39d9b4;
+          border-radius: 3px; background: #39d9b4;
+          cursor: pointer; white-space: nowrap;
+          display: flex; align-items: center; gap: 5px;
+          transition: all 0.2s;
+        }
+        .nav-btn-consult:hover { background: #4fe7c4; border-color: #4fe7c4; }
         .nav-btn-call {
           font-family: var(--font-mono);
           font-size: 0.58rem; font-weight: 600;
@@ -325,6 +337,11 @@ export default function Nav() {
           border: 1px solid rgba(57,217,180,0.4);
           background: rgba(57,217,180,0.07);
         }
+        .nav-mobile-cta-consult {
+          color: #001512;
+          border: 1px solid #39d9b4;
+          background: #39d9b4;
+        }
         .nav-mobile-cta-call {
           color: #3dba7e;
           border: 1px solid rgba(61,186,126,0.4);
@@ -386,6 +403,12 @@ export default function Nav() {
         {/* Desktop CTAs */}
         <div className="nav-ctas">
           <button
+            className="nav-btn-consult"
+            onClick={() => (window as unknown as Record<string, () => void>).openConsultAgent?.()}
+          >
+            <span style={{ fontSize: 9 }}>◆</span> Consult
+          </button>
+          <button
             className="nav-btn-ai"
             onClick={() => (window as unknown as Record<string, () => void>).openBusinessChat?.()}
           >
@@ -438,6 +461,12 @@ export default function Nav() {
         </div>
 
         <div className="nav-mobile-ctas">
+          <button
+            className="nav-mobile-cta nav-mobile-cta-consult"
+            onClick={() => { setMenuOpen(false); (window as unknown as Record<string, () => void>).openConsultAgent?.(); }}
+          >
+            ◆ Consult
+          </button>
           <button
             className="nav-mobile-cta nav-mobile-cta-ai"
             onClick={() => { setMenuOpen(false); (window as unknown as Record<string, () => void>).openBusinessChat?.(); }}

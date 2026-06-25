@@ -18,6 +18,7 @@ export default function BusinessChat() {
   const [loading, setLoading] = useState(false);
   const [count,   setCount]   = useState(0);
   const [hasNew,  setHasNew]  = useState(true);
+  const [consultOpen, setConsultOpen] = useState(false);
   const bodyRef  = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -33,6 +34,18 @@ export default function BusinessChat() {
   useEffect(() => {
     (window as unknown as Record<string, unknown>).openBusinessChat = () => setOpen(true);
     return () => { delete (window as unknown as Record<string, unknown>).openBusinessChat; };
+  }, []);
+
+  // When the Consult slide-over opens, step aside: close this panel and hide the
+  // floating launcher so the two AI entry points don't overlap.
+  useEffect(() => {
+    const onToggle = (e: Event) => {
+      const isOpen = !!(e as CustomEvent).detail?.open;
+      setConsultOpen(isOpen);
+      if (isOpen) setOpen(false);
+    };
+    window.addEventListener("consult:toggle", onToggle);
+    return () => window.removeEventListener("consult:toggle", onToggle);
   }, []);
 
   async function send() {
@@ -79,7 +92,8 @@ export default function BusinessChat() {
 
   return (
     <>
-      {/* Floating toggle button */}
+      {/* Floating toggle button — hidden while the Consult panel is open */}
+      {!consultOpen && (
       <button
         onClick={() => setOpen(o => !o)}
         aria-label="AI Business Advisor"
@@ -126,6 +140,7 @@ export default function BusinessChat() {
           }} />
         )}
       </button>
+      )}
 
       {/* Chat panel */}
       {open && (
