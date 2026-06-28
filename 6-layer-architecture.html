@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>6-Layer Agentic AI Architecture — Amex</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:#080812;
+    color:#e2e8f0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* TOP BAR */
+  #topbar{
+    background:#0f0f1f;
+    border-bottom:1px solid #1e1e2e;
+    padding:14px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-shrink:0;
+  }
+  .topbar-title{font-size:16px;font-weight:800;color:#f8fafc;}
+  .topbar-sub{font-size:11px;color:#64748b;margin-top:2px;}
+  .topbar-tag{
+    background:#1e1e3a;border:1px solid #4f46e5;
+    border-radius:6px;padding:5px 14px;
+    font-size:11px;font-weight:700;color:#818cf8;
+  }
+
+  /* MAIN BODY */
+  #body{
+    display:flex;
+    flex:1;
+    overflow:hidden;
+  }
+
+  /* LEFT: Layer Nav */
+  #layer-nav{
+    width:230px;min-width:230px;
+    background:#0c0c1a;
+    border-right:1px solid #1e1e2e;
+    display:flex;flex-direction:column;
+    overflow:hidden;
+    padding:14px 10px;
+    gap:6px;
+  }
+  .nav-label{
+    font-size:9px;font-weight:700;color:#475569;
+    text-transform:uppercase;letter-spacing:1px;
+    padding:4px 8px 8px;
+  }
+  .layer-btn{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;border-radius:8px;
+    cursor:pointer;transition:all 0.15s;
+    border:1px solid transparent;
+  }
+  .layer-btn:hover{background:#13132a;}
+  .layer-btn.active{border-color:var(--lc);background:#13132a;}
+  .layer-dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--lc);flex-shrink:0;
+  }
+  .layer-btn-text{}
+  .layer-btn-num{font-size:9px;font-weight:700;color:#475569;}
+  .layer-btn-name{font-size:12px;font-weight:700;color:#94a3b8;}
+  .layer-btn.active .layer-btn-name{color:#f1f5f9;}
+
+  /* CENTER: Architecture Visual */
+  #arch-visual{
+    flex:1;
+    overflow-y:auto;
+    padding:20px;
+    scrollbar-width:thin;
+    scrollbar-color:#1e1e2e transparent;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    position:relative;
+  }
+
+  .arch-layer{
+    border-radius:10px;
+    border:1px solid #1e1e2e;
+    padding:12px 16px;
+    cursor:pointer;
+    transition:all 0.2s;
+    position:relative;
+    overflow:hidden;
+  }
+  .arch-layer::before{
+    content:'';
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:4px;
+    background:var(--lc);
+    border-radius:4px 0 0 4px;
+  }
+  .arch-layer:hover{border-color:var(--lc);transform:translateY(-1px);}
+  .arch-layer.active{
+    border-color:var(--lc);
+    background:linear-gradient(135deg, #0f0f1f 0%, #13132a 100%);
+    box-shadow:0 0 20px var(--ls);
+  }
+  .layer-header{
+    display:flex;align-items:center;gap:12px;margin-bottom:0;
+  }
+  .arch-layer.active .layer-header{margin-bottom:12px;}
+  .layer-icon{
+    font-size:20px;width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:8px;background:#ffffff08;flex-shrink:0;
+  }
+  .layer-meta{}
+  .layer-num-label{font-size:9px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;}
+  .layer-name{font-size:14px;font-weight:800;color:#f1f5f9;}
+  .layer-tagline{font-size:11px;color:#64748b;margin-top:1px;}
+
+  /* Expanded content */
+  .layer-body{display:none;}
+  .arch-layer.active .layer-body{display:block;}
+
+  .components-row{
+    display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;
+  }
+  .comp-chip{
+    background:#ffffff08;border:1px solid #ffffff12;
+    border-radius:6px;padding:6px 12px;
+    font-size:11px;font-weight:600;color:#cbd5e1;
+    transition:all 0.15s;cursor:default;
+  }
+  .comp-chip:hover{
+    background:var(--lca);border-color:var(--lc);color:#fff;
+  }
+
+  .details-grid{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
+  }
+  .detail-card{
+    background:#ffffff06;border:1px solid #1e1e2e;
+    border-radius:8px;padding:10px 12px;
+  }
+  .detail-card-title{
+    font-size:10px;font-weight:700;color:#64748b;
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;
+  }
+  .detail-card-body{font-size:12px;color:#94a3b8;line-height:1.6;}
+
+  .flow-arrow{
+    text-align:center;font-size:18px;color:#4f46e5;
+    line-height:1;padding:2px 0;
+    flex-shrink:0;
+  }
+
+  /* RIGHT: Detail Panel */
+  #detail-panel{
+    width:280px;min-width:280px;
+    background:#0c0c1a;
+    border-left:1px solid #1e1e2e;
+    display:flex;flex-direction:column;
+    overflow:hidden;
+  }
+  #detail-header{
+    padding:16px 16px 12px;
+    border-bottom:1px solid #1e1e2e;
+  }
+  .detail-header-label{
+    font-size:9px;font-weight:700;color:#475569;
+    text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;
+  }
+  .detail-layer-name{font-size:16px;font-weight:800;color:#f1f5f9;}
+  .detail-layer-sub{font-size:11px;color:#64748b;margin-top:3px;line-height:1.5;}
+
+  #detail-content{
+    flex:1;overflow-y:auto;padding:14px;
+    scrollbar-width:thin;scrollbar-color:#1e1e2e transparent;
+  }
+  .detail-section{margin-bottom:16px;}
+  .detail-section-title{
+    font-size:10px;font-weight:700;color:var(--lc);
+    text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;
+  }
+
+  .what-box{
+    background:#ffffff06;border-left:3px solid var(--lc);
+    border-radius:0 6px 6px 0;padding:10px 12px;
+    font-size:12px;color:#94a3b8;line-height:1.6;margin-bottom:8px;
+  }
+  .why-box{
+    background:#ffffff06;border:1px solid #1e1e2e;
+    border-radius:6px;padding:10px 12px;margin-bottom:6px;
+  }
+  .why-box-q{font-size:11px;font-weight:700;color:#fbbf24;margin-bottom:3px;}
+  .why-box-a{font-size:11px;color:#94a3b8;line-height:1.5;}
+
+  .tech-pill{
+    display:inline-block;
+    background:#1e1e3a;border:1px solid #2d2d5e;
+    border-radius:4px;padding:3px 8px;
+    font-size:10px;font-weight:600;color:#818cf8;
+    margin:2px;
+  }
+
+  .interview-tip{
+    background:#1a1a2e;border:1px solid #f59e0b;
+    border-radius:7px;padding:10px 12px;margin-top:4px;
+  }
+  .interview-tip-label{font-size:9px;font-weight:700;color:#f59e0b;margin-bottom:4px;}
+  .interview-tip-text{font-size:11px;color:#fbbf24;line-height:1.5;}
+
+  #flow-indicator{
+    padding:10px 14px;
+    border-top:1px solid #1e1e2e;
+    background:#0a0a14;
+  }
+  .flow-label{font-size:9px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+  .flow-step{
+    display:flex;align-items:center;gap:6px;margin-bottom:4px;
+  }
+  .flow-step-dot{
+    width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  }
+  .flow-step-text{font-size:10px;color:#64748b;}
+  .flow-step.active-flow .flow-step-text{color:#e2e8f0;font-weight:600;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div>
+    <div class="topbar-title">6-Layer Agentic AI Architecture</div>
+    <div class="topbar-sub">Click any layer to deep dive — Amex AI Engineer I</div>
+  </div>
+  <div class="topbar-tag">System Design Reference</div>
+</div>
+
+<div id="body">
+
+  <!-- LEFT NAV -->
+  <div id="layer-nav">
+    <div class="nav-label">Layers</div>
+    <div id="nav-items"></div>
+  </div>
+
+  <!-- CENTER VISUAL -->
+  <div id="arch-visual">
+    <div id="layers-container"></div>
+  </div>
+
+  <!-- RIGHT DETAIL -->
+  <div id="detail-panel">
+    <div id="detail-header">
+      <div class="detail-header-label">Selected Layer</div>
+      <div class="detail-layer-name" id="dp-name">—</div>
+      <div class="detail-layer-sub" id="dp-sub">Click a layer to explore</div>
+    </div>
+    <div id="detail-content"></div>
+    <div id="flow-indicator">
+      <div class="flow-label">Request Flow</div>
+      <div id="flow-steps"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const layers = [
+  {
+    num: "L1",
+    name: "Client Layer",
+    tagline: "Where users & systems connect",
+    icon: "🖥️",
+    color: "#3b82f6",
+    colorAlpha: "#3b82f620",
+    colorShadow: "#3b82f610",
+    components: ["Card Member App", "Internal Tools", "Merchant Portal", "REST API Consumers", "Mobile SDK", "Partner APIs"],
+    what: "The entry point for all requests. Card members ask questions via mobile app, internal agents use internal tools, merchants call APIs. Every request starts here before touching any AI logic.",
+    why: [
+      { q: "Why separate this from the gateway?", a: "Clients don't know backend topology. They call one stable interface. You can change backends without touching client code." },
+      { q: "What protocols here?", a: "HTTPS/REST for web+mobile. gRPC for low-latency internal tools. WebSocket for streaming LLM responses token-by-token." },
+    ],
+    tech: ["React Native", "REST", "gRPC", "WebSocket", "OAuth 2.0", "TLS 1.3"],
+    tip: "Say: 'Clients should be protocol-agnostic — REST for external, gRPC for internal, WebSocket for streaming responses.'",
+  },
+  {
+    num: "L2",
+    name: "Gateway Layer",
+    tagline: "Security, traffic, and control",
+    icon: "🛡️",
+    color: "#8b5cf6",
+    colorAlpha: "#8b5cf620",
+    colorShadow: "#8b5cf610",
+    components: ["API Gateway", "Auth / JWT Validator", "Rate Limiter", "Load Balancer", "WAF", "Request Router"],
+    what: "The bouncer. Every request hits this layer first. It validates identity, enforces quotas, distributes traffic, and routes to the right downstream service. Nothing reaches L3 without passing through here.",
+    why: [
+      { q: "Why rate limiting here?", a: "LLM calls cost money. One team shouldn't be able to blow the entire monthly budget. Token bucket per team enforces fairness." },
+      { q: "Why WAF at this layer?", a: "Prompt injection attacks come disguised as user input. WAF + input sanitization catches obvious patterns before they reach the LLM." },
+    ],
+    tech: ["Kong / AWS API GW", "JWT", "Redis (rate limit)", "Nginx", "AWS WAF", "Istio"],
+    tip: "Say: 'In financial services, every request needs audit trail from this layer — log the caller, timestamp, and request ID before anything else.'",
+  },
+  {
+    num: "L3",
+    name: "Orchestration Layer",
+    tagline: "The agent brain and workflow engine",
+    icon: "🧠",
+    color: "#06b6d4",
+    colorAlpha: "#06b6d420",
+    colorShadow: "#06b6d410",
+    components: ["Agent Orchestrator", "Tool Router", "Workflow Engine", "State Manager", "Planner (ReAct)", "Human Escalation"],
+    what: "This is where agentic behavior lives. The orchestrator decides: which tools to call, in what order, and what to do with the result. It runs the ReAct loop — Reason → Act → Observe → Reason again — until the task is done or escalated.",
+    why: [
+      { q: "What is the ReAct loop?", a: "Think: what do I know? Act: call a tool. Observe: what did I get back? Think again: is this enough to answer? Repeat until confident." },
+      { q: "Why a separate State Manager?", a: "Agents are multi-step. State tracks: what tools were called, what was retrieved, confidence so far. Needed for audit and for resuming after failures." },
+    ],
+    tech: ["LangChain", "LangGraph", "Custom orchestrator", "Redis (state)", "Temporal (workflows)", "Kafka"],
+    tip: "Say: 'The orchestrator is the most critical layer — it decides autonomy level. At Amex, I'd always cap autonomous actions and require confidence > 85% before any irreversible step.'",
+  },
+  {
+    num: "L4",
+    name: "AI / Model Layer",
+    tagline: "LLMs, embedders, classifiers",
+    icon: "⚡",
+    color: "#10b981",
+    colorAlpha: "#10b98120",
+    colorShadow: "#10b98110",
+    components: ["LLM (GPT-4 / Claude)", "Embedding Model", "Re-ranker", "Intent Classifier", "Safety Filter", "Prompt Builder"],
+    what: "The intelligence layer. LLMs generate responses. Embedders convert text to vectors for retrieval. Re-rankers sort results by true relevance. Safety filters catch harmful or sensitive outputs before they reach the user.",
+    why: [
+      { q: "Why a separate re-ranker?", a: "Vector similarity finds 'similar' text, not 'relevant' text. A cross-encoder re-ranker reads the query AND the chunk together — much better relevance at the cost of 50-100ms." },
+      { q: "Why safety filter after LLM, not before?", a: "Before = prompt guardrails (block bad inputs). After = output guardrails (catch PII, hallucinated account numbers). You need both." },
+    ],
+    tech: ["GPT-4 / Claude 3", "text-embedding-3", "Cohere Re-rank", "Llama Guard", "RAGAS", "LangSmith"],
+    tip: "Say: 'I'd run output through a safety classifier before returning to the card member — financial data means we can never risk leaking another member's account details in a response.'",
+  },
+  {
+    num: "L5",
+    name: "Data Layer",
+    tagline: "Vectors, facts, cache, and history",
+    icon: "🗄️",
+    color: "#f59e0b",
+    colorAlpha: "#f59e0b20",
+    colorShadow: "#f59e0b10",
+    components: ["Vector Store (pgvector)", "Transaction DB (Postgres)", "Feature Store (Redis)", "Semantic Cache", "Audit Log (S3)", "Knowledge Base"],
+    what: "Where all data lives. Vector store holds embeddings for RAG retrieval. Transaction DB is the source of truth. Feature store (Redis) pre-computes user features for sub-millisecond access. Semantic cache deduplicates expensive LLM calls.",
+    why: [
+      { q: "Why pgvector over Pinecone?", a: "pgvector sits inside your existing Postgres — no new infra, simpler ops, and you get SQL filters for free. Pinecone only makes sense at 100M+ vectors." },
+      { q: "Why semantic cache?", a: "If 1000 users ask 'what was my biggest charge last month?' that's one LLM call worth of work cached and reused. Cuts LLM cost by 30-40%." },
+    ],
+    tech: ["pgvector", "Postgres", "Redis", "S3", "Pinecone (alt)", "Elasticsearch"],
+    tip: "Say: 'Every userId must be a hard filter on vector search — you can never return another card member's data. This is the most critical constraint in this layer.'",
+  },
+  {
+    num: "L6",
+    name: "Infrastructure Layer",
+    tagline: "Compute, messaging, and observability",
+    icon: "☁️",
+    color: "#ef4444",
+    colorAlpha: "#ef444420",
+    colorShadow: "#ef444410",
+    components: ["Kubernetes (EKS)", "Kafka (event stream)", "Prometheus + Grafana", "Distributed Tracing", "CI/CD Pipeline", "Secrets Manager"],
+    what: "The foundation everything runs on. Kubernetes orchestrates containers. Kafka streams events between services. Prometheus+Grafana monitors health. Distributed tracing (Jaeger) lets you follow a single request through all 6 layers.",
+    why: [
+      { q: "Why Kafka between layers?", a: "Decouples services. When a transaction happens, Kafka fans it out to: fraud detection, RAG ingestion, audit logger — all independently, without tight coupling." },
+      { q: "Why distributed tracing?", a: "An LLM response is slow. You need to know: was it the embedding (L4)? The vector search (L5)? The LLM call (L4)? Tracing gives you a flame graph across all layers." },
+    ],
+    tech: ["AWS EKS", "Kafka", "Prometheus", "Grafana", "Jaeger", "GitHub Actions", "Vault"],
+    tip: "Say: 'At Amex scale, I'd add circuit breakers between every layer — if the LLM is slow, the gateway should return a cached or fallback response rather than timing out the card member.'",
+  },
+];
+
+let active = 0;
+
+function setLayer(idx) {
+  active = idx;
+  render();
+}
+
+function render() {
+  const l = layers[active];
+
+  // CSS vars on body
+  document.body.style.setProperty('--lc', l.color);
+  document.body.style.setProperty('--lca', l.colorAlpha);
+  document.body.style.setProperty('--ls', l.colorShadow);
+
+  // Nav
+  document.getElementById('nav-items').innerHTML = layers.map((item, i) =>
+    `<div class="layer-btn ${i === active ? 'active' : ''}"
+         style="--lc:${item.color}"
+         onclick="setLayer(${i})">
+      <div class="layer-dot"></div>
+      <div class="layer-btn-text">
+        <div class="layer-btn-num">${item.num}</div>
+        <div class="layer-btn-name">${item.name}</div>
+      </div>
+    </div>`
+  ).join('');
+
+  // Architecture visual
+  document.getElementById('layers-container').innerHTML = layers.map((item, i) =>
+    `<div class="arch-layer ${i === active ? 'active' : ''}"
+          style="--lc:${item.color};--lca:${item.colorAlpha};--ls:${item.colorShadow}40"
+          onclick="setLayer(${i})">
+      <div class="layer-header">
+        <div class="layer-icon">${item.icon}</div>
+        <div class="layer-meta">
+          <div class="layer-num-label">${item.num} · ${i === active ? 'Active' : 'Click to expand'}</div>
+          <div class="layer-name">${item.name}</div>
+          <div class="layer-tagline">${item.tagline}</div>
+        </div>
+      </div>
+      <div class="layer-body">
+        <div class="components-row">
+          ${item.components.map(c => `<div class="comp-chip" style="--lc:${item.color};--lca:${item.colorAlpha}">${c}</div>`).join('')}
+        </div>
+        <div class="details-grid">
+          <div class="detail-card">
+            <div class="detail-card-title">What it does</div>
+            <div class="detail-card-body">${item.what}</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-card-title">Why it exists</div>
+            ${item.why.map(w => `<div style="margin-bottom:6px"><div style="font-size:11px;font-weight:700;color:#fbbf24">${w.q}</div><div style="font-size:11px;color:#94a3b8;line-height:1.5">${w.a}</div></div>`).join('')}
+          </div>
+          <div class="detail-card">
+            <div class="detail-card-title">Tech stack</div>
+            <div>${item.tech.map(t => `<span class="tech-pill">${t}</span>`).join('')}</div>
+            <div style="margin-top:10px;padding:8px;background:#1a1a2e;border-radius:6px;border:1px solid #f59e0b">
+              <div style="font-size:9px;font-weight:700;color:#f59e0b;margin-bottom:3px">INTERVIEW TIP</div>
+              <div style="font-size:10px;color:#fbbf24;line-height:1.5">${item.tip}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${i < layers.length - 1 ? '<div class="flow-arrow">↕</div>' : ''}`
+  ).join('');
+
+  // Right panel
+  document.getElementById('dp-name').textContent = `${l.num} · ${l.name}`;
+  document.getElementById('dp-name').style.color = l.color;
+  document.getElementById('dp-sub').textContent = l.tagline;
+
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title" style="color:${l.color}">What It Does</div>
+      <div class="what-box" style="--lc:${l.color}">${l.what}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title" style="color:${l.color}">Key Questions</div>
+      ${l.why.map(w => `
+        <div class="why-box">
+          <div class="why-box-q">${w.q}</div>
+          <div class="why-box-a">${w.a}</div>
+        </div>`).join('')}
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title" style="color:${l.color}">Tech Stack</div>
+      <div>${l.tech.map(t => `<span class="tech-pill">${t}</span>`).join('')}</div>
+    </div>
+    <div class="interview-tip">
+      <div class="interview-tip-label">💬 Say This in the Interview</div>
+      <div class="interview-tip-text">${l.tip}</div>
+    </div>
+  `;
+
+  // Flow indicator
+  document.getElementById('flow-steps').innerHTML = layers.map((item, i) =>
+    `<div class="flow-step ${i === active ? 'active-flow' : ''}">
+      <div class="flow-step-dot" style="background:${i === active ? item.color : '#1e1e2e'}"></div>
+      <div class="flow-step-text">${item.num} ${item.name} ${i === active ? '←' : ''}</div>
+    </div>`
+  ).join('');
+}
+
+render();
+</script>
+</body>
+</html>

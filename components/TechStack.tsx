@@ -47,7 +47,7 @@ export default function TechStack() {
   }, []);
 
   return (
-    <section ref={ref} className={`ts-wrap${visible ? " visible" : ""}`}>
+    <section id="stack" ref={ref} className={`ts-wrap${visible ? " visible" : ""}`}>
       <style>{`
         .ts-wrap {
           background: #000;

@@ -149,40 +149,109 @@ Langfuse, OpenTelemetry, Datadog, Sentry, Grafana
 
 ---
 
-## Engagement Process (How Om Works)
+## Execution Framework — Baseline → Value (How Om Solves Your Problem)
 
-### Step 01 — Diagnose (Week 1)
-Stakeholder interviews, system audit, root cause analysis. No solution proposed until Om can write a one-paragraph problem statement the client fully agrees with.
+Om runs every engagement on a six-phase framework. The core idea: a target metric is
+**frozen on day one** and **measured at the end**, so value is contractually measurable —
+which is what lets Om take part of his pay in the client's upside (`realized value = end − baseline`).
 
-### Step 02 — Scope (Week 1–2)
-Statement of Work with a fixed deliverable, success metric, and timeline. The client knows exactly what they're getting before a single line of code is written.
+### Phase 01 — Diagnose (Week 1)
+Map the real problem against the one the client thinks they have. No solution until Om can write a one-paragraph problem statement the client fully agrees with — then the metric it moves and its current number are frozen as the baseline everything is measured against.
 
-### Step 03 — Build (Week 2–6)
-Weekly increments. Every Friday: a working demo, not a slide. Every agent, model, or API is tested in an environment that mirrors production.
+### Phase 02 — Frame (Week 1–2)
+Statement of Work with one success metric, a target delta, a timeline, and the commercial structure: fixed fee, fee plus a share of the value created, or a small retainer plus equity — sized to what's actually at stake. The client knows the deal before a line of code.
 
-### Step 04 — Harden (Week 6–8)
-Guardrails, observability, and load testing. Every pipeline node is instrumented so the client can see latency, error rates, and model drift without calling Om.
+### Phase 03 — Build (Week 2–6)
+The smallest system that moves the number, shipped in weekly increments. Every Friday: a working demo, not a slide. The metric is instrumented from week one and tested in an environment that mirrors production.
 
-### Step 05 — Transfer (Week 8+)
-Runbooks, team training, clean handoff. The goal is for the client to not need Om — and for the system to keep working after he leaves.
+### Phase 04 — Harden (Week 6–8)
+Guardrails, evals, observability, and load testing. This is the trust layer — and what makes the value defensible: the client can prove the system moved the number, not the market.
+
+### Phase 05 — Transfer (Week 8+)
+Runbooks, team training, clean handoff. The goal is for the client to not need Om — and for the system to keep working, and improving, after he leaves.
+
+### Phase 06 — Compound (Ongoing)
+Realized value is measured against the day-one baseline. That delta is where a performance share or equity crystallizes, and the data loop keeps improving the system. Optional managed-service for ongoing monitoring.
 
 ---
 
-## Services & Rates
+## Engagements — Money, or Money + a Stake in the Outcome
 
-### Fractional AI/ML Lead — $180/hr
-Best for startups that need ML expertise without a full-time hire. Includes architecture decisions, code reviews, and mentoring the engineering team.
+Om doesn't sell hours. Every engagement opens with a paid Diagnostic that freezes the metric
+being moved; from there the client chooses how aligned they want him — flat fee, smaller fee
+plus a share of the value created, or equity. Specific figures are scoped on the call, not quoted
+up front (the baseline frozen in the Diagnostic is what any share or equity is measured against).
 
-### Agentic System Build — $6,000–$15,000
-Fixed-scope project: multi-agent pipeline, RAG system, or workflow automation. Includes full documentation and handoff.
+### Diagnostic — fixed fee (1–2 weeks)
+A Revenue-Leak Audit of the client's data, workflows, and stack. They walk away with a ranked,
+dollar-sized AI opportunity map, the baseline metric to build against, and an architecture proposal.
+No commitment beyond this. Covers Phase 01–02 of the execution framework.
 
-### ML Pipeline Productionization — $4,500–$10,000
-Take an existing model or prototype and turn it into a production system with CI/CD, monitoring, and observability.
+### Build partner — reduced fee + performance share (4–10 weeks)
+Om builds and ships the smallest system that moves the number, instruments the metric, and hardens
+it with guardrails and evals. He takes a lower fee up front and a share of the measured upside —
+he wins big only if the client does. Covers Phase 01–06.
 
-### Enterprise AI Consulting — Custom
-For larger organizations. Includes audit, strategy, proof-of-concept, and implementation roadmap.
+### Venture build — small retainer + equity (ongoing)
+For founders building an AI-native product. Om acts as a fractional AI cofounder for the build —
+architecture, the core system, and capability transfer — aligned mostly through equity that
+compounds with what they ship.
 
 All engagements start with a free 30-minute strategy call to scope the problem properly.
+
+---
+
+## Growth Frameworks (How Om Grows a Client's Revenue & Profit)
+
+These are the repeatable playbooks Om brings to an engagement. Each pairs a classic
+business lever with the AI/ML mechanism that makes it move — and ties to work Om has
+actually shipped. They are frameworks Om applies, not guaranteed outcomes.
+
+### 1. The Revenue-Leak Audit
+**Lever:** You can't grow what you can't see. Map the funnel and find where money leaks
+(lost leads, slow follow-up, churn, manual rework). **Mechanism:** instrument the workflow,
+then score every step so the biggest leak is obvious and ranked by dollar impact.
+**Grows:** prioritises the one or two automations with the highest ROI before any build.
+**Proof:** the AI-audit roadmaps Om built at HariKrushna Software.
+
+### 2. Predict-Before-You-Spend
+**Lever:** Stop paying for trial-and-error. **Mechanism:** a predictive ML model (often a
+gradient-boosted model with SHAP explainability) forecasts which options will work before
+you spend the budget. **Grows:** cuts wasted spend and shortens cycles — run 10× fewer
+experiments. **Proof:** Corol/NunaFab chemistry model — R²=0.89, 40% R&D cost reduction.
+
+### 3. Decision-at-the-Moment Scoring
+**Lever:** Most value is lost in slow, gut-feel decisions. **Mechanism:** a real-time
+scoring pipeline ranks the thing that matters — a candidate, a lead, a transaction, a churn
+risk — in under two seconds, at the moment of decision. **Grows:** better decisions made
+faster lift conversion and quality. **Proof:** Resso.ai live hire scoring — AUC 0.941, <2s.
+
+### 4. Automate-the-Boring-80%
+**Lever:** Labour cost hides in repetitive copy-paste work. **Mechanism:** agentic AI wired
+into existing tools (Slack, CRM, databases via MCP) reads signals and acts automatically.
+**Grows:** frees the team for revenue work and cuts operational cost. **Proof:** MCP
+Enterprise Bridge — multi-agent orchestration across business tools.
+
+### 5. The Private-AI Moat
+**Lever:** Your most valuable data is the data you can't put in the cloud. **Mechanism:**
+on-premise, air-gapped RAG that unlocks sensitive data with zero external calls.
+**Grows:** opens regulated/enterprise revenue (GDPR/HIPAA) competitors can't touch.
+**Proof:** Vadtal — 100% local RAG, 4.2ms retrieval, 0 external API calls.
+
+### 6. The Compounding Data Loop
+**Lever:** The classic flywheel — every interaction should make the system smarter.
+**Mechanism:** capture outcomes, feed them back into the model, measure drift, retrain.
+**Grows:** accuracy and margin compound over time instead of going stale. **Proof:** Om's
+production systems ship with observability and drift monitoring from day one (Harden step).
+
+### 7. Unit-Economics ML
+**Lever:** Profit lives in CLV, churn, and pricing — not just top-line revenue.
+**Mechanism:** classic ML on customer data to predict churn, estimate lifetime value, and
+inform pricing/retention spend. **Grows:** lifts margin and retention without new acquisition
+cost. **Proof:** the same scoring and explainability stack behind Om's hire and chemistry models.
+
+The right framework depends on the business — Om picks the one with the biggest dollar
+impact first in the free strategy call, then scopes the smallest build that proves it.
 
 ---
 
@@ -226,8 +295,8 @@ A: Always starts with a free 30-minute call to understand the actual problem. Th
 **Q: Do you sign NDAs?**
 A: Yes, standard for any consulting engagement.
 
-**Q: What's the smallest project you take?**
-A: Minimum engagement is a focused 2-week sprint (typically $4,500–$6,000). Anything smaller is usually better addressed in a strategy call.
+**Q: How do you charge — and what's the smallest way to start?**
+A: The smallest start is the paid Diagnostic (1–2 weeks): a Revenue-Leak Audit that ranks where AI moves the most money and freezes a baseline metric. From there it's a flat fee, a reduced fee plus a share of the value created, or a small retainer plus equity — depending on how aligned you want me on the outcome. Specifics get scoped on the call.
 
 **Q: Where are you located?**
 A: Ontario, Canada. Work remotely with teams globally.

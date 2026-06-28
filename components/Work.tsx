@@ -417,14 +417,14 @@ const personalProjects = [
   {
     num: "01",
     title: "Lawline.tech",
-    subtitle: "Legal AI Platform for Rogers · Live SaaS · $1M Investment Conversation",
+    subtitle: "Privilege-Compliant Legal AI · Live SaaS · Air-Gapped RAG",
     role: "AI Engineer",
     saas: true,
     description:
-      "Built the AI core for Lawline.tech — a Canadian legal research platform serving attorneys who cannot use any cloud AI due to attorney-client privilege. Built a fully local RAG stack: HNSW vector store over Canadian legal corpora, BGE cross-encoder reranker, GGUF-quantized local LLM — zero data ever leaves the office. Sub-4% hallucination rate on legal eval sets. Now in an active $1M investment conversation with the President of Rogers for enterprise licensing across Rogers' legal and compliance teams.",
+      "Built the AI core for Lawline.tech — a Canadian legal research platform serving attorneys who cannot use any cloud AI due to attorney-client privilege. Built a fully local RAG stack: HNSW vector store over Canadian legal corpora, BGE cross-encoder reranker, GGUF-quantized local LLM — zero data ever leaves the office. Sub-4% hallucination rate on legal eval sets, now in enterprise licensing discussions.",
     extra:
       "Designed the full pipeline: PDF ingestion → semantic chunking (512-token, 128 overlap) → local embeddings → HNSW index → top-K reranked retrieval → GGUF LLM response. Built confidence-gated output: low-confidence answers route to human review instead of surfacing to attorneys. The architecture became the sales pitch — attorneys demo'd the zero-outbound-packets screen to their law society contacts.",
-    impact: "Sub-4% hallucination · Air-gapped · 0 bytes leave the office · $1M Rogers President conversation",
+    impact: "Sub-4% hallucination · Air-gapped · 0 bytes leave the office · Privilege-compliant",
     formula: "E(doc) = LLM(top-k(HNSW(chunk)) + clause_template) → {party, obligation, risk, date}",
     tags: ["Legal AI", "Fine-tuning", "Document Parsing", "HNSW", "FastAPI", "TypeScript", "ONNX"],
     url: "https://lawline.tech",
@@ -469,14 +469,14 @@ const personalProjects = [
   {
     num: "04",
     title: "Lost and Found",
-    subtitle: "TTC · Transit Capstone · Pitching to TTC Director — May 2026",
+    subtitle: "Transit-Scale Lost & Found · AI Similarity Matching",
     role: "Full-Stack Engineer",
     saas: false,
     description:
-      "Built a complete digital Lost & Found system for the Toronto Transit Commission — one of North America's largest transit networks serving 1.7M daily riders. The platform digitizes the entire claim lifecycle: TTC staff report found items via a mobile app, each item gets a unique QR-tagged scan record, and owners submit claims through a mobile-first portal. An AI similarity-matching engine connects found items to incoming claims using description embeddings. Pitching this to the TTC Director in May 2026.",
+      "Built a complete digital Lost & Found system designed for a major North American transit network at 1.7M-daily-rider scale. The platform digitizes the entire claim lifecycle: staff report found items via a mobile app, each item gets a unique QR-tagged scan record, and owners submit claims through a mobile-first portal. An AI similarity-matching engine connects found items to incoming claims using description embeddings.",
     extra:
-      "Full pipeline: mobile item reporting → QR generation → owner claim portal → AI description similarity matching → staff approval dashboard. Built for TTC's operational constraints — works on spotty transit WiFi, handles hundreds of daily items, fully auditable claim history. Production-ready architecture, not a school demo.",
-    impact: "Full claim lifecycle · AI item matching · 1.7M riders · Mobile-first · Pitching to TTC Director May 2026",
+      "Full pipeline: mobile item reporting → QR generation → owner claim portal → AI description similarity matching → staff approval dashboard. Built for real operational constraints — works on spotty transit WiFi, handles hundreds of daily items, fully auditable claim history. Production-ready architecture, not a school demo.",
+    impact: "Full claim lifecycle · AI item matching · 1.7M-rider scale · Mobile-first",
     formula: "match(claim, item) = cosine(E(desc_claim), E(desc_item)) > θ → notify_owner",
     tags: ["Next.js", "TypeScript", "AI Matching", "QR Code", "Mobile-First", "PostgreSQL", "FastAPI"],
     url: null,
@@ -598,6 +598,7 @@ export default function Work() {
         </a>
 
         {/* ── Experience subsection ── */}
+        <div id="experience" style={{ scrollMarginTop: 80 }} />
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", fontWeight: 600,
             letterSpacing: "0.12em", color: "var(--muted)", textTransform: "uppercase" }}>

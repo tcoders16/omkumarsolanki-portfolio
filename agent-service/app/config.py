@@ -16,11 +16,30 @@ class Settings(BaseSettings):
 
     # --- LLM provider (OpenAI) ---
     openai_api_key: str = ""
+    openai_base_url: str = ""
     # Cheap model for routing / case-match / profile QA, strong model for reasoning.
     model_fast: str = "gpt-4o-mini"
     model_smart: str = "gpt-4o"
     model_guardrails: str = "gpt-4o-mini"
     embedding_model: str = "text-embedding-3-small"
+
+    # --- Azure OpenAI (used when these are set; takes priority over plain OpenAI) ---
+    # Resource endpoint only, e.g. https://<name>.openai.azure.com (no path).
+    azure_openai_endpoint: str = ""
+    azure_openai_api_key: str = ""
+    azure_openai_api_version: str = "2025-01-01-preview"
+    # Single chat deployment used for both fast and smart roles.
+    azure_openai_deployment: str = ""
+    # Optional embedding deployment; when set, vector RAG uses Azure embeddings.
+    azure_openai_embedding_deployment: str = ""
+
+    @property
+    def use_azure(self) -> bool:
+        return bool(
+            self.azure_openai_endpoint
+            and self.azure_openai_api_key
+            and self.azure_openai_deployment
+        )
 
     # --- Knowledge base location (copied into the image at build) ---
     knowledge_dir: str = "knowledge"          # contains portfolio.md
@@ -30,6 +49,29 @@ class Settings(BaseSettings):
     # --- Retrieval strategy: vector | vectorless | hybrid ---
     rag_mode: str = "hybrid"
     case_match_threshold: float = 0.45         # below this -> "no direct match"
+
+    # --- Owner identity (used by the appointment & email agents) ---
+    owner_name: str = "Om Kumar Solanki"
+    owner_email: str = "emailtosolankiom@gmail.com"
+    owner_timezone: str = "America/Toronto"    # IANA tz for calendar slots
+
+    # --- Email follow-up agent (Resend) ---
+    # When resend_api_key is empty the email agent runs in DRAFT-ONLY mode:
+    # it composes the message and returns it, but does not send.
+    resend_api_key: str = ""
+    resend_from: str = "Om Kumar Solanki <onboarding@resend.dev>"  # verified sender
+    resend_reply_to: str = ""                  # defaults to owner_email when empty
+
+    # --- Appointment agent (Google Calendar) ---
+    # google_credentials_json may be a path to a service-account JSON file OR the
+    # raw JSON itself (handy for Azure env vars). Empty -> agent falls back to the
+    # booking link instead of creating real events.
+    google_credentials_json: str = ""
+    google_calendar_id: str = "primary"        # calendar shared with the service account
+    appointment_duration_min: int = 30
+    appointment_window_days: int = 10          # how far ahead to offer slots
+    appointment_hour_start: int = 10           # local working-hours window (24h)
+    appointment_hour_end: int = 17
 
     # --- Guardrails ---
     guardrails_enabled: bool = True

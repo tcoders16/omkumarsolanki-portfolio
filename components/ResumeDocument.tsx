@@ -122,7 +122,7 @@ const EXP = {
         "Created Vadtal: HNSW vector store + GGUF-quantized RAG over 50,000+ donor records; sub-1s semantic search, fully offline.",
       ],
       consulting: [
-        "Built Lawline.tech — only privilege-compliant legal AI platform; 16 agents, air-gapped, 0 bytes egress, 12,000+ files processed. Opened $1M Rogers investment conversation: no competitor could make the same claim.",
+        "Built Lawline.tech — only privilege-compliant legal AI platform; 16 agents, air-gapped, 0 bytes egress, 12,000+ files processed. Drove enterprise licensing discussions: no competitor could make the same air-gap claim.",
         "Lifted e-commerce conversion 2.1% → 2.8% via XGBoost on 200K+ transactions (Optuna HPO); ~$180K annual revenue uplift presented as board-level ROI.",
         "Freed 120 monthly clinical staff-hours by shipping Kafka/Lambda pipeline across 3 hospital systems; reported to leadership as patient-care hours recovered.",
       ],
@@ -142,9 +142,9 @@ const PRODUCTS = {
     { name: "UHPC-ML",               desc: "Concrete strength prediction dashboard (R² = 0.73, multi-horizon, SHAP, Vercel serverless) — 12 engineers daily" },
   ],
   consulting: [
-    { name: "Lawline.tech",          desc: "Air-gapped legal AI, 16 agents, 0 bytes egress — opened $1M Rogers investment conversation; only privilege-compliant solution in the market" },
+    { name: "Lawline.tech",          desc: "Air-gapped legal AI, 16 agents, 0 bytes egress — drove enterprise licensing discussions; only privilege-compliant solution in the market" },
     { name: "Resso.ai",              desc: "AI interview platform — retention 72% → 98%, contract renewed and expanded mid-engagement" },
-    { name: "TTC Lost and Found",    desc: "Civic AI: pgvector cosine similarity, confidence-gated SMS routing, 1.7M daily riders (Capstone · Pitching May 2026)" },
+    { name: "Transit Lost & Found",  desc: "Civic AI: pgvector cosine similarity, confidence-gated SMS routing, 1.7M-rider scale (Capstone)" },
     { name: "Enterprise MCP Server", desc: "Universal agent integration layer — 4 weeks → 3 days across 5 enterprise deployments" },
     { name: "UHPC-ML",               desc: "UHPC concrete predictor (R² = 0.89, SHAP) — mix evaluation weeks → one afternoon, 100s screened computationally" },
   ],

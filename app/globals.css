@@ -505,6 +505,10 @@ main { position: relative; z-index: 1; }
   100% { transform: translateY(100vh); }
 }
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes spin   { to { transform: rotate(360deg); } }
+
+/* All sections clear the fixed 60px navbar on anchor scroll */
+section[id] { scroll-margin-top: 80px; }
 
 
 /* ═══════════════════════════════════════════════════════════════════

@@ -91,6 +91,42 @@ function getTransporter() {
   });
 }
 
+// ── Calendar invite (ICS) — so the booking lands in Google Calendar ───────────
+// ET slots are treated as UTC-5 (matching the bookings route), 30-min duration.
+function icsUTC(dt: Date): string {
+  return dt.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+function esc(s: string): string {
+  return (s || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+}
+function buildICS(b: Booking): string {
+  const [y, mo, d] = b.date.split("-").map(Number);
+  const [h, m] = b.slot.split(":").map(Number);
+  const start = new Date(Date.UTC(y, mo - 1, d, h + 5, m)); // ET → UTC
+  const end = new Date(start.getTime() + 30 * 60 * 1000);
+  const om = process.env.SMTP_USER ?? "emailtosolankiom@gmail.com";
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//omkumarsolanki//booking//EN",
+    "METHOD:REQUEST",
+    "BEGIN:VEVENT",
+    `UID:${b.id}@omkumarsolanki.com`,
+    `DTSTAMP:${icsUTC(new Date(b.bookedAt))}`,
+    `DTSTART:${icsUTC(start)}`,
+    `DTEND:${icsUTC(end)}`,
+    `SUMMARY:${esc(`30-min strategy call — Om × ${b.name}`)}`,
+    `DESCRIPTION:${esc(b.note || "Strategy call booked via omkumarsolanki.com")}`,
+    `ORGANIZER;CN=Om Kumar Solanki:mailto:${om}`,
+    `ATTENDEE;CN=${esc(b.name)};RSVP=TRUE:mailto:${b.email}`,
+    `ATTENDEE;CN=Om Kumar Solanki:mailto:${om}`,
+    "STATUS:CONFIRMED",
+    "SEQUENCE:0",
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+}
+
 export async function notifyEmail(b: Booking): Promise<void> {
   if (!process.env.SMTP_PASS || process.env.SMTP_PASS === "your_gmail_app_password_here") {
     console.log(`[booking] SMTP not configured — skipping email for ${b.name}`);
@@ -99,6 +135,8 @@ export async function notifyEmail(b: Booking): Promise<void> {
 
   const transporter = getTransporter();
   const from = `"Om Kumar Solanki" <${process.env.SMTP_USER}>`;
+  const ics = buildICS(b);
+  const icalEvent = { method: "REQUEST", content: ics } as const;
 
   // 1. Notify Om
   try {
@@ -107,6 +145,7 @@ export async function notifyEmail(b: Booking): Promise<void> {
       to:      process.env.NOTIFY_EMAIL ?? process.env.SMTP_USER,
       subject: `📅 New booking: ${b.name} — ${b.date} at ${b.slot} ET`,
       replyTo: b.email,
+      icalEvent,
       html: `
         <div style="font-family:monospace;max-width:560px;padding:28px;background:#0a0a0a;color:#ededed;border-radius:6px;">
           <h2 style="color:#3dba7e;font-size:0.9rem;margin:0 0 20px;letter-spacing:0.1em;text-transform:uppercase;">
@@ -135,6 +174,7 @@ export async function notifyEmail(b: Booking): Promise<void> {
       to:      b.email,
       subject: `Your call with Om is confirmed — ${b.date} at ${b.slot} ET`,
       replyTo: process.env.NOTIFY_EMAIL ?? process.env.SMTP_USER,
+      icalEvent,
       html: `
         <div style="font-family:monospace;max-width:560px;padding:28px;background:#0a0a0a;color:#ededed;border-radius:6px;">
           <h2 style="color:#3dba7e;font-size:0.9rem;margin:0 0 8px;letter-spacing:0.1em;text-transform:uppercase;">

@@ -55,8 +55,11 @@ def consultant_node(state: AgentState) -> AgentState:
 
     metrics = kb.metrics
     metrics_line = "; ".join(f"{k.replace('_',' ')}: {v}" for k, v in metrics.items())
+    memory = state.get("episodic", "")
     msg = (
-        f"COMPANY PROBLEM:\n{problem}\n\n{evidence}\n\n"
+        f"COMPANY PROBLEM:\n{problem}\n\n"
+        + (f"{memory}\n\n" if memory else "")
+        + f"{evidence}\n\n"
         f"OM'S VERIFIED METRICS (only ones you may cite): {metrics_line}"
     )
 

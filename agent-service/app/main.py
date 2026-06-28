@@ -13,12 +13,20 @@ from __future__ import annotations
 
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
+from app.agents.opportunities import Opportunities, find_opportunities
 from app.agents.state import AGENT_ROSTER
 from app.config import get_settings
 from app.guardrails.runner import get_engine
 from app.rag.ingest import load_kb
 from app.schemas import ChatRequest, ConsultRequest, ConsultResponse
+
+
+class OpportunityRequest(BaseModel):
+    business: str = Field(max_length=800)
+    goal: str = Field(default="", max_length=400)
+
 
 settings = get_settings()
 app = FastAPI(title="Om — AI Consulting Agent Service", version="1.0.0")
@@ -71,7 +79,14 @@ async def consult(req: ConsultRequest, x_service_key: str | None = Header(defaul
     if not req.problem.strip():
         raise HTTPException(status_code=400, detail="A problem description is required.")
     history = [t.model_dump() for t in req.history]
-    return await get_engine().process(req.as_brief(), is_chat=False, history=history)
+    return await get_engine().process(
+        req.as_brief(),
+        is_chat=False,
+        history=history,
+        session_id=req.session_id,
+        contact_name=req.contact_name,
+        contact_email=req.contact_email,
+    )
 
 
 @app.post("/chat", response_model=ConsultResponse)
@@ -80,4 +95,20 @@ async def chat(req: ChatRequest, x_service_key: str | None = Header(default=None
     if not req.message.strip():
         raise HTTPException(status_code=400, detail="A message is required.")
     history = [t.model_dump() for t in req.history]
-    return await get_engine().process(req.message, is_chat=True, history=history)
+    return await get_engine().process(
+        req.message,
+        is_chat=True,
+        history=history,
+        session_id=req.session_id,
+        contact_name=req.contact_name,
+        contact_email=req.contact_email,
+    )
+
+
+@app.post("/opportunities", response_model=Opportunities)
+def opportunities(req: OpportunityRequest, x_service_key: str | None = Header(default=None)) -> Opportunities:
+    """Free client takeaway: top-3 AI/automation opportunities for their business."""
+    _auth(x_service_key)
+    if not req.business.strip():
+        raise HTTPException(status_code=400, detail="Describe your business first.")
+    return find_opportunities(req.business.strip(), req.goal.strip())

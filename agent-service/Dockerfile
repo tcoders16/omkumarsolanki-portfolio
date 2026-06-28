@@ -6,6 +6,11 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /srv
 
+# Build tools for native wheels (annoy / chromadb deps), removed after install.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential g++ \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install deps first for layer caching.
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt

@@ -55,7 +55,7 @@ export default function Process() {
   }, []);
 
   return (
-    <section ref={ref} className={`pr-wrap${visible ? " visible" : ""}`}>
+    <section id="process" ref={ref} className={`pr-wrap${visible ? " visible" : ""}`}>
       <style>{`
         .pr-wrap {
           background: #000;

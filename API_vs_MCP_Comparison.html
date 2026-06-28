@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API vs MCP Server — Complete Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e0;
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 50px;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  thead th {
+    background: #1a1a2e;
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #333;
+  }
+  thead th:first-child { color: #888; width: 180px; }
+  thead th:nth-child(2) { color: #ff6b6b; }
+  thead th:nth-child(3) { color: #4ecdc4; }
+
+  tbody td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #1e1e2e;
+    vertical-align: top;
+    font-size: 0.95rem;
+  }
+  tbody tr:hover { background: #16162a; }
+  tbody td:first-child {
+    font-weight: 600;
+    color: #aaa;
+    white-space: nowrap;
+  }
+  tbody td:nth-child(2) { color: #ddd; }
+  tbody td:nth-child(3) { color: #ddd; }
+
+  code {
+    background: #1e1e30;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85rem;
+    color: #f8c555;
+  }
+
+  /* Visual Section */
+  .visual-section {
+    margin: 50px 0;
+    padding: 30px;
+    background: #12121a;
+    border-radius: 12px;
+    border: 1px solid #222;
+  }
+  .visual-section h2 {
+    color: #ffd93d;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+  }
+  .diagram {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .diagram-box {
+    flex: 1;
+    min-width: 400px;
+    max-width: 520px;
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid #333;
+  }
+  .diagram-box.api { background: linear-gradient(135deg, #1a0a0a, #1a1215); border-color: #ff6b6b33; }
+  .diagram-box.mcp { background: linear-gradient(135deg, #0a1a1a, #121a15); border-color: #4ecdc433; }
+  .diagram-box h3 { margin-bottom: 16px; font-size: 1.1rem; }
+  .diagram-box.api h3 { color: #ff6b6b; }
+  .diagram-box.mcp h3 { color: #4ecdc4; }
+
+  .flow-line {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: #ccc;
+    white-space: pre;
+  }
+  .flow-line .agent { color: #ffd93d; }
+  .flow-line .arrow { color: #666; }
+  .flow-line .api-call { color: #ff6b6b; }
+  .flow-line .mcp-call { color: #4ecdc4; }
+  .flow-line .comment { color: #666; font-style: italic; }
+
+  /* Code Comparison */
+  .code-section {
+    margin: 50px 0;
+  }
+  .code-section h2 {
+    color: #ffd93d;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    text-align: center;
+  }
+  .code-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .code-box {
+    flex: 1;
+    min-width: 400px;
+    background: #12121a;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #333;
+  }
+  .code-box .header {
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .code-box.api .header { background: #2a1515; color: #ff6b6b; }
+  .code-box.mcp .header { background: #152a2a; color: #4ecdc4; }
+
+  pre {
+    padding: 20px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: #ccc;
+  }
+  pre .keyword { color: #c792ea; }
+  pre .string { color: #c3e88d; }
+  pre .comment { color: #546e7a; }
+  pre .func { color: #82aaff; }
+  pre .param { color: #f8c555; }
+
+  /* Summary */
+  .summary {
+    margin: 50px 0;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .summary h2 {
+    color: #ffd93d;
+    margin-bottom: 16px;
+  }
+  .summary p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #ccc;
+  }
+  .summary .highlight {
+    color: #4ecdc4;
+    font-weight: 600;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+  .badge.red { background: #ff6b6b22; color: #ff6b6b; border: 1px solid #ff6b6b44; }
+  .badge.green { background: #4ecdc422; color: #4ecdc4; border: 1px solid #4ecdc444; }
+
+  @media (max-width: 900px) {
+    .diagram-box, .code-box { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Traditional API vs MCP Server</h1>
+<p class="subtitle">Complete comparison for Amex AI Engineer Interview</p>
+
+<!-- ==================== TABLE ==================== -->
+<table>
+<thead>
+  <tr>
+    <th>Aspect</th>
+    <th>Traditional API <span class="badge red">Old Way</span></th>
+    <th>MCP Server <span class="badge green">New Way</span></th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>What it is</td>
+    <td>A direct HTTP endpoint (REST / gRPC) that returns data when called</td>
+    <td>A wrapper around APIs that exposes them as <strong>tools</strong> agents can discover and call through a standard protocol</td>
+  </tr>
+  <tr>
+    <td>How agent connects</td>
+    <td>Agent calls the URL directly with custom code:<br><code>fetch("https://api.amex.com/v2/txn/123")</code></td>
+    <td>Agent calls any tool the same way:<br><code>mcpClient.callTool("get_txn", { txnId: "123" })</code></td>
+  </tr>
+  <tr>
+    <td>Discovery</td>
+    <td>Agent must <strong>already know</strong> the API exists — hardcoded URL, read the docs manually</td>
+    <td>Agent <strong>asks</strong> "what tools do you have?" — MCP Server returns the full list automatically at runtime</td>
+  </tr>
+  <tr>
+    <td>Auth / API keys</td>
+    <td>Agent holds the API key in its own code — keys scattered across codebases</td>
+    <td>MCP Server holds the key in env vars — agent <strong>never sees it</strong></td>
+  </tr>
+  <tr>
+    <td>Adding a new tool</td>
+    <td>Write custom integration code in <strong>every agent</strong> that needs it</td>
+    <td>Add one <code>server.tool()</code> call in the MCP Server — <strong>all agents see it instantly</strong></td>
+  </tr>
+  <tr>
+    <td>When API changes</td>
+    <td>Every agent's integration code breaks — must fix <strong>all of them</strong></td>
+    <td>Fix <strong>one file</strong> (the MCP Server) — agents don't know anything changed</td>
+  </tr>
+  <tr>
+    <td>Response format</td>
+    <td>Every API has its own unique response structure — agent must parse each one differently</td>
+    <td>MCP normalizes everything to one format:<br><code>{ content: [{ type: "text", text: "..." }] }</code></td>
+  </tr>
+  <tr>
+    <td>Multiple agents</td>
+    <td>Each agent writes its own fetch / axios / headers / error handling — <strong>massive duplication</strong></td>
+    <td>All agents use the same MCP client — <strong>zero duplicate code</strong></td>
+  </tr>
+  <tr>
+    <td>Example call in agent code</td>
+    <td><code>fetch("https://api.amex.com/v2/txn/123", { headers: { Authorization: "Bearer xyz123secret" }, method: "GET" })</code></td>
+    <td><code>mcpClient.callTool("get_transaction", { txnId: "123" })</code></td>
+  </tr>
+  <tr>
+    <td>Who knows DB/API details</td>
+    <td>The agent knows everything — URL, auth, table schema, error codes, retry logic</td>
+    <td>Only the MCP Server knows — agent just knows the tool name and what parameters to pass</td>
+  </tr>
+  <tr>
+    <td>Security</td>
+    <td>API keys scattered across multiple agent codebases — harder to rotate, easier to leak</td>
+    <td>API keys in <strong>one place</strong> (MCP Server env vars) — rotate once, done</td>
+  </tr>
+  <tr>
+    <td>Protocol</td>
+    <td>HTTP/REST, gRPC, GraphQL, SOAP — <strong>different for each API</strong></td>
+    <td>JSON-RPC over stdio — <strong>same for every MCP connection</strong></td>
+  </tr>
+  <tr>
+    <td>Error handling</td>
+    <td>Each agent implements its own retry logic, timeout handling, error parsing for each API</td>
+    <td>MCP Server handles errors internally — returns clean error message to agent</td>
+  </tr>
+  <tr>
+    <td>Testing</td>
+    <td>Test each agent's integration with each API separately — N × M test matrix</td>
+    <td>Test MCP Server once — if the tool works, it works for all agents</td>
+  </tr>
+  <tr>
+    <td>Deployment</td>
+    <td>API change → redeploy every agent that uses it</td>
+    <td>API change → redeploy only the MCP Server</td>
+  </tr>
+  <tr>
+    <td>Best for</td>
+    <td>Direct service-to-service calls where both sides are known and controlled</td>
+    <td>AI agents that need to <strong>discover and use tools dynamically</strong></td>
+  </tr>
+</tbody>
+</table>
+
+<!-- ==================== VISUAL ==================== -->
+<div class="visual-section">
+  <h2>Visual: How Connections Differ</h2>
+  <div class="diagram">
+    <div class="diagram-box api">
+      <h3>Traditional API — N × M Custom Integrations</h3>
+      <div class="flow-line">
+<span class="agent">Fraud Agent</span> <span class="arrow">──</span><span class="api-call">custom code</span><span class="arrow">──→</span> Transaction API
+<span class="agent">Fraud Agent</span> <span class="arrow">──</span><span class="api-call">custom code</span><span class="arrow">──→</span> Merchant API
+<span class="agent">Fraud Agent</span> <span class="arrow">──</span><span class="api-call">custom code</span><span class="arrow">──→</span> Geo API
+
+<span class="agent">Account Agent</span> <span class="arrow">──</span><span class="api-call">custom code</span><span class="arrow">──→</span> Transaction API <span class="comment">← duplicate!</span>
+<span class="agent">Account Agent</span> <span class="arrow">──</span><span class="api-call">custom code</span><span class="arrow">──→</span> Balance API
+
+<span class="agent">FAQ Agent</span> <span class="arrow">──</span><span class="api-call">custom code</span><span class="arrow">──→</span> Knowledge API
+
+<span class="comment">= 6 custom integrations to maintain</span>
+      </div>
+    </div>
+    <div class="diagram-box mcp">
+      <h3>MCP — One Standard Interface</h3>
+      <div class="flow-line">
+<span class="agent">Fraud Agent</span>   <span class="arrow">──┐</span>
+<span class="agent">Account Agent</span> <span class="arrow">──┤</span><span class="mcp-call">── MCP ──→</span> MCP Server <span class="arrow">──→</span> Transaction API
+<span class="agent">FAQ Agent</span>     <span class="arrow">──┘</span>                  <span class="arrow">├──→</span> Merchant API
+                                   <span class="arrow">├──→</span> Geo API
+                                   <span class="arrow">├──→</span> Balance API
+                                   <span class="arrow">└──→</span> Knowledge API
+
+<span class="comment">= 1 MCP Server to maintain</span>
+<span class="comment">= All agents connect the same way</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CODE COMPARISON ==================== -->
+<div class="code-section">
+  <h2>Code Comparison: Same Task, Two Approaches</h2>
+  <p class="subtitle">Agent needs to get transaction location for fraud check</p>
+  <div class="code-grid">
+    <div class="code-box api">
+      <div class="header">Traditional API — Agent Code (fraud-agent.ts)</div>
+      <pre>
+<span class="comment">// Agent knows EVERYTHING about the API</span>
+<span class="comment">// URL, auth, headers, response format, error handling</span>
+
+<span class="keyword">async function</span> <span class="func">getTransactionLocation</span>(<span class="param">txnId</span>: string) {
+  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="func">fetch</span>(
+    <span class="string">`https://api.internal.amex.com/v2/transactions/${txnId}`</span>,
+    {
+      method: <span class="string">"GET"</span>,
+      headers: {
+        <span class="string">"Authorization"</span>: <span class="string">`Bearer ${process.env.TXN_API_KEY}`</span>,
+        <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>,
+        <span class="string">"X-Request-ID"</span>: <span class="func">uuid</span>(),
+        <span class="string">"X-Client-Name"</span>: <span class="string">"fraud-agent"</span>,
+      },
+    }
+  );
+
+  <span class="comment">// Handle errors manually</span>
+  <span class="keyword">if</span> (!response.ok) {
+    <span class="keyword">if</span> (response.status === 429) {
+      <span class="keyword">await</span> <span class="func">sleep</span>(1000);
+      <span class="keyword">return</span> <span class="func">getTransactionLocation</span>(txnId); <span class="comment">// retry</span>
+    }
+    <span class="keyword">if</span> (response.status === 404) {
+      <span class="keyword">throw new</span> Error(<span class="string">"Transaction not found"</span>);
+    }
+    <span class="keyword">throw new</span> Error(<span class="string">`API error: ${response.status}`</span>);
+  }
+
+  <span class="comment">// Parse this specific API's response format</span>
+  <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="func">json</span>();
+
+  <span class="comment">// Dig into nested response structure</span>
+  <span class="keyword">return</span> {
+    city: data.transaction.merchant.location.city,
+    country: data.transaction.merchant.location.country,
+    lat: data.transaction.merchant.location.coordinates.lat,
+    lng: data.transaction.merchant.location.coordinates.lng,
+  };
+}
+
+<span class="comment">// 40+ lines of code</span>
+<span class="comment">// Agent knows: URL, auth, headers, response shape</span>
+<span class="comment">// If API changes response format → this code breaks</span>
+<span class="comment">// If Account Agent needs same data → write this AGAIN</span>
+      </pre>
+    </div>
+    <div class="code-box mcp">
+      <div class="header">MCP — Agent Code (fraud-agent.ts)</div>
+      <pre>
+<span class="comment">// Agent knows NOTHING about the API</span>
+<span class="comment">// Just the tool name and parameters</span>
+
+<span class="keyword">const</span> result = <span class="keyword">await</span> mcpClient.<span class="func">callTool</span>(
+  <span class="string">"get_transaction_location"</span>,
+  { <span class="param">txnId</span>: <span class="string">"TXN-A8F3K2M9P1Q4"</span> }
+);
+
+<span class="comment">// That's it. 4 lines.</span>
+<span class="comment">// Agent doesn't know: URL, auth, headers, DB schema</span>
+<span class="comment">// If API changes → MCP Server handles it</span>
+<span class="comment">// If Account Agent needs same data → same 4 lines</span>
+
+
+
+
+<span class="comment">// ─────────────────────────────────────────────</span>
+<span class="comment">// All the complexity lives in the MCP Server:</span>
+<span class="comment">// File: mcp-servers/transaction-server.ts</span>
+<span class="comment">// ─────────────────────────────────────────────</span>
+
+server.<span class="func">tool</span>(
+  <span class="string">"get_transaction_location"</span>,
+  <span class="string">"Get city and country of a transaction"</span>,
+  { <span class="param">txnId</span>: z.<span class="func">string</span>() },
+  <span class="keyword">async</span> ({ <span class="param">txnId</span> }) => {
+    <span class="comment">// API plumbing lives HERE, not in the agent</span>
+    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="func">fetch</span>(<span class="string">`https://api.internal.amex.com/v2/transactions/${txnId}`</span>, {
+      headers: { <span class="string">"Authorization"</span>: <span class="string">`Bearer ${process.env.TXN_API_KEY}`</span> },
+    });
+    <span class="keyword">const</span> data = <span class="keyword">await</span> res.<span class="func">json</span>();
+    <span class="keyword">return</span> {
+      content: [{ type: <span class="string">"text"</span>, text: <span class="func">JSON.stringify</span>({
+        city: data.transaction.merchant.location.city,
+        country: data.transaction.merchant.location.country,
+      }) }],
+    };
+  }
+);
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== FLOW ==================== -->
+<div class="visual-section">
+  <h2>Complete Flow: Agent → MCP Server → Database</h2>
+  <div class="flow-line" style="font-size: 0.9rem; line-height: 2;">
+<span class="agent">AGENT (fraud-agent.ts)</span>                    <span class="mcp-call">MCP SERVER (transaction-server.ts)</span>           <span class="api-call">DATABASE (PostgreSQL)</span>
+
+<span class="agent">"I need transaction location"</span>
+    │
+    │ calls: <span class="mcp-call">callTool("get_transaction_location", { txnId: "TXN-123" })</span>
+    │
+    │ ─── MCP protocol (JSON-RPC) ───→    receives { txnId: "TXN-123" }
+                                              │
+                                              │ runs <span class="mcp-call">server.tool()</span> handler
+                                              │
+                                              │ executes: <span class="api-call">db.query(</span>
+                                              │   <span class="api-call">"SELECT city, country FROM transactions WHERE id = $1"</span>,
+                                              │   <span class="api-call">["TXN-123"]</span>
+                                              │ <span class="api-call">)</span>
+                                              │
+                                              │ ─── SQL over TLS ───→     <span class="api-call">SELECT city, country</span>
+                                              │                           <span class="api-call">FROM transactions</span>
+                                              │                           <span class="api-call">WHERE id = 'TXN-123'</span>
+                                              │
+                                              │ ←────────────────────     <span class="api-call">{ city: "NYC", country: "US" }</span>
+                                              │
+    │ ←── MCP response ──────────────    wraps result in MCP format:
+    │                                    { content: [{ type: "text",
+    │                                      text: '{"city":"NYC","country":"US"}' }] }
+    │
+<span class="agent">Observes: "Transaction was in NYC"</span>
+<span class="agent">Thinks: "Customer lives in Toronto — mismatch!"</span>
+  </div>
+</div>
+
+<!-- ==================== SUMMARY ==================== -->
+<div class="summary">
+  <h2>Interview One-Liner</h2>
+  <p>
+    "A <span class="highlight">Traditional API</span> requires custom integration code in every agent —
+    the agent must know the URL, auth headers, response format, and error handling for each API it calls.
+    <span class="highlight">MCP</span> standardizes this — you wrap the API once in an MCP Server with
+    <code>server.tool()</code>, and every agent discovers and calls it through the same protocol.
+    It's the difference between <span class="highlight">N × M custom integrations</span> versus
+    <span class="highlight">one standard interface</span>."
+  </p>
+</div>
+
+</div>
+</body>
+</html>

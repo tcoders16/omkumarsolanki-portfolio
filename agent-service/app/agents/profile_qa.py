@@ -35,6 +35,10 @@ def profile_qa_node(state: AgentState) -> AgentState:
             pass
     context = "\n\n---\n\n".join(p for p in parts if p)
 
+    memory = state.get("episodic", "")
+    if memory:
+        context = f"{memory}\n\n---\n\n{context}"
+
     history = state.get("history", []) or []
     messages = [{"role": "system", "content": _SYS + f"\n\nCONTEXT:\n{context}"}]
     messages.extend(history[-6:])

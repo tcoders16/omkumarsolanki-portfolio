@@ -23,6 +23,8 @@ type ConsultBody = {
   industry?: string;
   whatTheyDo?: string;
   problem?: string;
+  contactName?: string;   // enables the appointment / email agents to act
+  contactEmail?: string;
   history?: { role: string; content: string }[];
   persist?: boolean; // first submission persists a lead; follow-up chat does not
 };
@@ -64,6 +66,8 @@ export async function POST(req: NextRequest) {
         what_they_do: (body.whatTheyDo || "").slice(0, 600),
         industry: (body.industry || "").slice(0, 120),
         problem,
+        contact_name: (body.contactName || "").slice(0, 120),
+        contact_email: (body.contactEmail || "").slice(0, 160),
         history: (body.history ?? [])
           .slice(-8)
           .filter(m => ["user", "assistant"].includes(m.role) && typeof m.content === "string")

@@ -51,7 +51,12 @@ async def _generate_answer_action(request_id: str = "", **_) -> str:
     """Registered with NeMo as `generate_answer`. Runs the multi-agent graph."""
     req = _REQUESTS.get(request_id, {})
     result = run_graph(
-        req.get("brief", ""), is_chat=req.get("is_chat", False), history=req.get("history")
+        req.get("brief", ""),
+        is_chat=req.get("is_chat", False),
+        history=req.get("history"),
+        session_id=req.get("session_id", ""),
+        contact_name=req.get("contact_name", ""),
+        contact_email=req.get("contact_email", ""),
     )
     _RESULTS[request_id] = result
     return result.answer
@@ -78,15 +83,15 @@ class GuardrailsEngine:
             self._nemo_ok = False
 
     # --- public API -------------------------------------------------------
-    async def process(self, brief: str, *, is_chat: bool = False, history: list[dict] | None = None) -> ConsultResponse:
+    async def process(self, brief: str, *, is_chat: bool = False, history: list[dict] | None = None, session_id: str = "", contact_name: str = "", contact_email: str = "") -> ConsultResponse:
         if self._nemo_ok:
-            return await self._process_nemo(brief, is_chat, history)
-        return self._process_fallback(brief, is_chat, history)
+            return await self._process_nemo(brief, is_chat, history, session_id, contact_name, contact_email)
+        return self._process_fallback(brief, is_chat, history, session_id, contact_name, contact_email)
 
     # --- NeMo path --------------------------------------------------------
-    async def _process_nemo(self, brief: str, is_chat: bool, history: list[dict] | None) -> ConsultResponse:
+    async def _process_nemo(self, brief: str, is_chat: bool, history: list[dict] | None, session_id: str = "", contact_name: str = "", contact_email: str = "") -> ConsultResponse:
         rid = uuid.uuid4().hex
-        _REQUESTS[rid] = {"brief": brief, "is_chat": is_chat, "history": history or []}
+        _REQUESTS[rid] = {"brief": brief, "is_chat": is_chat, "history": history or [], "session_id": session_id, "contact_name": contact_name, "contact_email": contact_email}
         try:
             messages = [
                 {"role": "context", "content": {"request_id": rid}},
@@ -107,16 +112,16 @@ class GuardrailsEngine:
             return result
         except Exception as exc:  # pragma: no cover
             print(f"[guardrails] NeMo runtime error, falling back: {exc}")
-            return self._process_fallback(brief, is_chat, history)
+            return self._process_fallback(brief, is_chat, history, session_id, contact_name, contact_email)
         finally:
             _REQUESTS.pop(rid, None)
             _RESULTS.pop(rid, None)
 
     # --- Heuristic fallback ----------------------------------------------
-    def _process_fallback(self, brief: str, is_chat: bool, history: list[dict] | None) -> ConsultResponse:
+    def _process_fallback(self, brief: str, is_chat: bool, history: list[dict] | None, session_id: str = "", contact_name: str = "", contact_email: str = "") -> ConsultResponse:
         if _JAILBREAK.search(brief or ""):
             return _refusal_response()
-        result = run_graph(brief, is_chat=is_chat, history=history)
+        result = run_graph(brief, is_chat=is_chat, history=history, session_id=session_id, contact_name=contact_name, contact_email=contact_email)
         # Output rail: never leak pricing numbers.
         if _PRICING.search(result.answer or ""):
             scrubbed = _PRICING.sub("(scoped on the call)", result.answer)

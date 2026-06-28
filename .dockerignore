@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.env*
+agent-service
+archive
+amex-interview-prep
+*.html
+*.jsx
+npm-debug.log*
+.DS_Store
+Dockerfile
+.dockerignore

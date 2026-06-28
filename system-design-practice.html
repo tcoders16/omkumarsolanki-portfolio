@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amex System Design Practice</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f0f1a;
+    color: #e2e8f0;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* LEFT SIDEBAR */
+  #sidebar {
+    width: 310px;
+    min-width: 310px;
+    background: #13131f;
+    border-right: 1px solid #1e1e2e;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 20px 18px 14px;
+    border-bottom: 1px solid #1e1e2e;
+  }
+  .sidebar-header .label {
+    font-size: 10px; color: #6366f1; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .sidebar-header h1 {
+    font-size: 18px; font-weight: 800; color: #f8fafc; margin-top: 4px;
+  }
+  .sidebar-header p { font-size: 12px; color: #64748b; margin-top: 2px; }
+  #question-list {
+    flex: 1; overflow-y: auto; padding: 10px;
+    scrollbar-width: thin; scrollbar-color: #1e1e2e transparent;
+  }
+  .q-item {
+    border: 1px solid #1e1e2e;
+    border-radius: 8px;
+    padding: 12px 13px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .q-item:hover { background: #16162a; }
+  .q-item.active { background: #1e1e3a; border-color: #4f46e5; }
+  .q-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .q-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #1e1e2e; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #64748b; flex-shrink: 0;
+  }
+  .q-item.active .q-num { background: #4f46e5; color: #fff; }
+  .q-title { font-size: 13px; font-weight: 700; color: #94a3b8; }
+  .q-item.active .q-title { color: #e2e8f0; }
+  .q-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    border-radius: 4px; padding: 1px 7px; margin-bottom: 5px;
+    border: 1px solid currentColor;
+  }
+  .q-desc { font-size: 11px; color: #475569; line-height: 1.5; display: none; }
+  .q-item.active .q-desc { display: block; }
+  .sidebar-footer {
+    padding: 14px 16px; border-top: 1px solid #1e1e2e; background: #0f0f1a;
+  }
+  .sidebar-footer .fl { font-size: 11px; color: #4f46e5; font-weight: 700; margin-bottom: 6px; }
+  .sidebar-footer .step { font-size: 11px; color: #64748b; margin-bottom: 2px; }
+
+  /* RIGHT PANEL */
+  #main {
+    flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  #q-header {
+    padding: 18px 26px;
+    border-bottom: 1px solid #1e1e2e;
+    background: #13131f;
+  }
+  .q-header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .q-number-big {
+    font-size: 32px; font-weight: 900;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .q-main-title { font-size: 20px; font-weight: 800; color: #f8fafc; }
+  .q-prompt {
+    background: #1e1e2e; border-radius: 8px;
+    padding: 12px 16px; font-size: 13px;
+    color: #cbd5e1; line-height: 1.6; font-style: italic;
+  }
+
+  /* CONTENT */
+  #content {
+    flex: 1; overflow-y: auto; padding: 18px 26px;
+    scrollbar-width: thin; scrollbar-color: #1e1e2e transparent;
+  }
+  .content-grid { display: flex; gap: 18px; }
+  .left-col { flex: 1; }
+  .right-col { width: 300px; flex-shrink: 0; }
+  .section-label {
+    font-size: 10px; font-weight: 700; color: #6366f1;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+  }
+
+  /* Answer steps */
+  .answer-step {
+    background: #13131f; border: 1px solid #1e1e2e;
+    border-radius: 8px; padding: 12px 14px; margin-bottom: 10px;
+    display: flex; gap: 10px;
+  }
+  .step-num { font-size: 11px; font-weight: 900; color: #4f46e5; min-width: 26px; padding-top: 1px; }
+  .step-body {}
+  .step-title { font-size: 13px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .step-text { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+  /* Components list */
+  .components-box {
+    background: #13131f; border: 1px solid #1e1e2e;
+    border-radius: 8px; padding: 12px 14px; margin-top: 6px;
+  }
+  .component-item { display: flex; gap: 8px; margin-bottom: 7px; align-items: flex-start; }
+  .comp-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .comp-name { font-size: 12px; font-weight: 700; color: #e2e8f0; }
+  .comp-desc { font-size: 11px; color: #64748b; }
+
+  /* Architecture */
+  .arch-group {
+    border-radius: 10px; padding: 12px 13px; margin-bottom: 10px;
+  }
+  .arch-group-label {
+    font-size: 9px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .arch-box {
+    background: #ffffff0d; border: 1px solid #ffffff15;
+    border-radius: 7px; padding: 8px 11px; margin-bottom: 6px;
+    cursor: default; transition: all 0.15s; position: relative;
+  }
+  .arch-box:hover { background: #ffffff18; border-color: #60a5fa; }
+  .arch-box-title { font-size: 12px; font-weight: 700; color: #e2e8f0; }
+  .arch-box-desc { font-size: 10px; color: #94a3b8; margin-top: 4px; line-height: 1.5; display: none; }
+  .arch-box:hover .arch-box-desc { display: block; }
+  .arrow {
+    text-align: center; font-size: 14px; color: #4f46e5;
+    margin: 2px 0; line-height: 1;
+  }
+
+  /* Tradeoffs */
+  .tradeoffs-box {
+    background: #1e1e2e; border-radius: 10px; padding: 12px 13px; margin-bottom: 10px;
+  }
+  .tradeoff-item { margin-bottom: 9px; border-left: 3px solid #3b82f6; padding-left: 10px; }
+  .tradeoff-name { font-size: 12px; font-weight: 700; color: #e2e8f0; margin-bottom: 2px; }
+  .tradeoff-why { font-size: 11px; color: #86efac; }
+  .tradeoff-cost { font-size: 11px; color: #fca5a5; }
+
+  /* Key insight */
+  .insight-box {
+    background: #1a1a2e; border: 1px solid #f59e0b;
+    border-radius: 8px; padding: 10px 13px;
+  }
+  .insight-text { font-size: 12px; color: #fbbf24; font-weight: 600; line-height: 1.5; }
+
+  /* Nav */
+  #nav {
+    padding: 12px 26px; border-top: 1px solid #1e1e2e;
+    background: #13131f; display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .nav-btn {
+    border: 1px solid #1e1e2e; border-radius: 7px;
+    padding: 8px 18px; font-weight: 700; font-size: 13px;
+    cursor: pointer; transition: all 0.15s; background: #1e1e2e; color: #64748b;
+  }
+  .nav-btn.active-btn { background: #4f46e5; border-color: #4f46e5; color: #fff; }
+  .nav-btn.active-btn:hover { background: #4338ca; }
+  .nav-count { font-size: 12px; color: #64748b; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div class="label">Amex AI Engineer I</div>
+    <h1>System Design</h1>
+    <p>5 questions · Hover boxes for details</p>
+  </div>
+  <div id="question-list"></div>
+  <div class="sidebar-footer">
+    <div class="fl">Interview Framework</div>
+    <div class="step">1. Clarify (2 min)</div>
+    <div class="step">2. Scope it</div>
+    <div class="step">3. High-level design</div>
+    <div class="step">4. Deep dive ×2</div>
+    <div class="step">5. Trade-offs</div>
+    <div class="step">6. Scale / failure</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="q-header">
+    <div class="q-header-top">
+      <div class="q-number-big" id="q-num-big">Q1</div>
+      <div>
+        <div class="q-main-title" id="q-main-title"></div>
+        <span class="q-tag" id="q-tag-big"></span>
+      </div>
+    </div>
+    <div class="q-prompt" id="q-prompt"></div>
+  </div>
+
+  <div id="content">
+    <div class="content-grid">
+      <div class="left-col">
+        <div class="section-label">How to Answer This</div>
+        <div id="answer-steps"></div>
+        <div class="components-box">
+          <div class="section-label">Components to Know</div>
+          <div id="components-list"></div>
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="section-label">Architecture · Hover to expand</div>
+        <div id="arch-diagram"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nav">
+    <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">← Prev</button>
+    <div class="nav-count" id="nav-count">1 / 5</div>
+    <button class="nav-btn active-btn" id="next-btn" onclick="navigate(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 1,
+    title: "RAG Pipeline",
+    tag: "Most Likely",
+    tagColor: "#ef4444",
+    prompt: "Design a system where Amex card members can ask natural language questions about their transaction history. Must be secure, fast, and grounded in real data.",
+    steps: [
+      { num: "01", title: "Clarify First", text: `"Before I design — how many card members? Real-time or batch? Latency budget? Any compliance constraints like PCI-DSS I should know about?"` },
+      { num: "02", title: "Scope It", text: `"I'll focus on the ingestion pipeline and the query/retrieval layer — those are the hardest parts. I'll mention the LLM layer at a high level."` },
+      { num: "03", title: "Deep Dive", text: "Go deep on Vector Store (chunking strategy, userId filtering) and Hybrid Search (why pure vector fails for 'charges over $200')." },
+      { num: "04", title: "Failure Modes", text: `"At 10x load, the Embedder becomes the bottleneck. I'd add a queue + async embedding workers. For the LLM — I'd stream the response and cache repeated queries."` },
+    ],
+    components: [
+      { label: "Transactions DB", color: "#1e40af", desc: "Postgres/Oracle — source of truth for all transaction data" },
+      { label: "Kafka", color: "#1e40af", desc: "Streams new transactions in real-time to the ingestion pipeline" },
+      { label: "Chunker", color: "#1e40af", desc: "Converts each transaction to text chunk + metadata (userId, date, amount, merchant)" },
+      { label: "Embedder", color: "#1e40af", desc: "OpenAI text-embedding-3 or internal model converts text → vector" },
+      { label: "Vector Store", color: "#0f766e", desc: "Pinecone / pgvector stores embeddings + metadata, filtered strictly by userId" },
+      { label: "Query Embedder", color: "#0f766e", desc: "User's question gets embedded using same model as ingestion" },
+      { label: "Hybrid Search", color: "#0f766e", desc: "Vector similarity + metadata filter (userId, date range, amount threshold)" },
+      { label: "Re-ranker", color: "#7c3aed", desc: "Cross-encoder reorders top-K chunks for true relevance, not just similarity" },
+      { label: "Prompt Builder", color: "#7c3aed", desc: "Assembles: system prompt + context chunks + user query" },
+      { label: "LLM", color: "#7c3aed", desc: "GPT-4 / internal model generates grounded response with citations" },
+    ],
+    arch: [
+      { group: "Ingestion (Offline)", bg: "#1e3a5f", items: ["Transactions DB", "Kafka", "Chunker", "Embedder", "Vector Store"] },
+      { group: "Query (Real-Time)", bg: "#134e4a", items: ["User Query", "Query Embedder", "Hybrid Search", "Re-ranker"] },
+      { group: "Generation", bg: "#3b1f6e", items: ["Prompt Builder", "LLM", "Response + Citations"] },
+    ],
+    tradeoffs: [
+      { name: "pgvector over Pinecone", why: "Already in Postgres, less infra overhead", cost: "Slower at 100M+ vectors" },
+      { name: "1 transaction = 1 chunk", why: "Precise retrieval, stays under context limit", cost: "More vectors to store and index" },
+      { name: "Hybrid search", why: "Handles exact filters (amount > $200, date ranges)", cost: "More complex query logic" },
+      { name: "Stream LLM response", why: "Feels fast to card member — tokens appear immediately", cost: "Harder to handle errors mid-stream" },
+    ],
+    insight: "🔒 SECURITY: Every vector search MUST filter by userId before returning results. Never mix card member data — mention this unprompted.",
+  },
+  {
+    id: 2,
+    title: "Agentic Dispute Handler",
+    tag: "Very Likely",
+    tagColor: "#f97316",
+    prompt: "Design an AI agent that autonomously handles card member disputes — reads complaint, pulls records, classifies type, then auto-resolves or escalates to a human. Must be safe and auditable.",
+    steps: [
+      { num: "01", title: "Clarify First", text: `"What's the auto-resolve threshold — by amount? By dispute type? What SLA does the card member expect? Is the agent stateless per request?"` },
+      { num: "02", title: "Scope It", text: `"I'll focus on the agent orchestration loop and the safety/escalation layer — those are most critical for a financial product."` },
+      { num: "03", title: "Deep Dive", text: "Deep dive on the Tool Orchestrator (how the agent decides what to call next) and the Audit Logger (why every step must be immutable for compliance)." },
+      { num: "04", title: "Failure Modes", text: `"If the LLM hallucinates a resolution — the confidence check catches it. If the Policy Engine is down — fail safe: always escalate to human, never auto-deny."` },
+    ],
+    components: [
+      { label: "Dispute Intake API", color: "#1e40af", desc: "REST endpoint receives complaint text + cardMemberId" },
+      { label: "Intent Classifier", color: "#1e40af", desc: "LLM classifies: fraud / billing error / merchant dispute / service issue" },
+      { label: "Tool Orchestrator", color: "#0f766e", desc: "Agent brain — ReAct loop: think → call tool → observe → think again" },
+      { label: "Transaction Fetcher", color: "#0f766e", desc: "Tool: pulls raw transaction data from DB for disputed period" },
+      { label: "Policy Engine", color: "#0f766e", desc: "Tool: checks Amex policy — is this auto-approvable? What's the $$ limit?" },
+      { label: "Confidence Scorer", color: "#dc2626", desc: "Scores agent's decision confidence — if < 85%, force escalation" },
+      { label: "Resolution Generator", color: "#7c3aed", desc: "LLM drafts resolution letter or decision with full reasoning" },
+      { label: "Human Queue", color: "#dc2626", desc: "If confidence < 85% OR amount > $500 → route to human agent with full context" },
+      { label: "Audit Logger", color: "#374151", desc: "Every agent step, tool call, decision logged immutably — required for SOX compliance" },
+    ],
+    arch: [
+      { group: "Intake & Classification", bg: "#1e3a5f", items: ["Dispute Intake API", "Intent Classifier"] },
+      { group: "Agent Loop", bg: "#134e4a", items: ["Tool Orchestrator", "Transaction Fetcher", "Policy Engine", "Confidence Scorer"] },
+      { group: "Resolution", bg: "#3b1f6e", items: ["Resolution Generator", "Human Queue", "Audit Logger"] },
+    ],
+    tradeoffs: [
+      { name: "$500 hard cap on auto-resolve", why: "Risk management — limits financial exposure", cost: "More human workload for large disputes" },
+      { name: "Audit every step", why: "SOX compliance — financial services requirement", cost: "Storage cost + adds latency" },
+      { name: "Stateless agent per request", why: "Easy to retry, replay, and debug", cost: "No memory across dispute sessions for same user" },
+      { name: "Fail-safe to human escalation", why: "Never auto-deny — better to slow down than wrong decision", cost: "Higher operational cost" },
+    ],
+    insight: "⚠️ SAFETY: Agent must NEVER auto-resolve if confidence < 85% or amount > $500. Always log the full reasoning chain for compliance audit.",
+  },
+  {
+    id: 3,
+    title: "LLM Evaluation System",
+    tag: "Likely",
+    tagColor: "#eab308",
+    prompt: "Your team ships a new LLM feature every 2 weeks. Design an evaluation pipeline that automatically tests each release for correctness, safety, and regression before it hits production.",
+    steps: [
+      { num: "01", title: "Clarify First", text: `"What kind of LLM features — RAG? Agents? What's acceptable regression? Who maintains the eval dataset? Is this blocking or advisory?"` },
+      { num: "02", title: "Scope It", text: `"I'll design the automated eval pipeline triggered on every PR. I'll mention the golden dataset curation process but won't design that fully."` },
+      { num: "03", title: "Deep Dive", text: "Deep dive on Faithfulness Scorer (NLI cross-encoder) and the Safety Classifier (PII detection, hallucination of account numbers)." },
+      { num: "04", title: "Failure Modes", text: `"Eval dataset can go stale. Quarterly review cycle. If the LLM improves on quality but regresses on safety — always block. Safety is non-negotiable at Amex."` },
+    ],
+    components: [
+      { label: "Eval Dataset Store", color: "#1e40af", desc: "500+ golden QA pairs curated by domain experts — versioned in S3" },
+      { label: "Test Runner", color: "#1e40af", desc: "Triggered on every PR merge — runs new model/prompt against full dataset" },
+      { label: "Faithfulness Scorer", color: "#0f766e", desc: "Cross-encoder NLI: is answer grounded in retrieved context? Score 0–1" },
+      { label: "Relevance Scorer", color: "#0f766e", desc: "Are retrieved chunks actually relevant to the query? Precision@K metric" },
+      { label: "Safety Classifier", color: "#dc2626", desc: "Checks: PII leakage, hallucinated account numbers, harmful content" },
+      { label: "Regression Detector", color: "#0f766e", desc: "Compares score vs previous version — flags if any metric drops > 2%" },
+      { label: "Eval Dashboard", color: "#7c3aed", desc: "Visual report: scores per category, failed cases, trend over time" },
+      { label: "Deploy Gate", color: "#374151", desc: "Auto-blocks deploy if safety fails OR regression > threshold" },
+    ],
+    arch: [
+      { group: "Dataset & Trigger", bg: "#1e3a5f", items: ["Eval Dataset Store", "Test Runner"] },
+      { group: "Scoring", bg: "#134e4a", items: ["Faithfulness Scorer", "Relevance Scorer", "Safety Classifier", "Regression Detector"] },
+      { group: "Output & Gate", bg: "#3b1f6e", items: ["Eval Dashboard", "Deploy Gate"] },
+    ],
+    tradeoffs: [
+      { name: "RAGAS framework", why: "Open source, battle-tested for RAG evaluation", cost: "Not tailored to financial domain — needs custom extensions" },
+      { name: "Automated + human eval", why: "Automated catches regressions; humans catch nuance and edge cases", cost: "Human eval is slow and expensive — reserve for releases" },
+      { name: "Block on safety, warn on relevance", why: "Safety is non-negotiable; relevance is a trade-off", cost: "May slow release velocity" },
+      { name: "Versioned eval datasets", why: "Can re-run old evals on new models for comparison", cost: "Dataset curation effort and drift over time" },
+    ],
+    insight: "📊 METRICS: Faithfulness (grounded in context?) + Relevance (right chunks?) + Safety (no PII?) + Latency (< 2s?) — know all four.",
+  },
+  {
+    id: 4,
+    title: "Real-Time Fraud Detection",
+    tag: "Possible",
+    tagColor: "#6b7280",
+    prompt: "Design a system that flags fraudulent transactions in real time. A card member swipes — you have 200ms to decide fraud or not before approving or declining.",
+    steps: [
+      { num: "01", title: "Clarify First", text: `"What's the false positive tolerance? Can we do step-up auth (OTP) or only hard decline? Is the 200ms budget for the full round-trip or just our service?"` },
+      { num: "02", title: "Scope It", text: `"I'll design the real-time scoring path — Feature Store, ML Model, Decision Engine. I'll mention the feedback loop for retraining at a high level."` },
+      { num: "03", title: "Deep Dive", text: "Deep dive on Feature Store (why Redis, what features matter — velocity, geo, time pattern) and Decision Engine (ML score + hard rules combined)." },
+      { num: "04", title: "Failure Modes", text: `"If Redis is down — fall back to DB with a 5s timeout, or fail-open to approve with a flag for async review. Never drop a card member's transaction silently."` },
+    ],
+    components: [
+      { label: "Transaction Event", color: "#1e40af", desc: "Card swipe event: amount, merchant, location, time, deviceId, cardId" },
+      { label: "Kafka Topic", color: "#1e40af", desc: "High-throughput stream, ordered per cardId partition" },
+      { label: "Feature Extractor", color: "#0f766e", desc: "Real-time: velocity (txns/hour), geo-distance from last txn, hour-of-day" },
+      { label: "Feature Store (Redis)", color: "#0f766e", desc: "Pre-computed user features: avg spend, typical merchants, home geo — sub-ms reads" },
+      { label: "ML Model", color: "#7c3aed", desc: "Gradient Boost: outputs fraud probability 0–1 in < 50ms. Fast and interpretable." },
+      { label: "Rule Engine", color: "#7c3aed", desc: "Hard rules: new country, amount 10× avg, card reported stolen → instant flag" },
+      { label: "Decision Engine", color: "#dc2626", desc: "Combines ML score + rules → APPROVE / DECLINE / STEP-UP (OTP)" },
+      { label: "Feedback Loop", color: "#374151", desc: "Card member confirms/denies fraud → weekly retraining pipeline" },
+    ],
+    arch: [
+      { group: "Event Ingestion", bg: "#1e3a5f", items: ["Transaction Event", "Kafka Topic"] },
+      { group: "Scoring (< 150ms)", bg: "#134e4a", items: ["Feature Extractor", "Feature Store (Redis)", "ML Model", "Rule Engine"] },
+      { group: "Decision & Learning", bg: "#3b1f6e", items: ["Decision Engine", "Feedback Loop"] },
+    ],
+    tradeoffs: [
+      { name: "Redis for feature store", why: "Sub-millisecond reads — fits within 200ms budget easily", cost: "Memory expensive; data loss on crash without persistence" },
+      { name: "Gradient Boost over deep learning", why: "Fast inference, interpretable (regulators can audit it)", cost: "Less accurate on long-term sequence patterns" },
+      { name: "Step-up auth over hard decline", why: "Fewer false positives — legitimate users aren't blocked", cost: "Adds friction for real users doing legit transactions" },
+      { name: "Async model retraining", why: "Doesn't block the real-time scoring path at all", cost: "Model lags behind new fraud patterns by days" },
+    ],
+    insight: "⚡ LATENCY BUDGET: Feature fetch: 10ms, Model inference: 50ms, Rules: 5ms, Decision: 5ms = 70ms. You have 130ms left for network + overhead.",
+  },
+  {
+    id: 5,
+    title: "LLM Gateway / AI Platform",
+    tag: "Possible",
+    tagColor: "#6b7280",
+    prompt: "50 product teams all want LLMs. Design a central LLM gateway handling routing, rate limiting, cost tracking, prompt logging, and model fallback — so teams don't each build their own.",
+    steps: [
+      { num: "01", title: "Clarify First", text: `"Are all 50 teams internal? Do we need multi-cloud (AWS + GCP)? What's the cost budget per team per month? Any teams with special latency SLAs?"` },
+      { num: "02", title: "Scope It", text: `"I'll focus on the routing + fallback layer and the cost tracking system — those are the highest-value pieces for an enterprise platform."` },
+      { num: "03", title: "Deep Dive", text: "Deep dive on Semantic Cache (how it works, 30–40% cost reduction) and the Router (how it decides which model: task type, cost tier, latency SLA)." },
+      { num: "04", title: "Failure Modes", text: `"If primary model (GPT-4) is down — auto-failover to Claude or internal model. If both are down — return cached response or graceful error. Never silent failure."` },
+    ],
+    components: [
+      { label: "API Gateway", color: "#1e40af", desc: "Single endpoint: POST /llm/complete — auth via API key per team" },
+      { label: "Auth + Rate Limiter", color: "#1e40af", desc: "Token bucket per team — enforces cost quota and requests/min" },
+      { label: "Semantic Cache", color: "#0f766e", desc: "If same/similar prompt seen before → return cached response. 30–40% cost reduction." },
+      { label: "Router", color: "#0f766e", desc: "Routes to correct model: task type (code vs chat), cost tier, latency SLA per team" },
+      { label: "Model Registry", color: "#0f766e", desc: "Tracks: GPT-4, Claude, Gemini, internal models — with health status and cost/token" },
+      { label: "Fallback Handler", color: "#dc2626", desc: "If primary model fails or is slow → auto-failover to secondary model" },
+      { label: "Prompt Logger", color: "#7c3aed", desc: "Every request/response logged with PII scrubbing — for audit and debugging" },
+      { label: "Cost Tracker", color: "#7c3aed", desc: "Per team, per model token cost → dashboard + monthly budget alerts" },
+    ],
+    arch: [
+      { group: "Ingress & Auth", bg: "#1e3a5f", items: ["API Gateway", "Auth + Rate Limiter", "Semantic Cache"] },
+      { group: "Routing & Models", bg: "#134e4a", items: ["Router", "Model Registry", "Fallback Handler"] },
+      { group: "Observability", bg: "#3b1f6e", items: ["Prompt Logger", "Cost Tracker"] },
+    ],
+    tradeoffs: [
+      { name: "Semantic cache", why: "30–40% cost reduction on repeated/similar queries", cost: "Cache invalidation complexity when prompts update" },
+      { name: "Per-team API keys", why: "Isolates cost, enables quota enforcement per team", cost: "Key rotation and management overhead" },
+      { name: "Async logging", why: "Doesn't add latency to the hot request path", cost: "Possible log loss on crash — use a queue (Kafka) to mitigate" },
+      { name: "Model-agnostic interface", why: "Teams don't change code when underlying model changes", cost: "Lowest-common-denominator API — can't expose model-specific features" },
+    ],
+    insight: "💰 COST: Always pitch semantic caching — it cuts LLM costs by 30–40% with no quality loss. Amex cares about cost at enterprise scale.",
+  },
+];
+
+let current = 0;
+
+function render() {
+  const q = questions[current];
+
+  // Sidebar
+  document.getElementById('question-list').innerHTML = questions.map((item, i) =>
+    `<div class="q-item ${i === current ? 'active' : ''}" onclick="setQ(${i})">
+      <div class="q-item-top">
+        <div class="q-num">${i + 1}</div>
+        <div class="q-title">${item.title}</div>
+      </div>
+      <span class="q-tag" style="color:${item.tagColor}; border-color:${item.tagColor}">${item.tag}</span>
+      <div class="q-desc">${item.prompt}</div>
+    </div>`
+  ).join('');
+
+  // Header
+  document.getElementById('q-num-big').textContent = `Q${current + 1}`;
+  document.getElementById('q-main-title').textContent = q.title;
+  const tagEl = document.getElementById('q-tag-big');
+  tagEl.textContent = q.tag;
+  tagEl.style.color = q.tagColor;
+  tagEl.style.borderColor = q.tagColor;
+  document.getElementById('q-prompt').textContent = `"${q.prompt}"`;
+
+  // Steps
+  document.getElementById('answer-steps').innerHTML = q.steps.map(s =>
+    `<div class="answer-step">
+      <div class="step-num">${s.num}</div>
+      <div class="step-body">
+        <div class="step-title">${s.title}</div>
+        <div class="step-text">${s.text}</div>
+      </div>
+    </div>`
+  ).join('');
+
+  // Components
+  document.getElementById('components-list').innerHTML = q.components.map(c =>
+    `<div class="component-item">
+      <div class="comp-dot" style="background:${c.color}"></div>
+      <div><span class="comp-name">${c.label}: </span><span class="comp-desc">${c.desc}</span></div>
+    </div>`
+  ).join('');
+
+  // Architecture
+  document.getElementById('arch-diagram').innerHTML =
+    q.arch.map(group =>
+      `<div class="arch-group" style="background:${group.bg}">
+        <div class="arch-group-label">${group.group}</div>
+        ${group.items.map((item, i) =>
+          `<div class="arch-box">
+            <div class="arch-box-title">${item}</div>
+            <div class="arch-box-desc">${q.components.find(c => c.label === item)?.desc || ''}</div>
+          </div>
+          ${i < group.items.length - 1 ? '<div class="arrow">↓</div>' : ''}`
+        ).join('')}
+      </div>`
+    ).join('') +
+    `<div class="tradeoffs-box">
+      <div class="section-label">Trade-offs</div>
+      ${q.tradeoffs.map(t =>
+        `<div class="tradeoff-item">
+          <div class="tradeoff-name">${t.name}</div>
+          <div class="tradeoff-why">✓ ${t.why}</div>
+          <div class="tradeoff-cost">✗ ${t.cost}</div>
+        </div>`
+      ).join('')}
+    </div>
+    <div class="insight-box">
+      <div class="insight-text">${q.insight}</div>
+    </div>`;
+
+  // Nav
+  document.getElementById('nav-count').textContent = `${current + 1} / ${questions.length}`;
+  const prev = document.getElementById('prev-btn');
+  const next = document.getElementById('next-btn');
+  prev.className = current === 0 ? 'nav-btn' : 'nav-btn active-btn';
+  next.className = current === questions.length - 1 ? 'nav-btn' : 'nav-btn active-btn';
+}
+
+function setQ(idx) { current = idx; render(); }
+function navigate(dir) {
+  const next = current + dir;
+  if (next >= 0 && next < questions.length) { current = next; render(); }
+}
+
+render();
+</script>
+</body>
+</html>

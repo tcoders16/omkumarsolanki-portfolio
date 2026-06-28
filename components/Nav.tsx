@@ -1,205 +1,155 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-const PRIMARY_LINKS = [
-  { label: "Work",       href: "/#work" },
-  { label: "Consulting", href: "/consulting", highlight: true },
-  { label: "Agents",     href: "/#agents" },
-  { label: "About",      href: "/#about" },
-  { label: "Contact",    href: "/#contact" },
+/* ─────────────────────────────────────────────
+   Smooth-scroll helper — no double-click bug
+───────────────────────────────────────────── */
+function goTo(id: string, closeFn?: () => void) {
+  closeFn?.();
+  if (id.startsWith("/")) {
+    window.location.href = id;
+    return;
+  }
+  // These nav links target ENGINEERING-PAGE sections. Only scroll in-page when
+  // we're actually on /engineering — other pages (e.g. /consulting) have
+  // colliding ids (#about, #process, #contact) and we'd scroll to the wrong one.
+  const onEngineering = window.location.pathname === "/engineering";
+  const el = onEngineering ? document.getElementById(id) : null;
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(null, "", `#${id}`);
+  } else {
+    // Not on the engineering page (or section not found) — store target, go there.
+    sessionStorage.setItem("scrollTo", id);
+    window.location.href = "/engineering";
+  }
+}
+
+/* Desktop nav:
+   Primary (bright)  → About, Experience, Consulting
+   Secondary (dimmer) → Agents, Math, Terminal, Services
+   Last (bright)     → Contact
+*/
+const PRIMARY = [
+  { label: "About",      id: "about",       href: null,          dim: false },
+  { label: "Work",       id: "work",        href: null,          dim: false },
+  { label: "Process",    id: "process",     href: null,          dim: true  },
+  { label: "Contact",    id: "contact",     href: null,          dim: false },
 ];
 
-const LAB_LINKS = [
-  { label: "Math",      href: "/#math",     desc: "ML models & optimization" },
-  { label: "Story",     href: "/#story",    desc: "The journey so far"        },
-  { label: "Terminal",  href: "/#terminal", desc: "Interactive CLI experience" },
-  { label: "Services",  href: "/#rates",    desc: "Rates & engagement models"  },
-];
-
-const ALL_MOBILE_LINKS = [
-  { label: "Work",      href: "/#work",     group: "main" },
-  { label: "Consulting",href: "/consulting",group: "main", highlight: true },
-  { label: "Agents",    href: "/#agents",   group: "main" },
-  { label: "About",     href: "/#about",    group: "main" },
-  { label: "Contact",   href: "/#contact",  group: "main" },
-  { label: "Math",      href: "/#math",     group: "lab"  },
-  { label: "Story",     href: "/#story",    group: "lab"  },
-  { label: "Terminal",  href: "/#terminal", group: "lab"  },
-  { label: "Services",  href: "/#rates",    group: "lab"  },
+/* Mobile menu — every section */
+const MOBILE_ALL = [
+  { label: "Home",        id: "hero",        href: null         },
+  { label: "About",       id: "about",       href: null         },
+  { label: "Work",        id: "work",        href: null         },
+  { label: "Process",     id: "process",     href: null         },
+  { label: "Consulting",  id: "consulting",  href: "/consulting", accent: true },
+  { label: "Contact",     id: "contact",     href: null         },
 ];
 
 export default function Nav() {
   const [scrolled,  setScrolled]  = useState(false);
   const [menuOpen,  setMenuOpen]  = useState(false);
-  const [labOpen,   setLabOpen]   = useState(false);
-  const labRef = useRef<HTMLDivElement>(null);
 
-  /* ── scroll effect ── */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ── lock body scroll when mobile menu open ── */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  /* ── close Lab dropdown on outside click ── */
-  useEffect(() => {
-    const handle = (e: MouseEvent) => {
-      if (labRef.current && !labRef.current.contains(e.target as Node)) {
-        setLabOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, []);
+  const close = () => setMenuOpen(false);
 
   return (
     <>
       <style>{`
-        /* ── Nav base ── */
+        /* ── base ── */
         .nav-root {
-          position: fixed; top: 0; left: 0; right: 0;
-          z-index: 100; height: 60px;
-          padding: 0 clamp(16px, 3vw, 48px);
-          display: flex; align-items: center; justify-content: space-between; gap: 12px;
-          transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+          position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+          height: 60px;
+          padding: 0 clamp(14px, 3vw, 48px);
+          display: flex; align-items: center; justify-content: space-between; gap: 10px;
+          transition: background .3s, border-color .3s, backdrop-filter .3s;
         }
         .nav-root.scrolled {
-          background: rgba(0,0,0,0.88);
+          background: rgba(0,0,0,0.9);
           backdrop-filter: blur(20px) saturate(1.4);
           -webkit-backdrop-filter: blur(20px) saturate(1.4);
           border-bottom: 1px solid rgba(255,255,255,0.07);
         }
-        .nav-root:not(.scrolled) {
-          background: transparent;
-          border-bottom: 1px solid transparent;
-        }
+        .nav-root:not(.scrolled) { background: transparent; border-bottom: 1px solid transparent; }
 
-        /* ── Logo ── */
+        /* ── logo ── */
         .nav-logo {
-          font-family: var(--font-display);
-          font-weight: 800; font-size: 1.1rem;
-          color: var(--white); text-decoration: none;
-          letter-spacing: -0.04em; flex-shrink: 0;
+          font-family: var(--font-display); font-weight: 800; font-size: 1.1rem;
+          color: var(--white); background: none; border: none;
+          cursor: pointer; letter-spacing: -.04em; flex-shrink: 0; padding: 0;
         }
         .nav-logo-dot { color: var(--accent); }
 
-        /* ── Desktop center ── */
+        /* ── desktop center ── */
         .nav-center {
           display: flex; align-items: center;
-          gap: clamp(6px, 1.2vw, 22px);
-          flex: 1; justify-content: center; overflow: hidden;
+          gap: clamp(3px, .9vw, 16px);
+          flex: 1; justify-content: center;
         }
 
-        /* ── Standard nav link ── */
+        /* ── nav link (button) ── */
         .nav-link {
-          font-family: var(--font-mono);
-          font-size: 0.6rem; letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: rgba(240,240,240,0.55);
-          text-decoration: none; white-space: nowrap;
-          transition: color 0.2s;
+          font-family: var(--font-mono); font-size: .57rem;
+          letter-spacing: .1em; text-transform: uppercase;
+          color: rgba(240,240,240,.5); background: none; border: none;
+          cursor: pointer; white-space: nowrap; padding: 4px 3px;
+          transition: color .18s;
         }
         .nav-link:hover { color: #f0f0f0; }
+        /* secondary items — visually de-prioritised */
+        .nav-link.dim { color: rgba(240,240,240,.3); font-size: .53rem; }
+        .nav-link.dim:hover { color: rgba(240,240,240,.7); }
 
-        /* ── Consulting pill ── */
-        .nav-link-consulting {
-          font-family: var(--font-mono);
-          font-size: 0.6rem; letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: #ffffff; font-weight: 700;
-          text-decoration: none; white-space: nowrap;
-          padding: 4px 11px;
-          border: 1px solid rgba(255,255,255,0.22);
-          border-radius: 3px;
-          background: rgba(255,255,255,0.05);
-          transition: all 0.2s;
-        }
-        .nav-link-consulting:hover {
-          background: rgba(255,255,255,0.1);
-          border-color: rgba(255,255,255,0.45);
-        }
-
-        /* ── Lab dropdown trigger ── */
-        .nav-lab-wrap { position: relative; }
-        .nav-lab-btn {
-          display: flex; align-items: center; gap: 4px;
-          font-family: var(--font-mono);
-          font-size: 0.6rem; letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: rgba(240,240,240,0.55);
-          background: transparent; border: none;
+        /* ── consulting pill ── */
+        .nav-pill {
+          font-family: var(--font-mono); font-size: .57rem;
+          letter-spacing: .1em; text-transform: uppercase;
+          color: #fff; font-weight: 700;
+          background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.22);
           cursor: pointer; white-space: nowrap;
-          padding: 0; transition: color 0.2s;
+          padding: 4px 11px; border-radius: 3px;
+          transition: all .18s;
         }
-        .nav-lab-btn:hover, .nav-lab-btn.open { color: #f0f0f0; }
-        .nav-lab-caret {
-          display: inline-block; font-size: 7px;
-          transition: transform 0.2s;
-          color: rgba(57,217,180,0.5);
-        }
-        .nav-lab-btn.open .nav-lab-caret { transform: rotate(180deg); }
+        .nav-pill:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.45); }
 
-        /* ── Lab dropdown panel ── */
-        .nav-lab-panel {
-          position: absolute; top: calc(100% + 16px); left: 50%;
-          transform: translateX(-50%);
-          width: 230px;
-          background: rgba(8,8,8,0.97);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 10px;
-          padding: 8px;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(57,217,180,0.06);
-          opacity: 0; pointer-events: none;
-          transform: translateX(-50%) translateY(-6px);
-          transition: opacity 0.18s ease, transform 0.18s ease;
-        }
-        .nav-lab-panel.open {
-          opacity: 1; pointer-events: all;
-          transform: translateX(-50%) translateY(0);
-        }
-        .nav-lab-item {
-          display: flex; flex-direction: column; gap: 2px;
-          padding: 10px 12px; border-radius: 6px;
-          text-decoration: none;
-          transition: background 0.15s;
-        }
-        .nav-lab-item:hover { background: rgba(255,255,255,0.04); }
-        .nav-lab-item-label {
-          font-family: var(--font-mono);
-          font-size: 0.62rem; letter-spacing: 0.1em;
-          text-transform: uppercase; color: rgba(240,240,240,0.8);
-          font-weight: 600;
-        }
-        .nav-lab-item-desc {
-          font-family: var(--font-body);
-          font-size: 0.7rem; color: rgba(255,255,255,0.28);
-          line-height: 1.3;
-        }
+        /* ── CTA cluster ── */
+        .nav-ctas { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 
-        /* ── Desktop CTA buttons ── */
-        .nav-ctas {
-          display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+        /* ── mode toggle (Engineering | Consultancy) — same control as the consulting site ── */
+        .nav-toggle { display: flex; border: 1px solid rgba(255,255,255,.18); border-radius: 4px; overflow: hidden; margin-right: 3px; }
+        .nav-seg {
+          font-family: var(--font-mono); font-size: .56rem; font-weight: 600;
+          letter-spacing: .06em; text-transform: uppercase; padding: 6px 11px;
+          color: rgba(240,240,240,.55); background: transparent; text-decoration: none;
+          cursor: pointer; white-space: nowrap; transition: color .18s, background .18s;
         }
+        .nav-seg:hover { color: #fff; }
+        .nav-seg.active { background: #39d9b4; color: #001512; }
+        .nav-seg.active:hover { color: #001512; }
+
         .nav-btn-ai {
-          font-family: var(--font-mono);
-          font-size: 0.58rem; font-weight: 700;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          color: #39d9b4; padding: 6px 13px;
-          border: 1px solid rgba(57,217,180,0.4);
-          border-radius: 3px; background: rgba(57,217,180,0.06);
-          cursor: pointer; white-space: nowrap;
+          font-family: var(--font-mono); font-size: .56rem; font-weight: 700;
+          letter-spacing: .08em; text-transform: uppercase;
+          color: #39d9b4; padding: 6px 12px;
+          border: 1px solid rgba(57,217,180,.4); border-radius: 3px;
+          background: rgba(57,217,180,.06); cursor: pointer;
           display: flex; align-items: center; gap: 5px;
-          transition: all 0.2s;
+          transition: all .2s; white-space: nowrap;
         }
         .nav-btn-ai:hover {
-          background: rgba(57,217,180,0.14);
-          border-color: rgba(57,217,180,0.7);
+          background: rgba(57,217,180,.14); border-color: rgba(57,217,180,.7);
+          box-shadow: 0 0 14px rgba(57,217,180,.16);
         }
         .nav-btn-consult {
           font-family: var(--font-mono);
@@ -214,206 +164,140 @@ export default function Nav() {
         }
         .nav-btn-consult:hover { background: #4fe7c4; border-color: #4fe7c4; }
         .nav-btn-call {
-          font-family: var(--font-mono);
-          font-size: 0.58rem; font-weight: 600;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          color: #3dba7e; text-decoration: none; white-space: nowrap;
-          padding: 6px 12px;
-          border: 1px solid rgba(61,186,126,0.35);
-          border-radius: 3px;
-          transition: all 0.2s;
+          font-family: var(--font-mono); font-size: .56rem; font-weight: 600;
+          letter-spacing: .08em; text-transform: uppercase;
+          color: var(--white); text-decoration: none; white-space: nowrap;
+          padding: 6px 11px;
+          border: 1px solid rgba(255,255,255,.18); border-radius: 3px;
+          background: rgba(255,255,255,.04); transition: all .2s;
         }
-        .nav-btn-call:hover {
-          background: rgba(61,186,126,0.1);
-          border-color: rgba(61,186,126,0.65);
-        }
+        .nav-btn-call:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.4); }
         .nav-btn-resume {
-          font-family: var(--font-mono);
-          font-size: 0.58rem; font-weight: 500;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          color: var(--accent); text-decoration: none; white-space: nowrap;
-          padding: 6px 12px;
-          border: 1px solid var(--accent-ring);
-          border-radius: 3px;
-          transition: all 0.2s;
+          font-family: var(--font-mono); font-size: .56rem;
+          letter-spacing: .08em; text-transform: uppercase;
+          color: rgba(240,240,240,.38); text-decoration: none; white-space: nowrap;
+          padding: 6px 8px; transition: color .2s;
         }
-        .nav-btn-resume:hover {
-          background: var(--accent-dim);
-          border-color: var(--accent);
-        }
+        .nav-btn-resume:hover { color: var(--accent); }
 
-        /* ── Hide/show ── */
-        @media (max-width: 860px) {
+        /* ── breakpoints ── */
+        @media (max-width: 960px) {
           .nav-center, .nav-ctas { display: none !important; }
         }
-        @media (min-width: 861px) {
+        @media (min-width: 961px) {
           .nav-hamburger { display: none !important; }
         }
 
-        /* ── Hamburger ── */
+        /* ── hamburger ── */
         .nav-hamburger {
           background: transparent; border: none; cursor: pointer;
           width: 28px; height: 28px;
           display: flex; flex-direction: column; justify-content: center;
-          gap: 5px; padding: 0; z-index: 101;
+          gap: 5px; padding: 0; z-index: 1001;
         }
         .nav-hamburger span {
           display: block; width: 100%; height: 1.5px;
-          background: rgba(240,240,240,0.8);
-          border-radius: 2px;
-          transition: all 0.3s ease;
-          transform-origin: center;
+          background: rgba(240,240,240,.8); border-radius: 2px;
+          transition: all .3s ease; transform-origin: center;
         }
-        .nav-hamburger.open span:nth-child(1) {
-          transform: translateY(6.5px) rotate(45deg);
-        }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
         .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .nav-hamburger.open span:nth-child(3) {
-          transform: translateY(-6.5px) rotate(-45deg);
-        }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-        /* ── Mobile menu ── */
+        /* ── mobile overlay ── */
         .nav-mobile {
-          position: fixed; inset: 0; z-index: 99;
-          background: rgba(4,4,4,0.98);
-          backdrop-filter: blur(24px);
+          position: fixed; inset: 0; z-index: 999;
+          background: rgba(3,3,3,.98); backdrop-filter: blur(24px);
           display: flex; flex-direction: column;
-          padding: 80px 32px 48px;
+          padding: 72px 28px 48px; overflow-y: auto;
           opacity: 0; pointer-events: none;
           transform: translateY(-8px);
-          transition: opacity 0.28s ease, transform 0.28s ease;
-          overflow-y: auto;
+          transition: opacity .28s ease, transform .28s ease;
         }
         .nav-mobile.open { opacity: 1; pointer-events: all; transform: none; }
 
-        .nav-mobile-group-label {
-          font-family: var(--font-mono);
-          font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-          color: rgba(57,217,180,0.4); margin-bottom: 10px;
+        /* group label */
+        .nm-group {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: .22em; text-transform: uppercase;
+          color: rgba(57,217,180,.4); margin-bottom: 8px; margin-top: 4px;
         }
-        .nav-mobile-links {
-          display: flex; flex-direction: column; gap: 2px;
-          margin-bottom: 28px;
+        /* section divider */
+        .nm-divider {
+          width: 100%; height: 1px;
+          background: rgba(255,255,255,.06);
+          margin: 20px 0 22px;
         }
-        .nav-mobile-link {
-          font-family: var(--font-display);
-          font-size: 1.5rem; font-weight: 800;
-          color: rgba(240,240,240,0.65); text-decoration: none;
-          padding: 8px 0; letter-spacing: -0.03em;
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-          transition: color 0.15s;
-        }
-        .nav-mobile-link:hover { color: #f0f0f0; }
-        .nav-mobile-link.highlight { color: #ffffff; }
 
-        .nav-mobile-lab-links {
-          display: flex; flex-direction: column; gap: 2px;
-          margin-bottom: 36px;
+        /* main link (big) */
+        .nm-link-main {
+          font-family: var(--font-display); font-size: 1.55rem; font-weight: 800;
+          color: rgba(240,240,240,.6); background: none; border: none;
+          cursor: pointer; text-align: left; display: block; width: 100%;
+          padding: 9px 0; letter-spacing: -.03em;
+          border-bottom: 1px solid rgba(255,255,255,.04);
+          transition: color .15s;
         }
-        .nav-mobile-lab-link {
-          font-family: var(--font-mono);
-          font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-          color: rgba(240,240,240,0.38); text-decoration: none;
-          padding: 7px 0;
-          transition: color 0.15s;
-        }
-        .nav-mobile-lab-link:hover { color: rgba(57,217,180,0.8); }
+        .nm-link-main:hover, .nm-link-main:active { color: #f0f0f0; }
+        .nm-link-main.accent { color: rgba(57,217,180,.7); }
+        .nm-link-main.accent:hover { color: #39d9b4; }
 
-        .nav-mobile-ctas {
-          display: flex; flex-direction: row; flex-wrap: wrap;
-          gap: 10px;
+        /* lab link (small) */
+        .nm-link-lab {
+          font-family: var(--font-mono); font-size: .72rem;
+          letter-spacing: .08em; text-transform: uppercase;
+          color: rgba(240,240,240,.35); background: none; border: none;
+          cursor: pointer; text-align: left; display: block; width: 100%;
+          padding: 8px 0;
+          border-bottom: 1px solid rgba(255,255,255,.03);
+          transition: color .15s;
         }
-        .nav-mobile-cta {
+        .nm-link-lab:hover { color: rgba(57,217,180,.8); }
+
+        /* cta row */
+        .nm-ctas {
+          display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px;
+        }
+        .nm-cta {
           flex: 1; min-width: 120px; text-align: center;
-          font-family: var(--font-mono);
-          font-size: 0.65rem; font-weight: 700;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          padding: 12px 16px; border-radius: 6px;
-          text-decoration: none; cursor: pointer;
-          transition: all 0.2s;
+          font-family: var(--font-mono); font-size: .64rem; font-weight: 700;
+          letter-spacing: .08em; text-transform: uppercase;
+          padding: 13px 16px; border-radius: 7px;
+          cursor: pointer; text-decoration: none; transition: all .2s;
         }
-        .nav-mobile-cta-ai {
-          color: #39d9b4;
-          border: 1px solid rgba(57,217,180,0.4);
-          background: rgba(57,217,180,0.07);
-        }
-        .nav-mobile-cta-consult {
-          color: #001512;
-          border: 1px solid #39d9b4;
-          background: #39d9b4;
-        }
-        .nav-mobile-cta-call {
-          color: #3dba7e;
-          border: 1px solid rgba(61,186,126,0.4);
-          background: rgba(61,186,126,0.07);
-        }
-        .nav-mobile-cta-resume {
-          color: var(--accent);
-          border: 1px solid var(--accent-ring);
-          background: var(--accent-dim);
-        }
+        .nm-cta-consult { color: #001512; border: 1px solid #39d9b4; background: #39d9b4; }
+        .nm-cta-ai   { color: #39d9b4; border: 1px solid rgba(57,217,180,.4); background: rgba(57,217,180,.07); }
+        .nm-cta-call { color: rgba(240,240,240,.8); border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.04); }
+        .nm-cta-resume { color: rgba(240,240,240,.38); border: 1px solid rgba(255,255,255,.1); background: transparent; }
       `}</style>
 
+      {/* ── Desktop navbar ── */}
       <nav className={`nav-root${scrolled ? " scrolled" : ""}`}>
 
-        {/* Logo */}
-        <a href="/" className="nav-logo">
+        {/* Logo → scroll to top */}
+        <button className="nav-logo" onClick={() => goTo("hero")}>
           OS<span className="nav-logo-dot">.</span>
-        </a>
+        </button>
 
-        {/* Desktop center — primary links + Lab dropdown */}
+        {/* Primary links */}
         <div className="nav-center">
-          {PRIMARY_LINKS.map(l =>
-            l.highlight ? (
-              <a key={l.label} href={l.href} className="nav-link-consulting">
-                {l.label}
-              </a>
-            ) : (
-              <a key={l.label} href={l.href} className="nav-link">
-                {l.label}
-              </a>
-            )
-          )}
-
-          {/* Lab dropdown */}
-          <div className="nav-lab-wrap" ref={labRef}>
+          {PRIMARY.map(l => (
             <button
-              className={`nav-lab-btn${labOpen ? " open" : ""}`}
-              onClick={() => setLabOpen(v => !v)}
-              onMouseEnter={() => setLabOpen(true)}
+              key={l.label}
+              className={`nav-link${l.dim ? " dim" : ""}`}
+              onClick={() => goTo(l.id)}
             >
-              Lab
-              <span className="nav-lab-caret">▾</span>
+              {l.label}
             </button>
-
-            <div
-              className={`nav-lab-panel${labOpen ? " open" : ""}`}
-              onMouseLeave={() => setLabOpen(false)}
-            >
-              {LAB_LINKS.map(l => (
-                <a key={l.label} href={l.href} className="nav-lab-item" onClick={() => setLabOpen(false)}>
-                  <span className="nav-lab-item-label">{l.label}</span>
-                  <span className="nav-lab-item-desc">{l.desc}</span>
-                </a>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Desktop CTAs */}
+        {/* CTAs — mode toggle makes the two sites unmistakable. */}
         <div className="nav-ctas">
-          <button
-            className="nav-btn-consult"
-            onClick={() => (window as unknown as Record<string, () => void>).openConsultAgent?.()}
-          >
-            <span style={{ fontSize: 9 }}>◆</span> Consult
-          </button>
-          <button
-            className="nav-btn-ai"
-            onClick={() => (window as unknown as Record<string, () => void>).openBusinessChat?.()}
-          >
-            <span style={{ fontSize: 9 }}>✦</span> Ask AI
-          </button>
+          <div className="nav-toggle">
+            <span className="nav-seg active">Engineering</span>
+            <a href="/consulting" className="nav-seg">Consultancy</a>
+          </div>
           <a href="/book" className="nav-btn-call">Book a Call ↗</a>
           <a href="/resume" target="_blank" rel="noopener noreferrer" className="nav-btn-resume">
             Resume ↓
@@ -430,53 +314,42 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Mobile full-screen menu */}
+      {/* ── Mobile overlay ── */}
       <div className={`nav-mobile${menuOpen ? " open" : ""}`}>
-        <p className="nav-mobile-group-label">Navigate</p>
-        <div className="nav-mobile-links">
-          {ALL_MOBILE_LINKS.filter(l => l.group === "main").map(l => (
+
+        <p className="nm-group">All Sections</p>
+        {MOBILE_ALL.map(l =>
+          l.href ? (
             <a
               key={l.label}
               href={l.href}
-              className={`nav-mobile-link${l.highlight ? " highlight" : ""}`}
-              onClick={() => setMenuOpen(false)}
+              className={`nm-link-main${l.accent ? " accent" : ""}`}
+              onClick={close}
             >
               {l.label}
             </a>
-          ))}
-        </div>
-
-        <p className="nav-mobile-group-label">Lab</p>
-        <div className="nav-mobile-lab-links">
-          {ALL_MOBILE_LINKS.filter(l => l.group === "lab").map(l => (
-            <a
+          ) : (
+            <button
               key={l.label}
-              href={l.href}
-              className="nav-mobile-lab-link"
-              onClick={() => setMenuOpen(false)}
+              className="nm-link-main"
+              onClick={() => goTo(l.id, close)}
             >
               {l.label}
-            </a>
-          ))}
-        </div>
+            </button>
+          )
+        )}
 
-        <div className="nav-mobile-ctas">
+        <div className="nm-ctas">
           <button
-            className="nav-mobile-cta nav-mobile-cta-consult"
-            onClick={() => { setMenuOpen(false); (window as unknown as Record<string, () => void>).openConsultAgent?.(); }}
+            className="nm-cta nm-cta-consult"
+            onClick={() => { close(); (window as unknown as Record<string, () => void>).openAgent?.(); }}
           >
-            ◆ Consult
-          </button>
-          <button
-            className="nav-mobile-cta nav-mobile-cta-ai"
-            onClick={() => { setMenuOpen(false); (window as unknown as Record<string, () => void>).openBusinessChat?.(); }}
-          >
-            ✦ Ask AI
+            ◆ Ask Om&apos;s AI
           </button>
           <a
             href="/book"
-            className="nav-mobile-cta nav-mobile-cta-call"
-            onClick={() => setMenuOpen(false)}
+            className="nm-cta nm-cta-call"
+            onClick={close}
           >
             Book a Call ↗
           </a>
@@ -484,8 +357,8 @@ export default function Nav() {
             href="/resume"
             target="_blank"
             rel="noopener noreferrer"
-            className="nav-mobile-cta nav-mobile-cta-resume"
-            onClick={() => setMenuOpen(false)}
+            className="nm-cta nm-cta-resume"
+            onClick={close}
           >
             Resume ↓
           </a>
