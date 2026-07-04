@@ -53,3 +53,4 @@ next-env.d.ts
 config.bat
 .env.local
 .env*.local
+.env*

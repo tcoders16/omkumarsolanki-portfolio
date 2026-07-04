@@ -5,24 +5,24 @@ import Agent from "@/components/Agent";
 import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
-  title: "Omkumar Solanki - AI & ML Engineer",
+  title: "Omkumar Solanki — Applied AI Engineer · Agents & Orchestration",
   description:
-    "AI/ML Engineer and consultant. I build production systems - real-time inference pipelines, autonomous agents, RAG architectures, and MLOps infrastructure.",
+    "Applied AI engineer and consultant. I design and ship AI agent systems — multi-agent orchestration, on-premise RAG, real-time inference — running in production.",
   keywords: [
-    "AI Engineer", "ML Engineer", "Founding Engineer", "Resso.ai",
-    "RAG Architecture", "MCP Server", "MLOps", "Agentic AI",
-    "Omkumar Solanki", "Machine Learning Consultant",
+    "Applied AI Engineer", "AI Agents", "Agent Orchestration", "Founding Engineer",
+    "Resso.ai", "RAG Architecture", "MCP Server", "Agentic AI",
+    "Omkumar Solanki", "AI Consultant",
   ],
   authors: [{ name: "Omkumar Solanki" }],
   openGraph: {
-    title: "Omkumar Solanki - AI & ML Engineer",
-    description: "Production AI systems. Real-time ML pipelines. Autonomous agents.",
+    title: "Omkumar Solanki — Applied AI Engineer",
+    description: "AI agent systems shipped to production. Orchestration, memory, RAG, real-time inference.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Omkumar Solanki - AI & ML Engineer",
-    description: "Production AI systems. Real-time ML pipelines. Autonomous agents.",
+    title: "Omkumar Solanki — Applied AI Engineer",
+    description: "AI agent systems shipped to production. Orchestration, memory, RAG, real-time inference.",
   },
 };
 
@@ -32,9 +32,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Syne (display/hero - ultra-bold geometric) + Space Grotesk (UI) + JetBrains Mono + Inter + Instrument Serif */}
+        {/* Fraunces (display serif) + Inter (body) + Geist Mono (eyebrows) — monochrome system.
+            Syne / Space Grotesk / JetBrains Mono / Instrument Serif kept for legacy pages (/resume /leads /admin). */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300&family=Geist+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
           rel="stylesheet"
         />
       </head>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta charset="utf-8">
+  <title>Polymath Consultancy Group — The intelligence layer for your business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #FAFAF8; }
+    body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    *, *::before, *::after { box-sizing: border-box; }
+    a { text-decoration: none; }
+    ::selection { background: #26262E; color: #FAFAF8; }
+    @keyframes pmTo30 { from { transform: rotate(0deg); } to { transform: rotate(30deg); } }
+    @keyframes pmTo60 { from { transform: rotate(0deg); } to { transform: rotate(60deg); } }
+    @keyframes pmDot { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</helmet>
+
+<div style="font-family: 'Inter', 'Helvetica Neue', sans-serif; font-optical-sizing: auto; color: #0A0A0C; background: #FAFAF8;">
+
+  <!-- ============ NAV ============ -->
+  <div data-screen-label="Nav" style="position: sticky; top: 0; z-index: 100; background: #0A0A0C; border-bottom: 1px solid #26262E;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between;">
+      <a href="#top" style="display: flex; align-items: center; gap: 12px;">
+        <dc-import name="Mark" size="26" ink="#FAFAF8" sw="1.25" dot="3.5" variant="aperture" hint-size="26px,26px"></dc-import>
+        <span style="font-size: 16.5px; font-weight: 500; letter-spacing: -0.01em; color: #FAFAF8;">Polymath</span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 28px;">
+        <a href="#what-we-do" style="font-size: 14px; font-weight: 400; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">What we do</a>
+        <a href="#industries" style="font-size: 14px; font-weight: 400; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">Industries</a>
+        <a href="#how-we-work" style="font-size: 14px; font-weight: 400; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">How we work</a>
+        <a href="#results" style="font-size: 14px; font-weight: 400; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">Results</a>
+        <a href="#about" style="font-size: 14px; font-weight: 400; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">About</a>
+        <a href="#contact" style="font-size: 14px; font-weight: 500; color: #0A0A0C; background: #FAFAF8; padding: 9px 18px; border-radius: 7px; transition: background 0.15s;" style-hover="background: #E9E9E5;">Book a consultation</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <div id="top" data-screen-label="Hero" style="background: #0A0A0C;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 104px 32px 96px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 64px; align-items: center;">
+      <div>
+        <div style="font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.22em; color: #6E6E78;">AI CONSULTANCY GROUP</div>
+        <sc-if value="{{ hl1 }}" hint-placeholder-val="{{ true }}">
+          <h1 style="margin: 26px 0 0; font-size: 64px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; color: #FAFAF8; text-wrap: balance;">The intelligence layer for your business.</h1>
+        </sc-if>
+        <sc-if value="{{ hl2 }}" hint-placeholder-val="{{ false }}">
+          <h1 style="margin: 26px 0 0; font-size: 64px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; color: #FAFAF8; text-wrap: balance;">Many industries. One intelligence.</h1>
+        </sc-if>
+        <sc-if value="{{ hl3 }}" hint-placeholder-val="{{ false }}">
+          <h1 style="margin: 26px 0 0; font-size: 64px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; color: #FAFAF8; text-wrap: balance;">We make complex businesses run frictionlessly.</h1>
+        </sc-if>
+        <sc-if value="{{ hl4 }}" hint-placeholder-val="{{ false }}">
+          <h1 style="margin: 26px 0 0; font-size: 64px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; color: #FAFAF8; text-wrap: balance;">Your operations, minus the friction.</h1>
+        </sc-if>
+        <p style="margin: 28px 0 0; font-size: 18px; font-weight: 400; line-height: 1.7; color: #6E6E78; max-width: 520px; text-wrap: pretty;">Polymath designs and deploys AI agents that remove friction from how your business actually works — so your people spend time on decisions, not busywork. One consultancy, every industry.</p>
+        <div style="margin-top: 40px; display: flex; align-items: center; gap: 28px;">
+          <a href="#contact" style="font-size: 15px; font-weight: 500; color: #0A0A0C; background: #FAFAF8; padding: 14px 26px; border-radius: 8px; transition: background 0.15s;" style-hover="background: #E9E9E5;">Book a consultation</a>
+          <a href="#how-we-work" style="font-size: 15px; font-weight: 500; color: #FAFAF8; opacity: 0.9; transition: opacity 0.15s;" style-hover="opacity: 0.6;">See how we work →</a>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center;">
+        <svg width="340" height="340" viewBox="0 0 96 96" fill="none" style="display: block;">
+          <rect x="18" y="18" width="60" height="60" stroke="#FAFAF8" stroke-width="0.5"></rect>
+          <rect x="18" y="18" width="60" height="60" stroke="#FAFAF8" stroke-width="0.5" style="transform-box: fill-box; transform-origin: 50% 50%; transform: rotate(30deg); animation: {{ a30 }};"></rect>
+          <rect x="18" y="18" width="60" height="60" stroke="#FAFAF8" stroke-width="0.5" style="transform-box: fill-box; transform-origin: 50% 50%; transform: rotate(60deg); animation: {{ a60 }};"></rect>
+          <circle cx="48" cy="48" r="3.5" fill="#FAFAF8" style="opacity: 1; animation: {{ aDot }};"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Trust bar -->
+    <div style="border-top: 1px solid #26262E;">
+      <div style="max-width: 1100px; margin: 0 auto; padding: 26px 32px; display: flex; align-items: center; gap: 40px;">
+        <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6E6E78; white-space: nowrap;">Trusted across sectors</div>
+        <sc-if value="{{ showStats }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; align-items: center; gap: 36px; flex: 1; justify-content: flex-end;">
+            <div style="font-size: 14px; font-weight: 400; color: #FAFAF8;">10+ years combined AI &amp; ML engineering</div>
+            <div style="width: 1px; height: 20px; background: #26262E;"></div>
+            <div style="font-size: 14px; font-weight: 400; color: #FAFAF8;">Production systems serving institutional clients</div>
+            <div style="width: 1px; height: 20px; background: #26262E;"></div>
+            <div style="font-size: 14px; font-weight: 400; color: #FAFAF8;">Deployments across education, retail, and manufacturing</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showLogos }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 20px; flex: 1; justify-content: flex-end;">
+            <div style="border: 1px dashed #26262E; border-radius: 6px; padding: 11px 26px; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6E78;">CLIENT 1</div>
+            <div style="border: 1px dashed #26262E; border-radius: 6px; padding: 11px 26px; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6E78;">CLIENT 2</div>
+            <div style="border: 1px dashed #26262E; border-radius: 6px; padding: 11px 26px; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6E78;">CLIENT 3</div>
+            <div style="border: 1px dashed #26262E; border-radius: 6px; padding: 11px 26px; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6E78;">CLIENT 4</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ THE PROBLEM ============ -->
+  <div data-screen-label="The problem" style="background: #FAFAF8; border-bottom: 1px solid #E9E9E5;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 120px 32px;">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">The problem</div>
+      <h2 style="margin: 24px 0 0; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #0A0A0C; max-width: 780px; text-wrap: balance;">Every industry has the same problem. It just wears a different uniform.</h2>
+      <div style="margin-top: 36px; max-width: 720px;">
+        <p style="margin: 0; font-size: 18px; font-weight: 400; line-height: 1.7; color: #26262E; text-wrap: pretty;">In a factory, it's production data trapped in machines nobody queries. In a clinic, it's staff re-typing the same intake form three times. In a firm, it's partners spending billable hours on documents an agent could draft. Different industries, same disease: friction. Work that consumes your best people without requiring their best thinking.</p>
+        <p style="margin: 24px 0 0; font-size: 18px; font-weight: 400; line-height: 1.7; color: #26262E; text-wrap: pretty;">Most companies respond by hiring more people or buying more software. Both add complexity. <span style="font-weight: 500; color: #0A0A0C;">We remove it.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ WHAT WE DO ============ -->
+  <div id="what-we-do" data-screen-label="What we do" style="background: #FAFAF8; border-bottom: 1px solid #E9E9E5;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 120px 32px;">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">What we do</div>
+      <h2 style="margin: 24px 0 0; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #0A0A0C; max-width: 820px; text-wrap: balance;">One layer of intelligence, placed exactly where your business loses time.</h2>
+      <p style="margin: 30px 0 0; font-size: 18px; font-weight: 400; line-height: 1.7; color: #26262E; max-width: 720px; text-wrap: pretty;">We don't sell tools. We study how your work actually flows, find where it breaks, and build the AI layer that fixes it — then stay until it runs on its own.</p>
+
+      <div style="margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #E9E9E5; border: 1px solid #E9E9E5;">
+        <div style="background: #FAFAF8; padding: 36px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #6E6E78;">01</div>
+          <div style="margin-top: 20px; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">AI agents that work your workflows</div>
+          <p style="margin: 14px 0 0; font-size: 15.5px; font-weight: 400; line-height: 1.65; color: #26262E; text-wrap: pretty;">Autonomous agents that handle the repetitive middle of your operations — triaging requests, drafting documents, reconciling data, chasing follow-ups — with human approval exactly where it matters.</p>
+        </div>
+        <div style="background: #FAFAF8; padding: 36px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #6E6E78;">02</div>
+          <div style="margin-top: 20px; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Workflow &amp; friction audits</div>
+          <p style="margin: 14px 0 0; font-size: 15.5px; font-weight: 400; line-height: 1.65; color: #26262E; text-wrap: pretty;">A structured two-week diagnosis of where your business bleeds time and money. You get a ranked map of every friction point, what fixing it is worth, and what it takes. Useful even if you never hire us again.</p>
+        </div>
+        <div style="background: #FAFAF8; padding: 36px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #6E6E78;">03</div>
+          <div style="margin-top: 20px; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Custom ML &amp; prediction systems</div>
+          <p style="margin: 14px 0 0; font-size: 15.5px; font-weight: 400; line-height: 1.65; color: #26262E; text-wrap: pretty;">When off-the-shelf isn't enough: demand forecasting, risk scoring, quality prediction, and decision-support models built on your data, deployed on your cloud, owned by you.</p>
+        </div>
+        <div style="background: #FAFAF8; padding: 36px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #6E6E78;">04</div>
+          <div style="margin-top: 20px; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">AI strategy for leadership</div>
+          <p style="margin: 14px 0 0; font-size: 15.5px; font-weight: 400; line-height: 1.65; color: #26262E; text-wrap: pretty;">Board-level clarity on what AI can and cannot do for your specific business — roadmaps, build-vs-buy decisions, vendor evaluation, and governance. No jargon, no theatre.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ INDUSTRIES ============ -->
+  <div id="industries" data-screen-label="Industries" style="background: #FAFAF8;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 120px 32px;">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">Industries</div>
+      <h2 style="margin: 24px 0 0; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #0A0A0C; text-wrap: balance;">Different fields. Same discipline.</h2>
+      <p style="margin: 30px 0 0; font-size: 18px; font-weight: 400; line-height: 1.7; color: #26262E; max-width: 720px; text-wrap: pretty;">A polymath is someone who masters many fields. Our method transfers because friction behaves the same way everywhere — only the vocabulary changes.</p>
+
+      <div style="margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: #E9E9E5; border: 1px solid #E9E9E5;">
+        <div style="background: #FAFAF8; padding: 32px; display: flex; flex-direction: column;">
+          <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Manufacturing &amp; industrial</div>
+          <p style="margin: 13px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #26262E; flex: 1; text-wrap: pretty;">Production monitoring, predictive maintenance, and quality-inspection agents that turn machine data into decisions on the floor.</p>
+          <a href="#contact" style="margin-top: 22px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">See what this looks like →</a>
+        </div>
+        <div style="background: #FAFAF8; padding: 32px; display: flex; flex-direction: column;">
+          <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Professional services</div>
+          <p style="margin: 13px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #26262E; flex: 1; text-wrap: pretty;">Document drafting, research, and client-intake agents that give partners and consultants their billable hours back.</p>
+          <a href="#contact" style="margin-top: 22px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">See what this looks like →</a>
+        </div>
+        <div style="background: #FAFAF8; padding: 32px; display: flex; flex-direction: column;">
+          <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Education &amp; training</div>
+          <p style="margin: 13px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #26262E; flex: 1; text-wrap: pretty;">Assessment, feedback, and preparation systems that scale personal attention — built with the safeguards institutions require.</p>
+          <a href="#contact" style="margin-top: 22px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">See what this looks like →</a>
+        </div>
+        <div style="background: #FAFAF8; padding: 32px; display: flex; flex-direction: column;">
+          <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Retail &amp; e-commerce</div>
+          <p style="margin: 13px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #26262E; flex: 1; text-wrap: pretty;">Demand forecasting, catalog operations, and customer-service agents that keep margins intact as you grow.</p>
+          <a href="#contact" style="margin-top: 22px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">See what this looks like →</a>
+        </div>
+        <div style="background: #FAFAF8; padding: 32px; display: flex; flex-direction: column;">
+          <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Healthcare &amp; clinics</div>
+          <p style="margin: 13px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #26262E; flex: 1; text-wrap: pretty;">Intake, scheduling, and documentation automation designed around privacy and compliance from day one.</p>
+          <a href="#contact" style="margin-top: 22px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">See what this looks like →</a>
+        </div>
+        <div style="background: #FAFAF8; padding: 32px; display: flex; flex-direction: column;">
+          <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: #0A0A0C;">Finance &amp; real estate</div>
+          <p style="margin: 13px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #26262E; flex: 1; text-wrap: pretty;">Underwriting support, portfolio monitoring, and reporting agents for teams where accuracy is non-negotiable.</p>
+          <a href="#contact" style="margin-top: 22px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">See what this looks like →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HOW WE WORK ============ -->
+  <div id="how-we-work" data-screen-label="How we work" style="background: #0A0A0C;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 120px 32px;">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">How we work</div>
+      <h2 style="margin: 24px 0 0; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #FAFAF8; text-wrap: balance;">Four steps. No black boxes.</h2>
+
+      <div style="margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1px; background: #26262E; border: 1px solid #26262E;">
+        <div style="background: #0A0A0C; padding: 32px 28px 40px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6E78;">01</div>
+          <div style="margin-top: 22px; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: #FAFAF8;">Diagnose</div>
+          <p style="margin: 14px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #6E6E78; text-wrap: pretty;">We embed with your team for two weeks and map where time, money, and attention actually go. You see the friction ranked by cost before we propose anything.</p>
+        </div>
+        <div style="background: #0A0A0C; padding: 32px 28px 40px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6E78;">02</div>
+          <div style="margin-top: 22px; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: #FAFAF8;">Design</div>
+          <p style="margin: 14px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #6E6E78; text-wrap: pretty;">We architect the intelligence layer: which agents, which models, where humans stay in the loop, and what it runs on. You approve the blueprint, not a mystery.</p>
+        </div>
+        <div style="background: #0A0A0C; padding: 32px 28px 40px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6E78;">03</div>
+          <div style="margin-top: 22px; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: #FAFAF8;">Deploy</div>
+          <p style="margin: 14px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #6E6E78; text-wrap: pretty;">We build and ship in weeks, not quarters — on your cloud, integrated with the systems you already use. Nothing is thrown away; everything is connected.</p>
+        </div>
+        <div style="background: #0A0A0C; padding: 32px 28px 40px;">
+          <div style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6E78;">04</div>
+          <div style="margin-top: 22px; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: #FAFAF8;">Operate</div>
+          <p style="margin: 14px 0 0; font-size: 15px; font-weight: 400; line-height: 1.65; color: #6E6E78; text-wrap: pretty;">We monitor, measure, and improve. Every engagement ends with your team trained and a dashboard that proves the value in hours saved and errors removed.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 26px; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #6E6E78;">Typical first engagement: 6–10 weeks from diagnosis to a working system.</div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="results" data-screen-label="Results" style="background: #FAFAF8; border-bottom: 1px solid #E9E9E5;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 120px 32px;">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">Results</div>
+      <h2 style="margin: 24px 0 0; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #0A0A0C; max-width: 720px; text-wrap: balance;">Measured in hours returned and errors removed.</h2>
+
+      <div style="margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #E9E9E5; border: 1px solid #E9E9E5;">
+        <div style="background: #FAFAF8; padding: 30px 28px 34px;">
+          <div style="font-size: 48px; font-weight: 500; letter-spacing: -0.03em; color: #0A0A0C;"><span style="color: #E9E9E5;">[</span>XX<span style="color: #E9E9E5;">]</span>%</div>
+          <div style="margin-top: 12px; font-size: 14px; line-height: 1.55; color: #6E6E78;">reduction in manual processing time, [industry] client</div>
+        </div>
+        <div style="background: #FAFAF8; padding: 30px 28px 34px;">
+          <div style="font-size: 48px; font-weight: 500; letter-spacing: -0.03em; color: #0A0A0C;"><span style="color: #E9E9E5;">[</span>XX<span style="color: #E9E9E5;">]</span><span style="font-size: 26px; color: #26262E;"> hrs/wk</span></div>
+          <div style="margin-top: 12px; font-size: 14px; line-height: 1.55; color: #6E6E78;">returned to a [role] team of [N]</div>
+        </div>
+        <div style="background: #FAFAF8; padding: 30px 28px 34px;">
+          <div style="font-size: 48px; font-weight: 500; letter-spacing: -0.03em; color: #0A0A0C;"><span style="color: #E9E9E5;">[</span>X<span style="color: #E9E9E5;">]</span>×</div>
+          <div style="margin-top: 12px; font-size: 14px; line-height: 1.55; color: #6E6E78;">faster [process name] turnaround</div>
+        </div>
+        <div style="background: #FAFAF8; padding: 30px 28px 34px;">
+          <div style="font-size: 48px; font-weight: 500; letter-spacing: -0.03em; color: #0A0A0C;">$<span style="color: #E9E9E5;">[</span>XXX<span style="color: #E9E9E5;">]</span><span style="font-size: 26px; color: #26262E;">k</span></div>
+          <div style="margin-top: 12px; font-size: 14px; line-height: 1.55; color: #6E6E78;">annual operating cost removed</div>
+        </div>
+      </div>
+      <div style="margin-top: 18px; font-family: 'Geist Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E6E78;">Placeholder metrics — replaced with client data as engagements complete</div>
+
+      <div style="margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #E9E9E5; border: 1px solid #E9E9E5;">
+        <div style="background: #FAFAF8; padding: 34px;">
+          <div style="font-size: 19px; font-weight: 500; color: #0A0A0C;">[Client / industry name]</div>
+          <div style="margin-top: 24px; display: grid; grid-template-columns: 110px 1fr; gap: 10px 18px; align-items: baseline;">
+            <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">The friction</div>
+            <div style="font-size: 15px; line-height: 1.6; color: #6E6E78;">[One sentence describing the broken process.]</div>
+            <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">The layer</div>
+            <div style="font-size: 15px; line-height: 1.6; color: #6E6E78;">[One sentence describing what we built.]</div>
+            <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">The result</div>
+            <div style="font-size: 15px; line-height: 1.6; color: #6E6E78;">[One metric.]</div>
+          </div>
+          <a href="#contact" style="display: inline-block; margin-top: 26px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">Read the full story →</a>
+        </div>
+        <div style="background: #FAFAF8; padding: 34px;">
+          <div style="font-size: 19px; font-weight: 500; color: #0A0A0C;">[Client / industry name]</div>
+          <div style="margin-top: 24px; display: grid; grid-template-columns: 110px 1fr; gap: 10px 18px; align-items: baseline;">
+            <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">The friction</div>
+            <div style="font-size: 15px; line-height: 1.6; color: #6E6E78;">[One sentence describing the broken process.]</div>
+            <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">The layer</div>
+            <div style="font-size: 15px; line-height: 1.6; color: #6E6E78;">[One sentence describing what we built.]</div>
+            <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">The result</div>
+            <div style="font-size: 15px; line-height: 1.6; color: #6E6E78;">[One metric.]</div>
+          </div>
+          <a href="#contact" style="display: inline-block; margin-top: 26px; font-size: 14px; font-weight: 500; color: #6E6E78; transition: color 0.15s;" style-hover="color: #0A0A0C;">Read the full story →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <div id="about" data-screen-label="About" style="background: #FAFAF8; border-bottom: 1px solid #E9E9E5;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 120px 32px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 72px; align-items: start;">
+      <div>
+        <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">About</div>
+        <h2 style="margin: 24px 0 0; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #0A0A0C; text-wrap: balance;">Built by engineers who ship, not decks.</h2>
+        <p style="margin: 30px 0 0; font-size: 17px; font-weight: 400; line-height: 1.7; color: #26262E; text-wrap: pretty;">Polymath was founded by [founder name], an AI/ML engineer who has spent years building production AI systems — from agentic platforms serving institutional education clients to prediction models running in live business environments. We are engineers first and consultants second: every recommendation we make is one we know how to build, because we're the ones who build it.</p>
+        <p style="margin: 22px 0 0; font-size: 17px; font-weight: 400; line-height: 1.7; color: #26262E;">We work with a small number of clients at a time, deliberately. <span style="font-weight: 500; color: #0A0A0C;">Depth over volume.</span></p>
+      </div>
+      <div style="border: 1px solid #E9E9E5; background: #FAFAF8; padding: 34px; margin-top: 62px;">
+        <dc-import name="Mark" size="44" ink="#0A0A0C" sw="1.5" dot="3.5" variant="aperture" hint-size="44px,44px"></dc-import>
+        <div style="margin-top: 26px; font-size: 19px; font-weight: 500; color: #0A0A0C;">[Founder name]</div>
+        <div style="margin-top: 6px; font-family: 'Geist Mono', monospace; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6E78;">Founder &amp; Principal</div>
+        <p style="margin: 20px 0 0; font-size: 14.5px; font-weight: 400; line-height: 1.65; color: #26262E; text-wrap: pretty;">AI/ML engineer. Builder of production agentic systems, ML pipelines, and cloud architecture (AWS, Azure). Instructor in computer systems.</p>
+        <div style="margin-top: 20px; padding-top: 18px; border-top: 1px solid #E9E9E5; font-size: 13.5px; color: #6E6E78;">Based in Ontario, Canada — working with clients everywhere.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FAQ ============ -->
+  <div data-screen-label="FAQ" style="background: #FAFAF8;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 120px 32px;">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #6E6E78;">FAQ</div>
+      <h2 style="margin: 24px 0 12px; font-size: 42px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #0A0A0C;">Fair questions.</h2>
+
+      <div style="margin-top: 34px; border-top: 1px solid #E9E9E5;">
+        <div style="border-bottom: 1px solid #E9E9E5;">
+          <div onClick="{{ f1 }}" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; cursor: pointer;">
+            <div style="font-size: 17px; font-weight: 500; color: #0A0A0C;">Do we need to already "use AI" to work with you?</div>
+            <div style="font-size: 20px; font-weight: 400; color: #6E6E78; line-height: 1; transition: transform 0.25s; transform: {{ r1 }};">+</div>
+          </div>
+          <sc-if value="{{ o1 }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 40px 24px 0; font-size: 16px; line-height: 1.7; color: #26262E; max-width: 760px;">No. Most clients come to us with a friction problem, not an AI plan. The diagnosis phase exists precisely to figure out where — and whether — AI belongs in your business.</p>
+          </sc-if>
+        </div>
+        <div style="border-bottom: 1px solid #E9E9E5;">
+          <div onClick="{{ f2 }}" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; cursor: pointer;">
+            <div style="font-size: 17px; font-weight: 500; color: #0A0A0C;">Who owns what you build?</div>
+            <div style="font-size: 20px; font-weight: 400; color: #6E6E78; line-height: 1; transition: transform 0.25s; transform: {{ r2 }};">+</div>
+          </div>
+          <sc-if value="{{ o2 }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 40px 24px 0; font-size: 16px; line-height: 1.7; color: #26262E; max-width: 760px;">You do. Systems are deployed on your cloud accounts, code and models are handed over, and your team is trained to run them.</p>
+          </sc-if>
+        </div>
+        <div style="border-bottom: 1px solid #E9E9E5;">
+          <div onClick="{{ f3 }}" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; cursor: pointer;">
+            <div style="font-size: 17px; font-weight: 500; color: #0A0A0C;">How do you handle our data?</div>
+            <div style="font-size: 20px; font-weight: 400; color: #6E6E78; line-height: 1; transition: transform 0.25s; transform: {{ r3 }};">+</div>
+          </div>
+          <sc-if value="{{ o3 }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 40px 24px 0; font-size: 16px; line-height: 1.7; color: #26262E; max-width: 760px;">Everything is built inside your environment with your access controls. Where required, we design fully private deployments that never send data to third-party services.</p>
+          </sc-if>
+        </div>
+        <div style="border-bottom: 1px solid #E9E9E5;">
+          <div onClick="{{ f4 }}" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; cursor: pointer;">
+            <div style="font-size: 17px; font-weight: 500; color: #0A0A0C;">What does an engagement cost?</div>
+            <div style="font-size: 20px; font-weight: 400; color: #6E6E78; line-height: 1; transition: transform 0.25s; transform: {{ r4 }};">+</div>
+          </div>
+          <sc-if value="{{ o4 }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 40px 24px 0; font-size: 16px; line-height: 1.7; color: #26262E; max-width: 760px;">Friction audits are fixed-price. Build engagements are scoped after diagnosis, so you're never quoted for a mystery. Ask us for the current rate card.</p>
+          </sc-if>
+        </div>
+        <div style="border-bottom: 1px solid #E9E9E5;">
+          <div onClick="{{ f5 }}" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; cursor: pointer;">
+            <div style="font-size: 17px; font-weight: 500; color: #0A0A0C;">What if it doesn't work?</div>
+            <div style="font-size: 20px; font-weight: 400; color: #6E6E78; line-height: 1; transition: transform 0.25s; transform: {{ r5 }};">+</div>
+          </div>
+          <sc-if value="{{ o5 }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 40px 24px 0; font-size: 16px; line-height: 1.7; color: #26262E; max-width: 760px;">Every build ships with success metrics defined before we start. If the numbers aren't there, we keep working until they are — that's in the agreement, not just on the website.</p>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FINAL CTA ============ -->
+  <div id="contact" data-screen-label="Final CTA" style="background: #0A0A0C;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 140px 32px; text-align: center;">
+      <dc-import name="Mark" size="56" ink="#FAFAF8" sw="1.5" dot="3.5" variant="aperture" hint-size="56px,56px" style="margin: 0 auto;"></dc-import>
+      <h2 style="margin: 44px 0 0; font-size: 46px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; color: #FAFAF8; text-wrap: balance;">Tell us where your business loses time. We'll tell you what it's worth to fix.</h2>
+      <p style="margin: 26px auto 0; font-size: 17px; font-weight: 400; line-height: 1.7; color: #6E6E78; max-width: 520px; text-wrap: pretty;">A 30-minute conversation. No pitch deck, no obligation — just an engineer's honest read on your problem.</p>
+      <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 18px;">
+        <a href="#contact" style="font-size: 15px; font-weight: 500; color: #0A0A0C; background: #FAFAF8; padding: 15px 30px; border-radius: 8px; transition: background 0.15s;" style-hover="background: #E9E9E5;">Book a consultation</a>
+        <div style="font-size: 14px; color: #6E6E78;">Or write to us — <span style="color: #FAFAF8;">hello@[domain]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <div data-screen-label="Footer" style="background: #0A0A0C; border-top: 1px solid #26262E;">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 72px 32px 0; display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <dc-import name="Mark" size="26" ink="#FAFAF8" sw="1.25" dot="3.5" variant="aperture" hint-size="26px,26px"></dc-import>
+          <span style="font-size: 16px; font-weight: 500; color: #FAFAF8;">Polymath Consultancy Group</span>
+        </div>
+        <div style="margin-top: 14px; font-size: 14px; line-height: 1.6; color: #6E6E78;">The intelligence layer for your business.</div>
+      </div>
+      <div>
+        <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6E6E78;">Company</div>
+        <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <a href="#what-we-do" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">What we do</a>
+          <a href="#industries" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">Industries</a>
+          <a href="#how-we-work" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">How we work</a>
+          <a href="#about" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">About</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6E6E78;">Resources</div>
+        <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <a href="#what-we-do" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">Friction audit</a>
+          <a href="#results" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">Case studies</a>
+          <a href="#top" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">FAQ</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6E6E78;">Contact</div>
+        <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 14px; color: #FAFAF8; opacity: 0.85;">hello@[domain]</div>
+          <a href="#top" style="font-size: 14px; color: #FAFAF8; opacity: 0.85; transition: opacity 0.15s;" style-hover="opacity: 0.5;">LinkedIn</a>
+          <div style="font-size: 14px; color: #6E6E78;">Ontario, Canada</div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1100px; margin: 56px auto 0; padding: 0 32px;">
+      <div style="border-top: 1px solid #26262E; padding: 24px 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 24px;">
+        <div style="font-size: 13px; color: #6E6E78;">© 2026 Polymath Consultancy Group. All rights reserved.</div>
+        <div style="display: flex; gap: 24px;">
+          <a href="#top" style="font-size: 13px; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">Privacy</a>
+          <a href="#top" style="font-size: 13px; color: #6E6E78; transition: color 0.15s;" style-hover="color: #FAFAF8;">Terms</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;headline&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;The intelligence layer for your business.&quot;, &quot;options&quot;: [&quot;The intelligence layer for your business.&quot;, &quot;Many industries. One intelligence.&quot;, &quot;We make complex businesses run frictionlessly.&quot;, &quot;Your operations, minus the friction.&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero&quot;},
+  &quot;motion&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Hero&quot;},
+  &quot;trustBar&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Stats&quot;, &quot;options&quot;: [&quot;Stats&quot;, &quot;Client logos&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero&quot;}
+}">
+class Component extends DCLogic {
+  state = { faq: -1 };
+
+  renderVals() {
+    const OPTS = [
+      'The intelligence layer for your business.',
+      'Many industries. One intelligence.',
+      'We make complex businesses run frictionlessly.',
+      'Your operations, minus the friction.',
+    ];
+    const hl = this.props.headline ?? OPTS[0];
+    const motion = (this.props.motion ?? true) !== false;
+    const trust = this.props.trustBar ?? 'Stats';
+    const o = this.state.faq;
+    const toggle = (i) => () => this.setState(s => ({ faq: s.faq === i ? -1 : i }));
+    const rot = (i) => (o === i ? 'rotate(45deg)' : 'rotate(0deg)');
+    return {
+      hl1: hl === OPTS[0], hl2: hl === OPTS[1], hl3: hl === OPTS[2], hl4: hl === OPTS[3],
+      a30: motion ? 'pmTo30 2.2s cubic-bezier(0.3, 0, 0.15, 1) 0.5s both' : 'none',
+      a60: motion ? 'pmTo60 2.9s cubic-bezier(0.3, 0, 0.15, 1) 0.5s both' : 'none',
+      aDot: motion ? 'pmDot 0.9s ease 3.1s both' : 'none',
+      showStats: trust === 'Stats', showLogos: trust !== 'Stats',
+      o1: o === 0, o2: o === 1, o3: o === 2, o4: o === 3, o5: o === 4,
+      f1: toggle(0), f2: toggle(1), f3: toggle(2), f4: toggle(3), f5: toggle(4),
+      r1: rot(0), r2: rot(1), r3: rot(2), r4: rot(3), r5: rot(4),
+    };
+  }
+}
+</script>
+</body>
+</html>

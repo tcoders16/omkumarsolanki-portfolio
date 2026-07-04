@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import Nav from "@/components/Nav";
+import OmMark from "@/components/OmMark";
 
 /**
  * /book — books directly onto Om's Google Calendar via the OAuth API
@@ -55,83 +55,147 @@ export default function BookPage() {
     finally { setBusy(false); }
   }
 
-  const accent = "#4a9eff";
-  const chip = (active: boolean): React.CSSProperties => ({
-    fontFamily: "var(--font-mono)", fontSize: 12, padding: "9px 13px", borderRadius: 8, cursor: "pointer",
-    border: `1px solid ${active ? accent : "rgba(255,255,255,0.14)"}`, background: active ? "rgba(74,158,255,0.14)" : "transparent",
-    color: active ? "#cfe0ff" : "#c8c4bc",
-  });
-  const input: React.CSSProperties = {
-    width: "100%", boxSizing: "border-box", fontFamily: "var(--font-mono)", fontSize: 13, padding: "11px 13px",
-    border: "1px solid rgba(255,255,255,0.14)", borderRadius: 8, background: "rgba(255,255,255,0.03)", color: "#f0f0f0", outline: "none",
-  };
-
   return (
-    <>
-      <Nav />
-      <main style={{ background: "#000", minHeight: "100vh", color: "#f0f0f0", padding: "120px 24px 80px" }}>
-        <div style={{ maxWidth: 760, margin: "0 auto" }}>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: "#39d9b4", marginBottom: 14 }}>Book a call</p>
-          <h1 style={{ fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: "clamp(28px,5vw,52px)", letterSpacing: "-0.02em", margin: "0 0 12px", lineHeight: 1.05 }}>
-            Book a free 30-min <span style={{ color: accent }}>AI strategy call.</span>
-          </h1>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "#7a7a7a", margin: "0 0 40px" }}>
-            Pick any open time — it books straight onto Om&apos;s Google Calendar and you&apos;ll get the invite by email.
-          </p>
+    <div className="bk">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
+      <style>{`
+        .bk { min-height:100vh; background:#0A0A0C; color:#FAFAF8;
+          font-family:'Inter','Helvetica Neue',sans-serif; font-optical-sizing:auto;
+          -webkit-font-smoothing:antialiased; }
+        .bk *, .bk *::before, .bk *::after { box-sizing:border-box; }
+        .bk a { text-decoration:none; }
+        .bk ::selection { background:#26262E; color:#FAFAF8; }
+        .bk-bar { height:64px; border-bottom:1px solid #26262E; display:flex; align-items:center;
+          justify-content:space-between; padding:0 32px; }
+        .bk-brand { display:flex; align-items:center; gap:11px; font-family:'Fraunces',Georgia,serif;
+          font-optical-sizing:auto; font-size:17.5px; font-weight:500; letter-spacing:0.005em; color:#FAFAF8; }
+        .bk-back { font-size:14px; font-weight:500; color:#6E6E78; transition:color 0.15s; }
+        .bk-back:hover { color:#FAFAF8; }
+        .bk-main { max-width:760px; margin:0 auto; padding:96px 32px 96px; }
+        .bk-eyebrow { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.22em;
+          text-transform:uppercase; color:#6E6E78; }
+        .bk-h1 { margin:26px 0 0; font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
+          font-size:48px; font-weight:480; letter-spacing:-0.015em;
+          line-height:1.12; color:#FAFAF8; text-wrap:balance; }
+        .bk-sub { margin:22px 0 48px; font-size:16px; line-height:1.7; color:#6E6E78; max-width:520px; }
+        .bk-load { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.14em;
+          text-transform:uppercase; color:#6E6E78; }
+        .bk-panel { border:1px solid #26262E; padding:44px 32px; text-align:center; }
+        .bk-panel-t { font-size:18px; font-weight:500; margin-bottom:12px; }
+        .bk-panel-p { font-size:15px; color:#6E6E78; line-height:1.7; margin:0 0 22px; }
+        .bk-btn { display:inline-block; font-size:15px; font-weight:500; color:#0A0A0C;
+          background:#FAFAF8; border:none; border-radius:8px; padding:14px 26px; cursor:pointer;
+          transition:background 0.15s; font-family:'Inter','Helvetica Neue',sans-serif; }
+        .bk-btn:hover { background:#E9E9E5; }
+        .bk-btn:disabled { opacity:0.5; cursor:default; }
+        .bk-step-l { font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:0.16em;
+          text-transform:uppercase; color:#6E6E78; margin-bottom:12px; }
+        .bk-chips { display:flex; flex-wrap:wrap; gap:8px; }
+        .bk-chip { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.06em;
+          padding:10px 14px; border:1px solid #26262E; background:transparent; color:#FAFAF8;
+          cursor:pointer; transition:all 0.15s; border-radius:0; }
+        .bk-chip:hover { border-color:#6E6E78; }
+        .bk-chip.on { background:#FAFAF8; color:#0A0A0C; border-color:#FAFAF8; }
+        .bk-in { width:100%; font-family:'Inter','Helvetica Neue',sans-serif; font-size:15px;
+          padding:13px 15px; border:1px solid #26262E; border-radius:0; background:#0A0A0C;
+          color:#FAFAF8; outline:none; transition:border-color 0.15s; }
+        .bk-in::placeholder { color:#6E6E78; }
+        .bk-in:focus { border-color:#6E6E78; }
+        .bk-err { font-size:14px; color:#FAFAF8; border:1px solid #26262E; padding:11px 14px; }
+        .bk-done { border:1px solid #26262E; padding:28px; }
+        .bk-done-t { font-size:18px; font-weight:500; margin-bottom:10px; }
+        .bk-done-p { font-size:15px; color:#6E6E78; line-height:1.7; margin:0 0 16px; }
+        .bk-done-p b { color:#FAFAF8; font-weight:500; }
+        .bk-link { font-size:14px; font-weight:500; color:#FAFAF8; opacity:0.9; transition:opacity 0.15s; }
+        .bk-link:hover { opacity:0.6; }
+        @media (max-width: 600px) { .bk-h1 { font-size:34px; } .bk-main { padding:64px 24px; } }
+      `}</style>
 
-          {connected === null && <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "#7a7a7a" }}>Loading availability…</div>}
+      <div className="bk-bar">
+        <a href="/" className="bk-brand">
+          <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} />
+          Omkumar Solanki
+        </a>
+        <a href="/consulting" className="bk-back">← Back to Polymath</a>
+      </div>
 
-          {connected === false && (
-            <div style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "44px 32px", textAlign: "center", background: "rgba(255,255,255,0.015)" }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, marginBottom: 10 }}>Scheduling opens here shortly.</div>
-              <p style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "#7a7a7a", lineHeight: 1.8, margin: "0 0 18px" }}>Email Om to grab a time and he&apos;ll send a Google Calendar invite.</p>
-              <a href="mailto:emailtosolankiom@gmail.com" style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: "#001512", background: "#39d9b4", padding: "11px 20px", borderRadius: 6, textDecoration: "none" }}>Email Om →</a>
+      <main className="bk-main">
+        <p className="bk-eyebrow">Book a call</p>
+        <h1 className="bk-h1">Book a free 30&#8209;minute AI strategy call.</h1>
+        <p className="bk-sub">
+          Pick any open time — it books straight onto Om&apos;s Google Calendar and
+          you&apos;ll get the invite by email.
+        </p>
+
+        {connected === null && <div className="bk-load">Loading availability…</div>}
+
+        {connected === false && (
+          <div className="bk-panel">
+            <div className="bk-panel-t">Scheduling opens here shortly.</div>
+            <p className="bk-panel-p">Email Om to grab a time and he&apos;ll send a Google Calendar invite.</p>
+            <a href="mailto:emailtosolankiom@gmail.com" className="bk-btn">Email Om</a>
+          </div>
+        )}
+
+        {connected && done && (
+          <div className="bk-done">
+            <div className="bk-done-t">Booked — {done.when}</div>
+            <p className="bk-done-p">
+              It&apos;s on Om&apos;s Google Calendar and the invite is on its way to <b>{form.email}</b>.
+            </p>
+            {done.link && <a href={done.link} target="_blank" rel="noreferrer" className="bk-link">View the event →</a>}
+          </div>
+        )}
+
+        {connected && !done && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+            <div>
+              <div className="bk-step-l">1 · Pick a day</div>
+              <div className="bk-chips">
+                {days.map(d => (
+                  <button key={d} className={`bk-chip${day === d ? " on" : ""}`}
+                    onClick={() => { setDay(d); setSlot(null); }}>{fmtDay(d)}</button>
+                ))}
+              </div>
             </div>
-          )}
 
-          {connected && done && (
-            <div style={{ border: `1px solid ${accent}66`, borderRadius: 12, padding: 24, background: "rgba(74,158,255,0.06)" }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 15, marginBottom: 8 }}>✓ Booked — {done.when}</div>
-              <p style={{ fontFamily: "var(--font-mono)", fontSize: 12.5, color: "#c8c4bc", lineHeight: 1.7, margin: "0 0 14px" }}>It&apos;s on Om&apos;s Google Calendar and the invite is on its way to <b>{form.email}</b>.</p>
-              {done.link && <a href={done.link} target="_blank" rel="noreferrer" style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: accent }}>View the event →</a>}
-            </div>
-          )}
-
-          {connected && !done && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+            {day && (
               <div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", color: "#5a5a5a", marginBottom: 10 }}>1 · Pick a day</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {days.map(d => <button key={d} style={chip(day === d)} onClick={() => { setDay(d); setSlot(null); }}>{fmtDay(d)}</button>)}
+                <div className="bk-step-l">2 · Pick a time (ET)</div>
+                <div className="bk-chips">
+                  {SLOTS.filter(s => !isPast(day, s)).map(s => (
+                    <button key={s} className={`bk-chip${slot === s ? " on" : ""}`}
+                      onClick={() => setSlot(s)}>{slotLabel(s)}</button>
+                  ))}
                 </div>
               </div>
+            )}
 
-              {day && (
-                <div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", color: "#5a5a5a", marginBottom: 10 }}>2 · Pick a time (ET)</div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    {SLOTS.filter(s => !isPast(day, s)).map(s => <button key={s} style={chip(slot === s)} onClick={() => setSlot(s)}>{slotLabel(s)}</button>)}
-                  </div>
-                </div>
-              )}
-
-              {day && slot && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 460 }}>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", color: "#5a5a5a" }}>3 · Your details</div>
-                  <input style={input} placeholder="your name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-                  <input style={input} placeholder="your email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
-                  <textarea style={{ ...input, resize: "vertical", minHeight: 60 }} placeholder="what do you want to cover? (optional)" value={form.note} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} />
-                  {err && <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "#f87171" }}>{err}</div>}
-                  <button onClick={submit} disabled={busy || !form.name.trim() || !form.email.trim()}
-                    style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#001512", background: busy ? "#2a6" : "#39d9b4", border: "none", borderRadius: 8, padding: "13px", cursor: busy ? "default" : "pointer", opacity: (!form.name.trim() || !form.email.trim()) ? 0.5 : 1 }}>
-                    {busy ? "Booking…" : `Book ${fmtDay(day)} · ${slotLabel(slot)} →`}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+            {day && slot && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 460 }}>
+                <div className="bk-step-l" style={{ marginBottom: 0 }}>3 · Your details</div>
+                <input className="bk-in" placeholder="Your name" value={form.name}
+                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                <input className="bk-in" placeholder="Your email" value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+                <textarea className="bk-in" style={{ resize: "vertical", minHeight: 72 }}
+                  placeholder="What do you want to cover? (optional)" value={form.note}
+                  onChange={e => setForm(f => ({ ...f, note: e.target.value }))} />
+                {err && <div className="bk-err">{err}</div>}
+                <button className="bk-btn" onClick={submit}
+                  disabled={busy || !form.name.trim() || !form.email.trim()}>
+                  {busy ? "Booking…" : `Book ${fmtDay(day)} · ${slotLabel(slot)}`}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </main>
-    </>
+    </div>
   );
 }

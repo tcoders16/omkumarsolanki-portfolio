@@ -1,107 +1,110 @@
 import Link from "next/link";
+import OmMark from "@/components/OmMark";
 
 /**
- * Home — the doorway. Header, two paths, footer. Minimal.
- *   Engineering (dark)  → production-AI portfolio
- *   Consultancy (light) → agents that do real tasks: workflows with memory
+ * Home — the doorway. Two paths, monochrome five-tone system.
+ *   Engineering (Carbon)    → applied AI portfolio: agents shipped to production
+ *   Consultancy (Porcelain) → Polymath Consultancy Group
  */
 export default function Home() {
   return (
     <div className="door">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
       <style>{`
-        .door { min-height:100vh; display:flex; flex-direction:column; background:#0a0a0a;
-          font-family:'Space Grotesk',system-ui,sans-serif; }
+        .door { min-height:100vh; display:flex; flex-direction:column; background:#0A0A0C;
+          font-family:'Inter','Helvetica Neue',sans-serif; font-optical-sizing:auto;
+          -webkit-font-smoothing:antialiased; }
+        .door *, .door *::before, .door *::after { box-sizing:border-box; }
+        .door a { text-decoration:none; }
+        .door ::selection { background:#26262E; color:#FAFAF8; }
 
-        /* header / footer frame */
-        .door-bar { display:flex; align-items:center; justify-content:space-between; height:66px; padding:0 clamp(18px,4vw,40px);
-          background:#0a0a0a; color:#f0f0f0; flex-shrink:0; }
-        .door-brand { font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:800; letter-spacing:-.04em; color:#f0f0f0; text-decoration:none; }
-        .door-brand i { color:#39d9b4; font-style:normal; }
-        .door-bar a.door-mail { font-family:'JetBrains Mono',monospace; font-size:11px; color:#7a7a7a; text-decoration:none; }
-        .door-bar a.door-mail:hover { color:#f0f0f0; }
-        .door-foot { font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#5a5a5a; }
-        .door-foot span { color:#5a5a5a; }
+        .door-bar { display:flex; align-items:center; justify-content:space-between; height:64px;
+          padding:0 clamp(20px,4vw,40px); background:#0A0A0C; flex-shrink:0;
+          border-bottom:1px solid #26262E; }
+        .door-brand { display:flex; align-items:center; gap:11px; font-family:'Fraunces',Georgia,serif;
+          font-optical-sizing:auto; font-size:17.5px; font-weight:500; letter-spacing:0.005em; color:#FAFAF8; }
+        .door-mail { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.08em;
+          color:#6E6E78; transition:color 0.15s; }
+        .door-mail:hover { color:#FAFAF8; }
+        .door-foot { border-top:1px solid #26262E; border-bottom:none; height:56px; }
+        .door-foot span { font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:0.12em;
+          text-transform:uppercase; color:#6E6E78; }
 
-        /* split */
         .door-split { flex:1; display:flex; overflow:hidden; }
-        @media(max-width:760px){ .door-split { flex-direction:column; } }
+        @media (max-width: 760px) { .door-split { flex-direction:column; } }
         .door-half { position:relative; flex:1; display:flex; flex-direction:column; justify-content:center;
-          padding:clamp(32px,6vw,76px); text-decoration:none; overflow:hidden;
-          transition:flex .55s cubic-bezier(.4,0,.2,1); animation:doorIn .7s cubic-bezier(.2,.8,.2,1) both; }
-        .door-half:nth-child(2){ animation-delay:.08s; }
-        @media(min-width:761px){
-          .door-split:hover .door-half { flex:.85; }
-          .door-split:hover .door-half:hover { flex:1.25; }
-        }
-        @keyframes doorIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+          padding:clamp(36px,6vw,80px); overflow:hidden; }
 
-        .eng { background:#0a0a0a; color:#f0f0f0; }
-        .eng::after { content:''; position:absolute; inset:0; pointer-events:none;
-          background:radial-gradient(120% 90% at 0% 100%, rgba(57,217,180,.12), transparent 60%); }
-        .con { background:#eceef2; color:#0b0f19; border-left:1px solid rgba(0,0,0,.08); }
-        .con::after { content:''; position:absolute; inset:0; pointer-events:none;
-          background:radial-gradient(120% 90% at 100% 0%, rgba(47,91,255,.10), transparent 60%); }
+        .eng { background:#0A0A0C; }
+        .con { background:#FAFAF8; border-left:1px solid #26262E; }
+        @media (max-width: 760px) { .con { border-left:none; border-top:1px solid #26262E; } }
 
-        .door-eye { position:relative; z-index:1; font-family:'JetBrains Mono',monospace; font-size:11px;
-          letter-spacing:.18em; text-transform:uppercase; margin-bottom:20px; }
-        .eng .door-eye { color:#39d9b4; }
-        .con .door-eye { color:#2f5bff; }
+        .door-eye { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.22em;
+          text-transform:uppercase; margin-bottom:24px; color:#6E6E78; }
+        .door-h { font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
+          font-size:clamp(32px,3.8vw,50px); font-weight:480; letter-spacing:-0.015em;
+          line-height:1.08; margin:0 0 18px; max-width:15ch; text-wrap:balance; }
+        .eng .door-h { color:#FAFAF8; }
+        .con .door-h { color:#0A0A0C; }
+        .door-p { font-size:clamp(14px,1.3vw,17px); font-weight:400; line-height:1.7;
+          max-width:38ch; margin:0 0 32px; color:#6E6E78; text-wrap:pretty; }
 
-        .door-h { position:relative; z-index:1; font-family:'Space Grotesk',sans-serif; font-weight:700;
-          font-size:clamp(30px,4.2vw,50px); line-height:1.03; letter-spacing:-.04em; margin:0 0 16px; max-width:11ch; }
-        .door-p { position:relative; z-index:1; font-size:clamp(13px,1.4vw,16px); line-height:1.6; font-weight:300;
-          max-width:32ch; margin:0 0 28px; }
-        .eng .door-p { color:#9a9a9a; }
-        .con .door-p { color:#5b6373; }
+        .door-go { display:inline-block; width:fit-content; font-size:15px; font-weight:500;
+          padding:14px 26px; border-radius:8px; transition:background 0.15s; }
+        .eng .door-go { background:#FAFAF8; color:#0A0A0C; }
+        .eng .door-go:hover { background:#E9E9E5; }
+        .con .door-go { background:#0A0A0C; color:#FAFAF8; }
+        .con .door-go:hover { background:#26262E; }
 
-        .door-go { position:relative; z-index:1; display:inline-flex; align-items:center; gap:10px;
-          font-family:'JetBrains Mono',monospace; font-weight:600; font-size:13px; letter-spacing:.01em;
-          padding:12px 22px; transition:gap .2s, transform .2s, background .2s, color .2s; width:fit-content; }
-        .eng .door-go { background:#39d9b4; color:#001512; }
-        .con .door-go { background:#0b0f19; color:#fff; }
-        .con .door-half:hover .door-go, .door-half:hover .door-go { gap:15px; transform:translateY(-2px); }
+        .door-meta { margin-top:auto; padding-top:36px; font-family:'Geist Mono',monospace;
+          font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#6E6E78; }
 
-        .door-meta { position:relative; z-index:1; margin-top:auto; padding-top:30px;
-          font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.05em; }
-        .eng .door-meta { color:#5a5a5a; }
-        .con .door-meta { color:#8a8f9c; }
+        .door a:focus-visible { outline:1px solid #6E6E78; outline-offset:3px; }
       `}</style>
 
       {/* header */}
       <header className="door-bar">
-        <Link href="/" className="door-brand">om<i>.</i></Link>
+        <Link href="/" className="door-brand">
+          <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} />
+          Omkumar Solanki
+        </Link>
         <a href="mailto:emailtosolankiom@gmail.com" className="door-mail">emailtosolankiom@gmail.com</a>
       </header>
 
       {/* split */}
       <main className="door-split">
-        <Link href="/engineering" className="door-half eng">
+        <div className="door-half eng">
           <span className="door-eye">For teams · Engineering</span>
-          <h2 className="door-h">Production AI systems.</h2>
+          <h2 className="door-h">AI agents, shipped to production.</h2>
           <p className="door-p">
-            Senior AI/ML engineer — agents, RAG, real-time inference, and MLOps,
-            built to run in production.
+            Applied AI engineer — agent orchestration, on-premise RAG, and real-time
+            systems, built to run in production.
           </p>
-          <span className="door-go">Enter →</span>
-          <span className="door-meta">work · case studies · resume</span>
-        </Link>
+          <Link href="/engineering" className="door-go">Enter</Link>
+          <span className="door-meta">Work · Case studies · Resume</span>
+        </div>
 
-        <Link href="/consulting" className="door-half con">
-          <span className="door-eye">For startups · Agents</span>
-          <h2 className="door-h">Agents that do real work.</h2>
+        <div className="door-half con">
+          <span className="door-eye">For businesses · Consultancy</span>
+          <h2 className="door-h">The intelligence layer for your business.</h2>
           <p className="door-p">
-            Real tasks, multi-step workflows, and memory that persists — I help
-            startups take agents from demo to production.
+            Polymath Consultancy Group — AI agents that remove friction from how your
+            business actually works. One consultancy, every industry.
           </p>
-          <span className="door-go">Fix my agent →</span>
-          <span className="door-meta">memory · workflows · architecture</span>
-        </Link>
+          <Link href="/consulting" className="door-go">Enter</Link>
+          <span className="door-meta">What we do · Industries · Book a consultation</span>
+        </div>
       </main>
 
       {/* footer */}
       <footer className="door-bar door-foot">
-        <span>© 2026 Om Solanki</span>
-        <span>AI engineer &amp; agent consultant</span>
+        <span>© 2026 Omkumar Solanki</span>
+        <span>Applied AI · Agents &amp; orchestration</span>
       </footer>
     </div>
   );

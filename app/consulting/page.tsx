@@ -1,35 +1,35 @@
 import type { Metadata } from "next";
-import ConsultingLight from "@/components/ConsultingLight";
+import PolymathConsulting from "@/components/PolymathConsulting";
 
 const URL = "https://omkumarsolanki.com/consulting";
 
 export const metadata: Metadata = {
-  title: "AI Agents That Do Real Work — Om Solanki",
+  title: "Polymath Consultancy Group — The intelligence layer for your business",
   description:
-    "I help AI startups take agents from demo to production: agents that do real tasks, multi-step workflows that recover, and memory that persists. Tell me where your agent breaks.",
+    "Polymath designs and deploys AI agents that remove friction from how your business actually works — so your people spend time on decisions, not busywork. One consultancy, every industry.",
   keywords: [
-    "AI agent consultant",
-    "agent memory",
-    "agent workflows",
-    "multi-agent orchestration",
-    "AI agent architecture",
-    "agent reliability",
-    "LLM agents production",
-    "startup AI agents",
+    "AI consultancy",
+    "AI agents",
+    "workflow automation",
+    "friction audit",
+    "custom ML systems",
+    "AI strategy",
+    "agent deployment",
+    "Polymath Consultancy Group",
   ],
   alternates: { canonical: URL },
   openGraph: {
-    title: "AI Agents That Do Real Work — Om Solanki",
+    title: "Polymath Consultancy Group — The intelligence layer for your business",
     description:
-      "Agents that do real tasks, workflows that recover, and memory that persists. I help startups take agents from demo to production.",
+      "AI agents that remove friction from how your business actually works. One consultancy, every industry.",
     url: URL,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Agents That Do Real Work — Om Solanki",
+    title: "Polymath Consultancy Group",
     description:
-      "Real tasks, multi-step workflows, and memory that persists — agents from demo to production.",
+      "The intelligence layer for your business. AI agents that remove operational friction — one consultancy, every industry.",
   },
 };
 
@@ -40,33 +40,39 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": `${URL}#service`,
-      name: "AI Agent Architecture for Startups",
+      name: "Polymath Consultancy Group",
       url: URL,
+      slogan: "The intelligence layer for your business.",
       description:
-        "I help AI startups take agents from demo to production — agents that do real tasks, multi-step workflows that recover, and memory that persists.",
+        "Polymath designs and deploys AI agents that remove friction from how businesses actually work — workflow audits, autonomous agents, custom ML systems, and AI strategy for leadership.",
       areaServed: "Worldwide",
       serviceType: [
-        "AI agent architecture",
-        "Agent memory design",
-        "Multi-agent workflow orchestration",
-        "Agent reliability & evaluation",
+        "AI agent deployment",
+        "Workflow & friction audits",
+        "Custom ML & prediction systems",
+        "AI strategy for leadership",
       ],
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Ontario",
+        addressCountry: "CA",
+      },
+      founder: { "@id": `${URL}#person` },
       provider: { "@id": `${URL}#person` },
     },
     {
       "@type": "Person",
       "@id": `${URL}#person`,
-      name: "Om Kumar Solanki",
-      jobTitle: "Senior AI / ML & Agent Engineer",
-      email: "mailto:om@resso.ai",
+      name: "Omkumar Solanki",
+      jobTitle: "Founder & Principal, Polymath Consultancy Group",
+      email: "mailto:emailtosolankiom@gmail.com",
       url: "https://omkumarsolanki.com",
       knowsAbout: [
         "AI agents",
-        "Agent reliability",
-        "LLM evaluation",
-        "RAG",
+        "Machine learning",
         "MLOps",
-        "AWS Bedrock",
+        "RAG",
+        "Cloud architecture",
         "Production AI",
       ],
     },
@@ -80,7 +86,7 @@ export default function ConsultingPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ConsultingLight />
+      <PolymathConsulting />
     </>
   );
 }

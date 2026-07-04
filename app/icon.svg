@@ -1,14 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="5" fill="#080808"/>
-  <text x="1" y="24"
-    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
-    font-size="20"
-    font-weight="900"
-    fill="#ffffff"
-    letter-spacing="-0.5">OS</text>
-  <text x="26.5" y="24"
-    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
-    font-size="20"
-    font-weight="900"
-    fill="#3dba7e">.</text>
+  <rect width="32" height="32" rx="6" fill="#0A0A0C"/>
+  <circle cx="15" cy="17" r="8.7" stroke="#FAFAF8" stroke-width="1.4" fill="none"/>
+  <line x1="15" y1="17" x2="23.8" y2="8.2" stroke="#FAFAF8" stroke-width="1.4"/>
+  <circle cx="15" cy="17" r="1.7" fill="#FAFAF8"/>
+  <circle cx="23.8" cy="8.2" r="1.5" fill="#FAFAF8"/>
 </svg>
