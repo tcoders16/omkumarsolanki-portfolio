@@ -12,13 +12,13 @@ export default function Home() {
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
         rel="stylesheet"
       />
       <style>{`
         .door { min-height:100vh; display:flex; flex-direction:column; background:#0A0A0C;
-          font-family:'Inter','Helvetica Neue',sans-serif; font-optical-sizing:auto;
-          -webkit-font-smoothing:antialiased; }
+          font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','Inter',sans-serif;
+          font-optical-sizing:auto; -webkit-font-smoothing:antialiased; }
         .door *, .door *::before, .door *::after { box-sizing:border-box; }
         .door a { text-decoration:none; }
         .door ::selection { background:#26262E; color:#FAFAF8; }
@@ -26,8 +26,8 @@ export default function Home() {
         .door-bar { display:flex; align-items:center; justify-content:space-between; height:64px;
           padding:0 clamp(20px,4vw,40px); background:#0A0A0C; flex-shrink:0;
           border-bottom:1px solid #26262E; }
-        .door-brand { display:flex; align-items:center; gap:11px; font-family:'Fraunces',Georgia,serif;
-          font-optical-sizing:auto; font-size:17.5px; font-weight:500; letter-spacing:0.005em; color:#FAFAF8; }
+        .door-brand { display:flex; align-items:center; gap:11px; font-size:17px;
+          font-weight:600; letter-spacing:-0.015em; color:#FAFAF8; }
         .door-mail { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.08em;
           color:#6E6E78; transition:color 0.15s; }
         .door-mail:hover { color:#FAFAF8; }
@@ -46,9 +46,8 @@ export default function Home() {
 
         .door-eye { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.22em;
           text-transform:uppercase; margin-bottom:24px; color:#6E6E78; }
-        .door-h { font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
-          font-size:clamp(32px,3.8vw,50px); font-weight:480; letter-spacing:-0.015em;
-          line-height:1.08; margin:0 0 18px; max-width:15ch; text-wrap:balance; }
+        .door-h { font-size:clamp(30px,3.6vw,46px); font-weight:600; letter-spacing:-0.028em;
+          line-height:1.07; margin:0 0 18px; max-width:15ch; text-wrap:balance; }
         .eng .door-h { color:#FAFAF8; }
         .con .door-h { color:#0A0A0C; }
         .door-p { font-size:clamp(14px,1.3vw,17px); font-weight:400; line-height:1.7;

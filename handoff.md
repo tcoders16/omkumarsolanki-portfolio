@@ -5,7 +5,10 @@ _Single living handoff. Refreshed on every sync (every 20 min, session) and afte
 ---
 
 ## Current focus
-**FULL SITE REDESIGN → Polymath monochrome system** — BUILT 2026-07-04, all builds green, COMMITTED + PUSHED 2026-07-04 (see log).
+**FULL SITE REDESIGN → Polymath monochrome system** — BUILT 2026-07-04, all builds green, COMMITTED + PUSHED 2026-07-04 (see log). Typography follow-up committed 2026-07-05.
+
+### Typography pass 2026-07-05 (third pass)
+- **Fraunces display serif REPLACED with the Apple system SF stack** (`-apple-system, BlinkMacSystemFont, 'SF Pro Display'/'SF Pro Text', 'Helvetica Neue', 'Inter'`) on all personal surfaces: home doorway, /book, /engineering (EngineeringMono, EngAgentChat, EngContactForm) and the global Agent widget. Display headings now 600 weight with tighter tracking (−0.028/−0.032em); brand lockups 17px/600. Fraunces removed from all per-page font links and the global layout link (Inter/Geist Mono + legacy fonts kept). Polymath /consulting untouched. Build green (20 pages), committed + pushed this session.
 
 ### Brand layer added 2026-07-04 (same day, second pass)
 - **`components/OmMark.tsx`** — personal logo: hairline ring (the O) + center dot + spoke to a node beyond the ring ("orchestrator dispatching an agent"). Circular counterpart to PolymathMark. `sw` and `dot` are SCREEN-px (converted to viewBox units) so it stays crisp at any size. Mounted: home doorway header, /engineering nav, /book bar, Agent widget avatar + fab, `app/icon.svg` favicon (Carbon rounded square version).
@@ -94,12 +97,13 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - [x] Commit + push all work (d5b9c2c) · [x] deploy agent-service to Azure
 - [x] Frontend prod = Vercel (not Azure); env vars added; redeploy triggered
 - [x] Prod fully verified: /book connected, AI chat 200, consult 200, agent-service healthy — DEPLOYMENT COMPLETE
-- [ ] `.github/workflows/deploy.yml`: frontend job targets Azure (OOM + wrong — prod is Vercel) → fix/remove that job; needs `AZURE_CREDENTIALS` secret + service principal (not yet created)
+- [x] `.github/workflows/deploy.yml` fixed (committed `d653584`): Azure frontend job removed, agent-service job path-scoped to `agent-service/**` — still needs `AZURE_CREDENTIALS` secret before the job can run (manual `az containerapp up` until then)
 - [ ] Add prod redirect URI to Google client only if re-auth needed (token already works)
 
 ---
 
 ## Log
+- **2026-07-05** — Typography pass committed + pushed: Fraunces → Apple system SF stack across home, /book, /engineering (page + chat + contact form) and global Agent widget; headings 600wt, tighter tracking; Fraunces dropped from all font links. Build green (20 pages). deploy.yml confirmed already fixed in `d653584` (checkbox below stale). Prod verify pending Vercel auto-deploy.
 - **2026-07-04 (later)** — Brand pass: new OmMark personal logo (ring+spoke+node) across nav/doorway/book/widget/favicon; Fraunces display serif on personal pages (home, /engineering, /book) — classy editorial look, monochrome tones untouched; deploy.yml Azure frontend job removed + agent-service job path-scoped; ALL WORK COMMITTED + PUSHED → Vercel auto-deploy. DesignSync (claude.ai/design) publish of the brand bundle pending user `/design-login`.
 - **2026-07-04** — Global floating chat widget `Agent.tsx` reskinned to the monochrome system (Carbon header/Porcelain avatar/Geist Mono labels/Fog hairlines/Carbon buttons) — logic untouched, only STYLE + font consts. `layout.tsx` font link now loads Geist Mono + Inter opsz globally. Build green, verified open in Chrome on /consulting. Now the whole primary surface (home, engineering, consulting, book, + global widget) is one consistent system.
 - **2026-07-04** — FULL REDESIGN: /consulting → Polymath Consultancy Group (pixel-faithful from design_handoff_polymath_website/, chatbot kept + reskinned as PolymathAgent). /engineering + / + /book rebuilt in same monochrome five-tone system — content verbatim, repositioned agents-first/applied-AI (ML framed as "small, explainable where it earned its place"). 23 old components deleted (Story.tsx kept per user), 6 new components. Builds green, visually verified. UNCOMMITTED — next agent: commit/push → Vercel, then verify prod. See "Current focus" for full plan.
@@ -120,6 +124,7 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - **2026-06-27** — Set up handoff + 20-min session sync (job `98294620`). Baseline: source clean, ~57 uncommitted paths.
 
 ## Activity (auto)
+- 2026-07-04 19:47 · main @d653584 · 0 uncommitted · Δ-67 ctx-lines
 - 2026-07-04 12:42 · main @d5b9c2c · 39 uncommitted · Δ+67 ctx-lines
 - 2026-07-04 11:23 · main @d5b9c2c · 38 uncommitted · Δ+184 ctx-lines
 - 2026-07-04 11:09 · main @d5b9c2c · 14 uncommitted · Δ-124 ctx-lines
@@ -127,4 +132,3 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - 2026-06-30 14:03 · main @d5b9c2c · 3 uncommitted · Δ+9 ctx-lines
 - 2026-06-30 12:25 · main @d5b9c2c · 3 uncommitted · Δ+10 ctx-lines
 - 2026-06-29 21:54 · main @d5b9c2c · 3 uncommitted · Δ+16 ctx-lines
-- 2026-06-29 19:29 · main @d5b9c2c · 3 uncommitted · Δ+34 ctx-lines

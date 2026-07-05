@@ -44,7 +44,7 @@ export default function EngContactForm() {
         .ecf-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
         @media (max-width: 640px) { .ecf-grid { grid-template-columns:1fr; } }
         .ecf input, .ecf textarea { width:100%; box-sizing:border-box;
-          font-family:'Inter','Helvetica Neue',sans-serif; font-size:15px; color:#FAFAF8;
+          font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; font-size:15px; color:#FAFAF8;
           background:#0A0A0C; border:1px solid #26262E; border-radius:0; padding:13px 15px;
           outline:none; transition:border-color 0.15s; }
         .ecf input::placeholder, .ecf textarea::placeholder { color:#6E6E78; }
@@ -53,7 +53,7 @@ export default function EngContactForm() {
         .ecf .ecf-subject { margin-top:12px; }
         .ecf-err { margin-top:12px; font-size:14px; line-height:1.6; color:#FAFAF8;
           border:1px solid #26262E; padding:12px 14px; }
-        .ecf-btn { width:100%; margin-top:16px; font-family:'Inter','Helvetica Neue',sans-serif;
+        .ecf-btn { width:100%; margin-top:16px; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif;
           font-size:15px; font-weight:500; color:#0A0A0C; background:#FAFAF8; border:none;
           border-radius:8px; padding:15px 30px; cursor:pointer; transition:background 0.15s; }
         .ecf-btn:hover { background:#E9E9E5; }
@@ -62,7 +62,7 @@ export default function EngContactForm() {
         .ecf-done-t { font-size:19px; font-weight:500; color:#FAFAF8; }
         .ecf-done-s { margin:12px auto 0; font-size:15px; line-height:1.65; color:#6E6E78; max-width:340px; }
         .ecf-again { margin-top:20px; background:none; border:none; padding:0; cursor:pointer;
-          font-family:'Inter','Helvetica Neue',sans-serif; font-size:14px; font-weight:500;
+          font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; font-size:14px; font-weight:500;
           color:#6E6E78; transition:color 0.15s; }
         .ecf-again:hover { color:#FAFAF8; }
       `}</style>

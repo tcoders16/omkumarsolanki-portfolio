@@ -32,10 +32,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Fraunces (display serif) + Inter (body) + Geist Mono (eyebrows) — monochrome system.
-            Syne / Space Grotesk / JetBrains Mono / Instrument Serif kept for legacy pages (/resume /leads /admin). */}
+        {/* System SF stack for display/body (Apple-style, no webfont needed) + Inter fallback +
+            Geist Mono eyebrows. Syne / Space Grotesk / JetBrains Mono / Instrument Serif kept
+            for legacy pages (/resume /leads /admin). */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300&family=Geist+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300&family=Geist+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
           rel="stylesheet"
         />
       </head>

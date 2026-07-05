@@ -91,7 +91,7 @@ export default function EngAgentChat() {
       <style>{`
         .eac { border:1px solid #E9E9E5; background:#FAFAF8; display:flex; flex-direction:column;
           min-height:520px; max-height:680px; text-align:left;
-          font-family:'Inter','Helvetica Neue',sans-serif; }
+          font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; }
         .eac-hd { display:flex; align-items:center; justify-content:space-between; gap:16px;
           padding:16px 24px; border-bottom:1px solid #E9E9E5; }
         .eac-hd-t { font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:0.16em;
@@ -106,7 +106,7 @@ export default function EngAgentChat() {
 
         .eac-greet { font-size:15.5px; color:#26262E; line-height:1.65; margin:0 0 18px; }
         .eac-chips { display:flex; flex-direction:column; gap:8px; }
-        .eac-chip { text-align:left; font-family:'Inter','Helvetica Neue',sans-serif; font-size:15px;
+        .eac-chip { text-align:left; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; font-size:15px;
           color:#26262E; background:#FAFAF8; border:1px solid #E9E9E5; padding:13px 16px;
           cursor:pointer; transition:border-color 0.15s, color 0.15s; border-radius:0; }
         .eac-chip:hover { border-color:#26262E; color:#0A0A0C; }
@@ -146,12 +146,12 @@ export default function EngAgentChat() {
 
         .eac-foot { display:flex; gap:10px; padding:16px 24px; border-top:1px solid #E9E9E5; align-items:flex-end; }
         .eac-foot textarea { flex:1; background:#FAFAF8; border:1px solid #E9E9E5; border-radius:0;
-          padding:11px 13px; resize:none; outline:none; font-family:'Inter','Helvetica Neue',sans-serif;
+          padding:11px 13px; resize:none; outline:none; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif;
           font-size:15px; color:#0A0A0C; max-height:88px; transition:border-color 0.15s; }
         .eac-foot textarea:focus { border-color:#26262E; }
         .eac-send { flex-shrink:0; border:none; border-radius:7px; background:#0A0A0C; color:#FAFAF8;
           font-size:15px; font-weight:500; padding:11px 18px; cursor:pointer; transition:background 0.15s;
-          font-family:'Inter','Helvetica Neue',sans-serif; }
+          font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; }
         .eac-send:hover { background:#26262E; }
         .eac-send:disabled { opacity:0.35; cursor:default; background:#0A0A0C; }
         @media (prefers-reduced-motion: reduce) { .eac-tl, .eac-ans { animation:none; } }

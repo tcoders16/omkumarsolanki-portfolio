@@ -403,11 +403,12 @@ export default function EngineeringMono() {
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
         rel="stylesheet"
       />
       <style>{`
-        .em { font-family:'Inter','Helvetica Neue',sans-serif; font-optical-sizing:auto;
+        .em { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','Inter',sans-serif;
+          font-optical-sizing:auto;
           color:#0A0A0C; background:#FAFAF8; -webkit-font-smoothing:antialiased;
           text-rendering:optimizeLegibility; }
         .em *, .em *::before, .em *::after { box-sizing:border-box; }
@@ -419,8 +420,7 @@ export default function EngineeringMono() {
 
         .em-eyebrow { font-family:'Geist Mono',monospace; font-size:11px; font-weight:400;
           letter-spacing:0.22em; text-transform:uppercase; color:#6E6E78; }
-        .em-h2 { margin-top:24px; font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
-          font-size:44px; font-weight:500; letter-spacing:-0.015em;
+        .em-h2 { margin-top:24px; font-size:42px; font-weight:600; letter-spacing:-0.028em;
           line-height:1.12; color:#0A0A0C; }
         .em-intro { margin:30px 0 0; font-size:18px; font-weight:400; line-height:1.7;
           color:#26262E; max-width:720px; }
@@ -443,8 +443,8 @@ export default function EngineeringMono() {
         .em-nav { position:sticky; top:0; z-index:100; background:#0A0A0C; border-bottom:1px solid #26262E; }
         .em-nav-in { max-width:1100px; margin:0 auto; padding:0 32px; height:64px;
           display:flex; align-items:center; justify-content:space-between; }
-        .em-brand { display:flex; align-items:center; gap:11px; font-family:'Fraunces',Georgia,serif;
-          font-optical-sizing:auto; font-size:17.5px; font-weight:500; letter-spacing:0.005em; color:#FAFAF8; }
+        .em-brand { display:flex; align-items:center; gap:11px; font-size:17px;
+          font-weight:600; letter-spacing:-0.015em; color:#FAFAF8; }
         .em-nav-r { display:flex; align-items:center; gap:26px; }
         .em-nav-link { font-size:14px; font-weight:400; color:#6E6E78; transition:color 0.15s; }
         .em-nav-link:hover { color:#FAFAF8; }
@@ -458,9 +458,8 @@ export default function EngineeringMono() {
         .em-avail { display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace;
           font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#6E6E78; }
         .em-avail::before { content:""; width:5px; height:5px; background:#FAFAF8; }
-        .em-h1 { margin-top:28px; font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
-          font-size:68px; font-weight:480; letter-spacing:-0.02em;
-          line-height:1.04; color:#FAFAF8; }
+        .em-h1 { margin-top:28px; font-size:64px; font-weight:600; letter-spacing:-0.032em;
+          line-height:1.05; color:#FAFAF8; }
         .em-h1 .dim { color:#6E6E78; }
         .em-role { margin-top:22px; font-family:'Geist Mono',monospace; font-size:11px;
           letter-spacing:0.18em; text-transform:uppercase; color:#6E6E78; }
@@ -616,8 +615,7 @@ export default function EngineeringMono() {
 
         /* ── Contact (dark) ── */
         .em-contact-in { max-width:760px; margin:0 auto; padding:140px 32px 96px; text-align:center; }
-        .em-contact-h2 { margin-top:24px; font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
-          font-size:48px; font-weight:480; letter-spacing:-0.015em;
+        .em-contact-h2 { margin-top:24px; font-size:46px; font-weight:600; letter-spacing:-0.028em;
           line-height:1.12; color:#FAFAF8; }
         .em-contact-sub { margin:26px auto 0; font-size:17px; line-height:1.7; color:#6E6E78; max-width:460px; }
         .em-anchors { margin:44px 0 48px; display:flex; justify-content:center; gap:48px; flex-wrap:wrap; }

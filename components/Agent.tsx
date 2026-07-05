@@ -16,7 +16,7 @@ import OmMark from "@/components/OmMark";
 
 /* Monochrome five-tone system, shared with the Polymath + engineering pages. */
 const MONO = "'Geist Mono','JetBrains Mono',ui-monospace,monospace";
-const SANS = "'Inter','Helvetica Neue',sans-serif";
+const SANS = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif";
 
 type Trace = { agent: string; label: string };
 type Msg = { role: "user" | "assistant"; text: string; harness?: Trace[] };

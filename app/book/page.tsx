@@ -60,27 +60,26 @@ export default function BookPage() {
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Geist+Mono:wght@400;500&display=swap"
         rel="stylesheet"
       />
       <style>{`
         .bk { min-height:100vh; background:#0A0A0C; color:#FAFAF8;
-          font-family:'Inter','Helvetica Neue',sans-serif; font-optical-sizing:auto;
-          -webkit-font-smoothing:antialiased; }
+          font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','Inter',sans-serif;
+          font-optical-sizing:auto; -webkit-font-smoothing:antialiased; }
         .bk *, .bk *::before, .bk *::after { box-sizing:border-box; }
         .bk a { text-decoration:none; }
         .bk ::selection { background:#26262E; color:#FAFAF8; }
         .bk-bar { height:64px; border-bottom:1px solid #26262E; display:flex; align-items:center;
           justify-content:space-between; padding:0 32px; }
-        .bk-brand { display:flex; align-items:center; gap:11px; font-family:'Fraunces',Georgia,serif;
-          font-optical-sizing:auto; font-size:17.5px; font-weight:500; letter-spacing:0.005em; color:#FAFAF8; }
+        .bk-brand { display:flex; align-items:center; gap:11px; font-size:17px;
+          font-weight:600; letter-spacing:-0.015em; color:#FAFAF8; }
         .bk-back { font-size:14px; font-weight:500; color:#6E6E78; transition:color 0.15s; }
         .bk-back:hover { color:#FAFAF8; }
         .bk-main { max-width:760px; margin:0 auto; padding:96px 32px 96px; }
         .bk-eyebrow { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.22em;
           text-transform:uppercase; color:#6E6E78; }
-        .bk-h1 { margin:26px 0 0; font-family:'Fraunces',Georgia,serif; font-optical-sizing:auto;
-          font-size:48px; font-weight:480; letter-spacing:-0.015em;
+        .bk-h1 { margin:26px 0 0; font-size:46px; font-weight:600; letter-spacing:-0.028em;
           line-height:1.12; color:#FAFAF8; text-wrap:balance; }
         .bk-sub { margin:22px 0 48px; font-size:16px; line-height:1.7; color:#6E6E78; max-width:520px; }
         .bk-load { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.14em;
@@ -90,7 +89,7 @@ export default function BookPage() {
         .bk-panel-p { font-size:15px; color:#6E6E78; line-height:1.7; margin:0 0 22px; }
         .bk-btn { display:inline-block; font-size:15px; font-weight:500; color:#0A0A0C;
           background:#FAFAF8; border:none; border-radius:8px; padding:14px 26px; cursor:pointer;
-          transition:background 0.15s; font-family:'Inter','Helvetica Neue',sans-serif; }
+          transition:background 0.15s; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; }
         .bk-btn:hover { background:#E9E9E5; }
         .bk-btn:disabled { opacity:0.5; cursor:default; }
         .bk-step-l { font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:0.16em;
@@ -101,7 +100,7 @@ export default function BookPage() {
           cursor:pointer; transition:all 0.15s; border-radius:0; }
         .bk-chip:hover { border-color:#6E6E78; }
         .bk-chip.on { background:#FAFAF8; color:#0A0A0C; border-color:#FAFAF8; }
-        .bk-in { width:100%; font-family:'Inter','Helvetica Neue',sans-serif; font-size:15px;
+        .bk-in { width:100%; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Inter',sans-serif; font-size:15px;
           padding:13px 15px; border:1px solid #26262E; border-radius:0; background:#0A0A0C;
           color:#FAFAF8; outline:none; transition:border-color 0.15s; }
         .bk-in::placeholder { color:#6E6E78; }
