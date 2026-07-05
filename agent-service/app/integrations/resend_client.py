@@ -48,6 +48,9 @@ def send_email(*, to: str, subject: str, html: str, text: str) -> SendOutcome:
         headers={
             "Authorization": f"Bearer {s.resend_api_key}",
             "Content-Type": "application/json",
+            # Cloudflare in front of api.resend.com 403s (error 1010) urllib's
+            # default Python-urllib/x.y User-Agent — send a real one.
+            "User-Agent": "om-agent-service/1.0 (+https://omkumarsolanki.com)",
         },
         method="POST",
     )
