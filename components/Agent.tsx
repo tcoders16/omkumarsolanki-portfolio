@@ -212,7 +212,7 @@ function Panel({ onClose }: { onClose?: () => void }) {
     <div className="ag-panel">
       <div className="ag-hd">
         <span className="ag-hd-l">
-          <span className="ag-av"><OmMark size={22} ink="#0A0A0C" sw={1.3} dot={1.9} /></span>
+          <span className="ag-av"><OmMark size={22} ink="#0A0A0C" sw={1.3} dot={1.9} animate /></span>
           <span>
             <b>Om&apos;s AI</b>
             <i><span className="ag-stat" /> online · {view === "form" ? "intake" : persona.label}</i>
@@ -493,7 +493,7 @@ export default function Agent() {
         <div className="ag-float"><Panel onClose={() => setOpen(false)} /></div>
       ) : (
         <button className="ag-fab" onClick={() => setOpen(true)}>
-          <OmMark size={17} ink="#FAFAF8" sw={1.2} dot={1.7} /> Ask Om&apos;s AI
+          <OmMark size={17} ink="#FAFAF8" sw={1.2} dot={1.7} animate /> Ask Om&apos;s AI
         </button>
       )}
     </>

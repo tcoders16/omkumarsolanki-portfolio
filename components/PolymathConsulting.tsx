@@ -14,6 +14,7 @@
 import { useState } from "react";
 import PolymathMark from "@/components/PolymathMark";
 import PolymathAgent from "@/components/PolymathAgent";
+import SwitchLink from "@/components/SwitchLink";
 
 /* Config — real data slots (the design keeps these parameterized) */
 const HEADLINE = "The intelligence layer for your business."; // approved alternates: "Many industries. One intelligence." · "We make complex businesses run frictionlessly." · "Your operations, minus the friction."
@@ -380,6 +381,7 @@ export default function PolymathConsulting() {
             <a className="pm-nav-link" href="#how-we-work">How we work</a>
             <a className="pm-nav-link" href="#results">Results</a>
             <a className="pm-nav-link" href="#about">About</a>
+            <SwitchLink href="/engineering" label="Engineering" />
             <a className="pm-nav-cta" href={BOOK_HREF}>Book a consultation</a>
           </div>
         </div>

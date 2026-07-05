@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import EngAgentChat from "@/components/EngAgentChat";
 import EngContactForm from "@/components/EngContactForm";
 import OmMark from "@/components/OmMark";
+import BrandName from "@/components/BrandName";
+import SwitchLink from "@/components/SwitchLink";
 
 const EMAIL = "emailtosolankiom@gmail.com";
 const LINKEDIN_URL = "https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/";
@@ -671,16 +673,16 @@ export default function EngineeringMono() {
       <div className="em-nav">
         <div className="em-nav-in">
           <a href="/" className="em-brand">
-            <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} />
-            Omkumar Solanki
+            <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} animate />
+            <BrandName />
           </a>
           <div className="em-nav-r">
             <a className="em-nav-link" href="#agents">Agents</a>
             <a className="em-nav-link" href="#work">Work</a>
             <a className="em-nav-link" href="#process">Process</a>
             <a className="em-nav-link" href="#about">About</a>
-            <a className="em-nav-link" href="/consulting">Consulting</a>
             <a className="em-nav-link" href="/resume">Resume</a>
+            <SwitchLink href="/consulting" label="Consulting" />
             <a className="em-nav-cta" href="#contact">Hire me</a>
           </div>
         </div>
@@ -966,7 +968,6 @@ export default function EngineeringMono() {
               <a href="https://www.resso.ai" target="_blank" rel="noopener noreferrer">resso.ai</a>
               <a href="https://www.corol.org" target="_blank" rel="noopener noreferrer">corol.org</a>
               <a href="https://www.nunafab.com" target="_blank" rel="noopener noreferrer">nunafab.com</a>
-              <a href="/consulting">Polymath Consultancy →</a>
             </div>
             <div className="em-foot-c">Designed &amp; built by Omkumar Solanki · 2026</div>
           </div>

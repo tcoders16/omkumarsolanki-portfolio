@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import OmMark from "@/components/OmMark";
+import BrandName from "@/components/BrandName";
 
 /**
  * /book — books directly onto Om's Google Calendar via the OAuth API
@@ -117,8 +118,8 @@ export default function BookPage() {
 
       <div className="bk-bar">
         <a href="/" className="bk-brand">
-          <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} />
-          Omkumar Solanki
+          <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} animate />
+          <BrandName />
         </a>
         <a href="/consulting" className="bk-back">← Back to Polymath</a>
       </div>

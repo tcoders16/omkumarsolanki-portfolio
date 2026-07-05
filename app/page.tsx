@@ -1,5 +1,6 @@
 import Link from "next/link";
 import OmMark from "@/components/OmMark";
+import BrandName from "@/components/BrandName";
 
 /**
  * Home — the doorway. Two paths, monochrome five-tone system.
@@ -69,8 +70,8 @@ export default function Home() {
       {/* header */}
       <header className="door-bar">
         <Link href="/" className="door-brand">
-          <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} />
-          Omkumar Solanki
+          <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} animate />
+          <BrandName />
         </Link>
         <a href="mailto:emailtosolankiom@gmail.com" className="door-mail">emailtosolankiom@gmail.com</a>
       </header>
