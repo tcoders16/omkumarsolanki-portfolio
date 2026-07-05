@@ -1,9 +1,15 @@
 """Google Calendar client — powers the Appointment agent.
 
-Auth uses a Google service account. ``google_credentials_json`` may be either a
-path to the service-account key file or the raw JSON string (convenient as an
-Azure env var). The target calendar (``google_calendar_id``) must be shared with
-the service account's email with "Make changes to events" permission.
+Two auth paths (first configured wins):
+
+1. Service account — ``google_credentials_json`` is a path to the key file or
+   the raw JSON string (convenient as an Azure env var); the target calendar
+   (``google_calendar_id``) must be shared with the service account's email
+   with "Make changes to events" permission.
+2. OAuth user — ``GOOGLE_OAUTH_CLIENT_ID`` / ``GOOGLE_OAUTH_CLIENT_SECRET`` /
+   ``GOOGLE_OAUTH_REFRESH_TOKEN`` (the same credentials the Next.js /book page
+   uses) act as the calendar owner directly. Use this where org policy blocks
+   service-account key creation (iam.disableServiceAccountKeyCreation).
 
 Every function is defensive: if the optional Google libraries or credentials are
 missing, ``is_configured()`` returns False and the Appointment agent falls back
@@ -51,23 +57,40 @@ def _tz():
 
 
 def _credentials():
-    """Load service-account credentials, or None if unavailable."""
+    """Load Google credentials — service account first, OAuth user second.
+
+    The OAuth path uses the same client id/secret + refresh token the Next.js
+    /book page authenticates with, acting directly as the calendar owner, so it
+    works where org policy blocks service-account key creation.
+    """
     s = get_settings()
     raw = s.google_credentials_json.strip()
-    if not raw:
-        return None
-    try:
-        from google.oauth2 import service_account  # type: ignore
-    except Exception:
-        return None
-    try:
-        if raw.startswith("{"):
-            info = json.loads(raw)
-        else:
-            info = json.loads(Path(raw).read_text())
-        return service_account.Credentials.from_service_account_info(info, scopes=_SCOPES)
-    except Exception:
-        return None
+    if raw:
+        try:
+            from google.oauth2 import service_account  # type: ignore
+
+            if raw.startswith("{"):
+                info = json.loads(raw)
+            else:
+                info = json.loads(Path(raw).read_text())
+            return service_account.Credentials.from_service_account_info(info, scopes=_SCOPES)
+        except Exception:
+            pass
+    if s.google_oauth_client_id and s.google_oauth_client_secret and s.google_oauth_refresh_token:
+        try:
+            from google.oauth2.credentials import Credentials  # type: ignore
+
+            return Credentials(
+                None,
+                refresh_token=s.google_oauth_refresh_token,
+                client_id=s.google_oauth_client_id,
+                client_secret=s.google_oauth_client_secret,
+                token_uri="https://oauth2.googleapis.com/token",
+                scopes=_SCOPES,
+            )
+        except Exception:
+            return None
+    return None
 
 
 def _service():

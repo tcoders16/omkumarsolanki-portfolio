@@ -63,11 +63,19 @@ class Settings(BaseSettings):
     resend_reply_to: str = ""                  # defaults to owner_email when empty
 
     # --- Appointment agent (Google Calendar) ---
-    # google_credentials_json may be a path to a service-account JSON file OR the
-    # raw JSON itself (handy for Azure env vars). Empty -> agent falls back to the
-    # booking link instead of creating real events.
+    # Two auth paths, first configured one wins:
+    # 1. google_credentials_json — path to a service-account JSON file OR the raw
+    #    JSON itself (handy for Azure env vars). Calendar must be shared with the
+    #    service account. Unavailable when the org enforces
+    #    iam.disableServiceAccountKeyCreation.
+    # 2. google_oauth_* — an OAuth client + refresh token acting as Om himself
+    #    (same credentials the Next.js /book page uses; no key file needed).
+    # Neither -> agent falls back to the booking link instead of real events.
     google_credentials_json: str = ""
-    google_calendar_id: str = "primary"        # calendar shared with the service account
+    google_oauth_client_id: str = ""
+    google_oauth_client_secret: str = ""
+    google_oauth_refresh_token: str = ""
+    google_calendar_id: str = "primary"        # shared calendar (or "primary" with OAuth)
     appointment_duration_min: int = 30
     appointment_window_days: int = 10          # how far ahead to offer slots
     appointment_hour_start: int = 10           # local working-hours window (24h)
