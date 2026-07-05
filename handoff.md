@@ -108,6 +108,7 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 ---
 
 ## Log
+- **2026-07-05 (inbound email live)** — hello@omkumarsolanki.com now RECEIVES: ImprovMX catch-all (*@domain → emailtosolankiom@gmail.com), MX mx1/mx2.improvmx.com + root SPF (spf.improvmx.com) + DMARC p=reject added to Vercel DNS via CLI. Domain active on ImprovMX (user's account, API key provided), delivery verified via ImprovMX logs: 2× DELIVERED (loop test + user's own "Hi" mail). Previously mail to hello@ bounced (no MX; it was Resend send-only identity). Full setup in memory: email-infrastructure.
 - **2026-07-05 (BOOKING RESTORED)** — User re-minted the Google refresh token via /api/google/connect. Verified valid (calendar scope), pushed to Vercel (3 envs) + Azure secret, prod redeployed. END-TO-END VERIFIED: prod /api/gcal-book created a real event (test event Jul 8 10:00, user can delete); agent-service chat booking proposes real free-busy slots; zero cal.com anywhere. All secrets from the original env checklist are now DONE except optional CHROMA persistent volume (abandoned, SMB deadlock). Watch-out: if OAuth app still in Testing mode, token expires ~Jul 12 — recheck /book then. Local dev server stopped.
 - **2026-07-05 (email content rules)** — User received a real recap email: Cal.com link + em dashes, both banned. Fixed (`6d43676`, deployed rev 0000010): KB booking → https://www.omkumarsolanki.com/book (om-meta.json `booking.cal` value + portfolio.md ×2); email_followup.py `_sanitize()` strips ALL model-written URLs (booking link appended deterministically from KB) + replaces em/en dashes, prompt rules added, "—" signoff removed. Verified live: sent=True, no cal.com, no long dashes, /book link present. RULES SAVED TO MEMORY (outbound-copy-rules): never em dashes, never Cal.com, own ecosystem links only.
 - **2026-07-05 (Resend 403 fix)** — Follow-up emails from Azure failed "Resend error 403: error code: 1010" = Cloudflare banning urllib's default `Python-urllib` User-Agent from datacenter IPs (same request via curl worked). Fix: real UA header in resend_client.py (`2c954b9`), redeployed (rev 0000009), verified end-to-end: /chat with contact_email → "Done — I've emailed a recap". NOTE: the email agent gets its recipient from `contact_email` in state (bare email in the message text is NOT extracted — agent re-asks); the widget intake supplies it. FLAG: recap emails link to cal.com/om-solanki/consultation from knowledge/portfolio.md `booking.cal` — site booking is /book (Google) now; update KB if Cal link is dead.
@@ -136,6 +137,7 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - **2026-06-27** — Set up handoff + 20-min session sync (job `98294620`). Baseline: source clean, ~57 uncommitted paths.
 
 ## Activity (auto)
+- 2026-07-05 11:19 · main @3a6c89e · 0 uncommitted · Δ+95 ctx-lines
 - 2026-07-05 11:08 · main @16cd402 · 0 uncommitted · Δ+183 ctx-lines
 - 2026-07-05 10:52 · main @e60b9d7 · 0 uncommitted · Δ+223 ctx-lines
 - 2026-07-05 10:22 · main @0e7a3a9 · 0 uncommitted · Δ+265 ctx-lines
@@ -143,4 +145,3 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - 2026-07-04 19:47 · main @d653584 · 0 uncommitted · Δ-67 ctx-lines
 - 2026-07-04 12:42 · main @d5b9c2c · 39 uncommitted · Δ+67 ctx-lines
 - 2026-07-04 11:23 · main @d5b9c2c · 38 uncommitted · Δ+184 ctx-lines
-- 2026-07-04 11:09 · main @d5b9c2c · 14 uncommitted · Δ-124 ctx-lines
