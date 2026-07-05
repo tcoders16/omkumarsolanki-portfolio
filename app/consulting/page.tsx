@@ -65,7 +65,7 @@ const jsonLd = {
       "@id": `${URL}#person`,
       name: "Omkumar Solanki",
       jobTitle: "Founder & Principal, Polymath Consultancy Group",
-      email: "mailto:emailtosolankiom@gmail.com",
+      email: "mailto:hello@omkumarsolanki.com",
       url: "https://omkumarsolanki.com",
       knowsAbout: [
         "AI agents",

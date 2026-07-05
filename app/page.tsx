@@ -73,7 +73,7 @@ export default function Home() {
           <OmMark size={26} ink="#FAFAF8" sw={1.4} dot={2.1} animate />
           <BrandName />
         </Link>
-        <a href="mailto:emailtosolankiom@gmail.com" className="door-mail">emailtosolankiom@gmail.com</a>
+        <a href="mailto:hello@omkumarsolanki.com" className="door-mail">hello@omkumarsolanki.com</a>
       </header>
 
       {/* split */}

@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
   const emailClash = bookings.find(b => b.email.toLowerCase() === email.trim().toLowerCase());
   if (emailClash) {
     return NextResponse.json(
-      { error: "This email already has a booking. Reach Om at emailtosolankiom@gmail.com to reschedule." },
+      { error: "This email already has a booking. Reach Om at hello@omkumarsolanki.com to reschedule." },
       { status: 409 }
     );
   }

@@ -344,7 +344,7 @@ export default function ResumeDocument({ variant = "tech", pdfFilename, hideSave
           <div className="rd-name">Omkumar Solanki</div>
           <div className="rd-subtitle">{V.subtitle}</div>
           <div className="rd-contact">
-            <a href="mailto:emailtosolankiom@gmail.com">emailtosolankiom@gmail.com</a>
+            <a href="mailto:hello@omkumarsolanki.com">hello@omkumarsolanki.com</a>
             <span className="rd-sep">|</span>
             <a href="https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/" target="_blank" rel="noreferrer" className="rd-ca">LinkedIn</a>
             <span className="rd-sep">|</span>

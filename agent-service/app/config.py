@@ -52,7 +52,7 @@ class Settings(BaseSettings):
 
     # --- Owner identity (used by the appointment & email agents) ---
     owner_name: str = "Omkumar Solanki"
-    owner_email: str = "emailtosolankiom@gmail.com"
+    owner_email: str = "hello@omkumarsolanki.com"
     owner_timezone: str = "America/Toronto"    # IANA tz for calendar slots
 
     # --- Email follow-up agent (Resend) ---

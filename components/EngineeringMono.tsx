@@ -19,7 +19,7 @@ import OmMark from "@/components/OmMark";
 import BrandName from "@/components/BrandName";
 import SwitchLink from "@/components/SwitchLink";
 
-const EMAIL = "emailtosolankiom@gmail.com";
+const EMAIL = "hello@omkumarsolanki.com";
 const LINKEDIN_URL = "https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/";
 const GITHUB_URL = "https://github.com/omkumarsolanki";
 

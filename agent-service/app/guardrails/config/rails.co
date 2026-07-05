@@ -14,7 +14,7 @@ define flow self check output
     stop
 
 define bot refuse off topic
-  "I can only help with questions about Om's work and how he'd solve an AI/automation problem for your business. For anything else, email emailtosolankiom@gmail.com."
+  "I can only help with questions about Om's work and how he'd solve an AI/automation problem for your business. For anything else, email hello@omkumarsolanki.com."
 
 define bot refuse unsafe output
   "Let's keep this focused on your business problem and how Om can help. Book a free strategy call and we'll dig into specifics: https://cal.com/om-solanki/consultation"

@@ -14,8 +14,8 @@ He is currently Founding Engineer at **Resso.ai**, where he designed and built t
 
 He takes on consulting projects with companies that want to embed AI into their core operations — from research-stage startups to enterprise teams at firms like Deloitte and Accenture.
 
-- **Email**: emailtosolankiom@gmail.com
-- **Booking**: https://cal.com/om-solanki/consultation
+- **Email**: hello@omkumarsolanki.com
+- **Booking**: https://www.omkumarsolanki.com/book
 - **GitHub**: github.com/omkumarsolanki
 - **LinkedIn**: linkedin.com/in/omkumar-solanki
 
@@ -236,8 +236,8 @@ A: Ontario, Canada. Work remotely with teams globally.
 
 ## Contact & Booking
 
-- **Email**: emailtosolankiom@gmail.com
-- **Book a free strategy call**: https://cal.com/om-solanki/consultation
+- **Email**: hello@omkumarsolanki.com
+- **Book a free strategy call**: https://www.omkumarsolanki.com/book
 - **GitHub**: https://github.com/omkumarsolanki
 - **LinkedIn**: https://linkedin.com/in/omkumar-solanki
 

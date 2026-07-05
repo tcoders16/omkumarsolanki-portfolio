@@ -32,7 +32,7 @@ export default function EngContactForm() {
       setSent(true);
       form.reset();
     } catch {
-      setError("Something went wrong. Email me directly at emailtosolankiom@gmail.com");
+      setError("Something went wrong. Email me directly at hello@omkumarsolanki.com");
     }
     setSending(false);
   };

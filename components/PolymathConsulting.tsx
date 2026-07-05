@@ -19,7 +19,7 @@ import SwitchLink from "@/components/SwitchLink";
 /* Config — real data slots (the design keeps these parameterized) */
 const HEADLINE = "The intelligence layer for your business."; // approved alternates: "Many industries. One intelligence." · "We make complex businesses run frictionlessly." · "Your operations, minus the friction."
 const BOOK_HREF = "/book";
-const CONTACT_EMAIL = "emailtosolankiom@gmail.com";
+const CONTACT_EMAIL = "hello@omkumarsolanki.com";
 const FOUNDER_NAME = "Omkumar Solanki";
 const LINKEDIN_URL = "https://www.linkedin.com/in/omkumar-solanki-atluxuarywxtchbusinessmandeveloper2/";
 

@@ -33,7 +33,7 @@ _PRICING = re.compile(r"\$\s?\d[\d,]*(?:\.\d+)?\s?(?:/\s?(?:hr|hour|day|mo|month
 
 _OFF_TOPIC_REFUSAL = (
     "I can only help with questions about Om's work and how he'd solve an AI or "
-    "automation problem for your business. For anything else, email emailtosolankiom@gmail.com."
+    "automation problem for your business. For anything else, email hello@omkumarsolanki.com."
 )
 
 

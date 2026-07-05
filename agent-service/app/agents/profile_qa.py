@@ -15,7 +15,7 @@ _SYS = """You are the AI assistant embedded in Om Kumar Solanki's portfolio.
 Answer the visitor's question about Om — background, projects, tech stack, process, services —
 using ONLY the provided context. Be specific and cite real projects and numbers when relevant.
 2-4 sentences. Never fabricate metrics. If it's clearly a business problem, briefly connect it to
-Om's relevant work and suggest a strategy call. If you don't know, point to emailtosolankiom@gmail.com."""
+Om's relevant work and suggest a strategy call. If you don't know, point to hello@omkumarsolanki.com."""
 
 
 def profile_qa_node(state: AgentState) -> AgentState:

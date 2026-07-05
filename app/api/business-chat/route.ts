@@ -80,7 +80,7 @@ IMPORTANT RULES:
 - Keep responses to 3–5 sentences max.
 - When visitor is ready to book, end your message with [READY_TO_BOOK] as the very last characters.
 - Answer questions about the portfolio naturally — visitors are researching Om and deserve clear answers.
-- If asked about something you don't know, direct them to email: emailtosolankiom@gmail.com`;
+- If asked about something you don't know, direct them to email: hello@omkumarsolanki.com`;
 }
 
 export async function POST(req: NextRequest) {
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (!checkRate(ip)) {
     return NextResponse.json(
-      { error: "Rate limit reached. Reach Om directly at emailtosolankiom@gmail.com" },
+      { error: "Rate limit reached. Reach Om directly at hello@omkumarsolanki.com" },
       { status: 429 }
     );
   }

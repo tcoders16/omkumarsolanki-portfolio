@@ -138,7 +138,7 @@ export default function BookPage() {
           <div className="bk-panel">
             <div className="bk-panel-t">Scheduling opens here shortly.</div>
             <p className="bk-panel-p">Email Om to grab a time and he&apos;ll send a Google Calendar invite.</p>
-            <a href="mailto:emailtosolankiom@gmail.com" className="bk-btn">Email Om</a>
+            <a href="mailto:hello@omkumarsolanki.com" className="bk-btn">Email Om</a>
           </div>
         )}
 
