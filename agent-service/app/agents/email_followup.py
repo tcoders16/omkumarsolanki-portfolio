@@ -11,6 +11,8 @@ Skills: compose_followup, send_email.
 """
 from __future__ import annotations
 
+import re
+
 from pydantic import BaseModel
 
 from app.agents.state import AgentState
@@ -34,7 +36,10 @@ Rules:
 - 120-180 words, warm and confident, first person as Om ("I").
 - Reference their specific situation if known; tie it to one concrete thing Om has done (with a real metric).
 - Offer one clear next step (a 30-min strategy call).
-- Never invent metrics or clients. Plain text, short paragraphs. No subject line inside the body."""
+- Never invent metrics or clients. Plain text, short paragraphs. No subject line inside the body.
+- NEVER write any URL or link in the body. The correct booking link is appended automatically
+  after your draft; any link you write will be wrong.
+- Never use em dashes or en dashes anywhere. Use commas, periods, or a plain hyphen instead."""
 
 
 def _to_html(body: str, booking_link: str) -> str:
@@ -74,14 +79,21 @@ def email_followup_node(state: AgentState) -> AgentState:
         )
     )
 
-    signoff = f"\n\n— {s.owner_name}\n{s.owner_email}"
-    body = draft.body.rstrip() + signoff
-    result = EmailResult(to=email, subject=draft.subject, body=body)
+    def _sanitize(t: str) -> str:
+        # Belt and braces over the prompt rules: strip any URL the model wrote
+        # (the real booking link is appended deterministically) and long dashes.
+        t = re.sub(r"https?://\S+", "", t)
+        return t.replace("—", "-").replace("–", "-")
+
+    signoff = f"\n\n{s.owner_name}\n{s.owner_email}"
+    body = _sanitize(draft.body).rstrip() + signoff
+    subject = _sanitize(draft.subject).strip()
+    result = EmailResult(to=email, subject=subject, body=body)
 
     if email:
         outcome = resend_client.send_email(
             to=email,
-            subject=draft.subject,
+            subject=subject,
             html=_to_html(body, booking_link),
             text=body + (f"\n\nBook a call: {booking_link}" if booking_link else ""),
         )
