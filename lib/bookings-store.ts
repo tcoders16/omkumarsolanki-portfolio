@@ -117,9 +117,9 @@ function buildICS(b: Booking): string {
     `DTEND:${icsUTC(end)}`,
     `SUMMARY:${esc(`30-min strategy call — Om × ${b.name}`)}`,
     `DESCRIPTION:${esc(b.note || "Strategy call booked via omkumarsolanki.com")}`,
-    `ORGANIZER;CN=Om Kumar Solanki:mailto:${om}`,
+    `ORGANIZER;CN=Omkumar Solanki:mailto:${om}`,
     `ATTENDEE;CN=${esc(b.name)};RSVP=TRUE:mailto:${b.email}`,
-    `ATTENDEE;CN=Om Kumar Solanki:mailto:${om}`,
+    `ATTENDEE;CN=Omkumar Solanki:mailto:${om}`,
     "STATUS:CONFIRMED",
     "SEQUENCE:0",
     "END:VEVENT",
@@ -134,7 +134,7 @@ export async function notifyEmail(b: Booking): Promise<void> {
   }
 
   const transporter = getTransporter();
-  const from = `"Om Kumar Solanki" <${process.env.SMTP_USER}>`;
+  const from = `"Omkumar Solanki" <${process.env.SMTP_USER}>`;
   const ics = buildICS(b);
   const icalEvent = { method: "REQUEST", content: ics } as const;
 
@@ -180,11 +180,11 @@ export async function notifyEmail(b: Booking): Promise<void> {
           <h2 style="color:#3dba7e;font-size:0.9rem;margin:0 0 8px;letter-spacing:0.1em;text-transform:uppercase;">
             You're booked ✓
           </h2>
-          <p style="color:#888;font-size:0.75rem;margin:0 0 24px;">Hi ${b.name}, your 30-min strategy call with Om Kumar Solanki is confirmed.</p>
+          <p style="color:#888;font-size:0.75rem;margin:0 0 24px;">Hi ${b.name}, your 30-min strategy call with Omkumar Solanki is confirmed.</p>
           <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
             <tr><td style="color:#555;padding:5px 0;width:60px;font-size:0.7rem;">DATE</td><td style="color:#ededed;padding:5px 0;">${b.date}</td></tr>
             <tr><td style="color:#555;padding:5px 0;font-size:0.7rem;">TIME</td><td style="color:#ededed;padding:5px 0;">${b.slot} ET · 30 min</td></tr>
-            <tr><td style="color:#555;padding:5px 0;font-size:0.7rem;">WITH</td><td style="color:#ededed;padding:5px 0;">Om Kumar Solanki — AI/ML Engineer</td></tr>
+            <tr><td style="color:#555;padding:5px 0;font-size:0.7rem;">WITH</td><td style="color:#ededed;padding:5px 0;">Omkumar Solanki — AI/ML Engineer</td></tr>
           </table>
           <p style="color:#555;font-size:0.7rem;margin:0 0 8px;">Om will reach out with a meeting link shortly. Reply to this email if you need to reschedule.</p>
           <p style="color:#333;font-size:0.65rem;margin:0;">omkumarsolanki.com</p>

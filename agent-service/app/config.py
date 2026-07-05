@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     case_match_threshold: float = 0.45         # below this -> "no direct match"
 
     # --- Owner identity (used by the appointment & email agents) ---
-    owner_name: str = "Om Kumar Solanki"
+    owner_name: str = "Omkumar Solanki"
     owner_email: str = "emailtosolankiom@gmail.com"
     owner_timezone: str = "America/Toronto"    # IANA tz for calendar slots
 
@@ -59,7 +59,7 @@ class Settings(BaseSettings):
     # When resend_api_key is empty the email agent runs in DRAFT-ONLY mode:
     # it composes the message and returns it, but does not send.
     resend_api_key: str = ""
-    resend_from: str = "Om Kumar Solanki <onboarding@resend.dev>"  # verified sender
+    resend_from: str = "Omkumar Solanki <hello@omkumarsolanki.com>"  # verified sender
     resend_reply_to: str = ""                  # defaults to owner_email when empty
 
     # --- Appointment agent (Google Calendar) ---
