@@ -108,6 +108,7 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 ---
 
 ## Log
+- **2026-07-05 (Resend 403 fix)** — Follow-up emails from Azure failed "Resend error 403: error code: 1010" = Cloudflare banning urllib's default `Python-urllib` User-Agent from datacenter IPs (same request via curl worked). Fix: real UA header in resend_client.py (`2c954b9`), redeployed (rev 0000009), verified end-to-end: /chat with contact_email → "Done — I've emailed a recap". NOTE: the email agent gets its recipient from `contact_email` in state (bare email in the message text is NOT extracted — agent re-asks); the widget intake supplies it. FLAG: recap emails link to cal.com/om-solanki/consultation from knowledge/portfolio.md `booking.cal` — site booking is /book (Google) now; update KB if Cal link is dead.
 - **2026-07-05 (Azure backend setup)** — gmail Azure login obtained. DONE: resend-api-key secret + RESEND_FROM="Omkumar Solanki <hello@omkumarsolanki.com>" (domain verified, real sends confirmed); GOOGLE_OAUTH client id/secret on app; image redeployed from source (rev 0000007→0000008, OAuth-fallback code live, health ok); text-embedding-3-small deployed on om-agent-aoai-93a1 → RAG_MODE=hybrid, consult 200 grounded. FAILED/reverted: Chroma on Azure Files share (SQLite-over-SMB deadlock → replica wedged, consult 502) — CHROMA_DIR removed, ephemeral disk again. STILL BLOCKED: Google refresh token re-mint (user browser action) → then Vercel + Azure secret + prod /book retest. Sender name unified to "Omkumar Solanki" in frontend ICS/SMTP too (b1cc28e).
 - **2026-07-05 (secrets + OUTAGE FOUND)** — (1) SMTP live: fresh Gmail app pw verified (nodemailer auth OK), set in Vercel ×3 envs + .env.local, prod redeployed, /api/contact 200 real email sent. (2) Resend key (send-only, restricted) verified via real test send; NOT yet on Azure — om-agent-rg is NOT under om@resso.ai Azure login (both subs checked), it's on the gmail Azure account → user must az login with gmail. (3) Google org policy `iam.disableServiceAccountKeyCreation` blocks service-account keys → patched agent-service google_calendar.py/config.py to accept GOOGLE_OAUTH_{CLIENT_ID,CLIENT_SECRET,REFRESH_TOKEN} (same creds as frontend /book) as fallback auth; installed google libs in venv; is_configured:true locally. (4) 🔴 **DISCOVERED: /book booking BROKEN in prod** — refresh token `invalid_grant: expired or revoked` (minted 6/28, OAuth app in Testing mode = 7-day token expiry; died today). `connected:true` was false comfort — isConnected() only checks env presence, POST 502s. FIX: publish OAuth consent screen to Production in console.cloud.google.com, re-mint via localhost:3000/api/google/connect, update Vercel + Azure, redeploy.
 - **2026-07-05 (prod verify)** — ✅ Prod verified after `0c320e3` deploy: home/eng/consulting 200 with animations + switch buttons live; /api/gcal-book connected:true; /api/consult 200 (real Azure agent-service answer, MCP Enterprise Bridge cited). Handoff NEXT PLAN items 1–2 closed. Remaining open: env secrets (SMTP/RESEND/GOOGLE_CREDENTIALS_JSON/embedding deployment/CHROMA_DIR volume — need user), `[XX]` Polymath placeholder metrics (need real engagement data), optional /resume /leads /admin restyle.
@@ -133,6 +134,7 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - **2026-06-27** — Set up handoff + 20-min session sync (job `98294620`). Baseline: source clean, ~57 uncommitted paths.
 
 ## Activity (auto)
+- 2026-07-05 10:52 · main @e60b9d7 · 0 uncommitted · Δ+223 ctx-lines
 - 2026-07-05 10:22 · main @0e7a3a9 · 0 uncommitted · Δ+265 ctx-lines
 - 2026-07-05 09:57 · main @498a7cc · 0 uncommitted · Δ-141 ctx-lines
 - 2026-07-04 19:47 · main @d653584 · 0 uncommitted · Δ-67 ctx-lines
@@ -140,4 +142,3 @@ Router classifies all 5 intents correctly. Small-talk / appointment (slot offer)
 - 2026-07-04 11:23 · main @d5b9c2c · 38 uncommitted · Δ+184 ctx-lines
 - 2026-07-04 11:09 · main @d5b9c2c · 14 uncommitted · Δ-124 ctx-lines
 - 2026-07-02 18:46 · main @d5b9c2c · 3 uncommitted · Δ-1956 ctx-lines
-- 2026-06-30 14:03 · main @d5b9c2c · 3 uncommitted · Δ+9 ctx-lines
